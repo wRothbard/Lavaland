@@ -1,3 +1,17 @@
+local ss = minetest.settings:get("static_spawnpoint")
+
+if ss then
+	ss = minetest.string_to_pos(ss)
+else
+	ss = {x = 0, y = 5, z = 0}
+end
+
+minetest.register_chatcommand("spawn", {
+	func = function(name)
+		minetest.get_player_by_name(name):set_pos(ss)
+	end,
+})
+
 minetest.set_mapgen_setting("mg_name", "singlenode")
 
 minetest.register_on_generated(function(minp, maxp, seed)
