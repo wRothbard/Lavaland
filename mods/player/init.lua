@@ -13,8 +13,8 @@ local function physics(player, enabled)
 	if enabled then
 		player:set_physics_override({
 			speed = 2,
-			jump = 2,
-			gravity = 0.9,
+			jump = 1.5,
+			gravity = 0.96,
 		})
 	else
 		player:set_physics_override({
