@@ -25,7 +25,9 @@ minetest.register_abm({
 						pitch = rand(),
 					})
 					minetest.after(rand(5, 10), function()
-						music.players[name] = music.players[name] - 1
+						if music.players[name] then
+							music.players[name] = music.players[name] - 1
+						end
 					end)
 					break
 				end
