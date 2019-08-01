@@ -98,6 +98,15 @@ minetest.register_on_dieplayer(function(player, reason)
 	local an = minetest.find_node_near(pos, 3, "air", true)
 	if an then
 		minetest.set_node(an, {name = "bones:bones"})
+		local p_inv = player:get_inventory()
+		local meta = minetest.get_meta(an)
+		local inv = meta:get_inventory()
+		inv:set_size("main", 8 * 4)
+		meta:set_string("formspec", "size[8,9]" ..
+				"list[context;main;0,0;8,4]" ..
+				"list[current_player;main;0,5;8,4]")
+		inv:set_list("main", p_inv:get_list("main"))
+		p_inv:set_list("main", {})
 	end
 end)
 
