@@ -51,9 +51,9 @@ minetest.register_item(":", {
 		groupcaps = {
 			oddly_breakable_by_hand = {
 				times = {
-					[1] = 3.50,
-					[2] = 2.00,
-					[3] = 0.70,
+					[1] = 5.00,
+					[2] = 3.00,
+					[3] = 1.00,
 				},
 				uses = 0,
 			},
