@@ -12,6 +12,12 @@ minetest.register_chatcommand("spawn", {
 	end,
 })
 
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "" and fields.spawn then
+		player:set_pos(ss)
+	end
+end)
+
 minetest.set_mapgen_setting("mg_name", "singlenode")
 
 minetest.register_on_generated(function(minp, maxp, seed)

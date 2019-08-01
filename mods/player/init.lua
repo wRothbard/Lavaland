@@ -41,6 +41,33 @@ local function sprint(player)
 	end)
 end
 
+local formspec_prepend = "bgcolor[#080808BB;false]" ..
+		"background[1,1;1,1;player_background.png;true]" ..
+		"listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF"
+
+local function get_hotbar_bg(x, y)
+	local out = ""
+	for i= 0, 7, 1 do
+		out = out .. "image[" .. x + i ..
+				"," .. y .. ";1,1;player_hb_bg.png]"
+	end
+	return out
+end
+
+local formspec_default = "size[8,7.25]" ..
+		"button_exit[0.5,1;2,1;home;Home]" ..
+		"button_exit[0.5,0;2,1;status;Status]" ..
+		"button_exit[7,0;1,1;quit;X]" ..
+		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
+		"list[current_player;craft;3,0;3,3;]" ..
+		"list[current_player;craftpreview;7,1;1,1;]" ..
+		"image[6,1;1,1;player_arrow.png^[transformR270]" ..
+		"list[current_player;main;0,3.25;8,1;]" ..
+		"list[current_player;main;0,4.5;8,3;8]" ..
+		"listring[current_player;main]" ..
+		"listring[current_player;craft]" ..
+		get_hotbar_bg(0, 3.25)
+
 minetest.register_item(":", {
 	type = "none",
 	wield_image = "player_wieldhand.png",
@@ -82,6 +109,10 @@ minetest.register_on_joinplayer(function(player)
 	})
 	sprinting[player:get_player_name()] = false
 	sprint(player)
+	player:set_formspec_prepend(formspec_prepend)
+	player:set_inventory_formspec(formspec_default)
+	player:hud_set_hotbar_image("player_hotbar.png")
+	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
 end)
 
 minetest.register_on_leaveplayer(function(player)
