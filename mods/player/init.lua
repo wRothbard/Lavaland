@@ -65,7 +65,7 @@ minetest.register_item(":", {
 minetest.register_on_dieplayer(function(player, reason)
 	local pos = player:get_pos()
 	local old_node = minetest.get_node(pos)
-	if old_node.name == "lava:source" then
+	if old_node.name:match("lava") then
 		minetest.set_node(pos, {name = "water:source"})
 	end
 	local an = minetest.find_node_near(pos, 3, "air", true)

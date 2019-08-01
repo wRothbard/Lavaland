@@ -9,7 +9,7 @@ minetest.register_node("bones:bones", {
 		"bones_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand = 2},
+	groups = {oddly_breakable_by_hand = 2, cracky = 2},
 	drop = {
 		max_items = 2,
 		items = {
