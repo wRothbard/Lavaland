@@ -3,6 +3,11 @@ minetest.register_craftitem("mese:crystal", {
 	inventory_image = "mese_crystal.png",
 })
 
+local sounds = {
+	footstep = "mese_crstal_footstep",
+	dig = "mese_crystal_dig",
+}
+
 -- Mese Crystals by RealBadAngel
 minetest.register_node("mese:crystal_ore1", {
 	description = "Mese Crystal Ore",
@@ -13,7 +18,7 @@ minetest.register_node("mese:crystal_ore1", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 1",
 	use_texture_alpha = true,
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = sounds,
 	light_source = 7,
 	selection_box = {
 		type = "fixed",
@@ -32,7 +37,7 @@ minetest.register_node("mese:crystal_ore2", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 2",
 	use_texture_alpha = true,
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = sounds,
 	light_source = 8,
 	selection_box = {
 		type = "fixed",
@@ -51,7 +56,7 @@ minetest.register_node("mese:crystal_ore3", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 3",
 	use_texture_alpha = true,
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = sounds,
 	light_source = 9,
 	selection_box = {
 		type = "fixed",
@@ -70,7 +75,7 @@ minetest.register_node("mese:crystal_ore4", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 4",
 	use_texture_alpha = true,
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = sounds,
 	light_source = 10,
 	selection_box = {
 		type = "fixed",
