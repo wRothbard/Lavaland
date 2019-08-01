@@ -9,12 +9,14 @@ end
 minetest.register_chatcommand("spawn", {
 	func = function(name)
 		minetest.get_player_by_name(name):set_pos(ss)
+		minetest.sound_play("mapgen_item", {pos = ss, gain = 0.3})
 	end,
 })
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" and fields.spawn then
 		player:set_pos(ss)
+		minetest.sound_play("mapgen_item", {pos = ss, gain = 0.3})
 	end
 end)
 

@@ -18,7 +18,11 @@ minetest.register_node("bones:bones", {
 			{rarity = 1, items = {"bones:bones"}},
 		},
 	},
-	--sounds = default.node_sound_gravel_defaults(),
+	sounds = {
+		footstep = {name = "bones_footstep", gain = 0.4},
+		dug = {name = "bones_footstep", gain = 1.0},
+		place = {name = "nodes_place", gain = 1.0},
+	},
 })
 
 minetest.register_craftitem("bones:bone", {
