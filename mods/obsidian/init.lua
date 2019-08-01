@@ -2,7 +2,9 @@ minetest.register_node("obsidian:node", {
 	description = "Obsidian",
 	tiles = {"obsidian.png"},
 	sounds = {
-		footstep = "obsidian_footstep",
+		footstep = {name = "obsidian_footstep", gain = 0.3},
+		dig = {name = "obsidian_footstep", gain = 1.0},
+		dug = {name = "obsidian_footstep", gain = 1.0},
 	},
 	groups = {oddly_breakable_by_hand = 1, cracky = 3},
 })

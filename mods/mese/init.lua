@@ -4,9 +4,34 @@ minetest.register_craftitem("mese:crystal", {
 })
 
 local sounds = {
-	footstep = "mese_crstal_footstep",
-	dig = "mese_crystal_dig",
+	footstep = {name = "mese_footstep", gain = 0.3},
+	dig = {name = "mese_footstep", gain = 1.0},
+	dug = {name = "mese_footstep", gain = 1.0},
 }
+
+minetest.register_node("mese:node", {
+	description = "Mese",
+	tiles = {"mese.png"},
+	paramtype = "light",
+	groups = {cracky = 2, level = 2},
+	sounds = sounds,
+	light_source = minetest.LIGHT_MAX,
+})
+
+minetest.register_craft({
+	output = "mese:node",
+	recipe = {
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
+	}
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "mese:crystal 9",
+	recipe = {"mese:node"}
+})
 
 -- Mese Crystals by RealBadAngel
 minetest.register_node("mese:crystal_ore1", {
