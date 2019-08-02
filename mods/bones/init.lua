@@ -31,7 +31,8 @@ minetest.register_node("bones:bones", {
 		inv:set_size("main", 8 * 4)
 		meta:set_string("formspec", "size[8,9]" ..
 				"list[context;main;0,0;8,4]" ..
-				"list[current_player;main;0,5;8,4]")
+				"list[current_player;main;0,5;8,4]" ..
+				"listring[]")
 	end,
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
 		for k, v in pairs(oldmetadata.inventory.main) do

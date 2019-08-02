@@ -104,7 +104,8 @@ minetest.register_on_dieplayer(function(player, reason)
 		inv:set_size("main", 8 * 4)
 		meta:set_string("formspec", "size[8,9]" ..
 				"list[context;main;0,0;8,4]" ..
-				"list[current_player;main;0,5;8,4]")
+				"list[current_player;main;0,5;8,4]" ..
+				"listring[]")
 		inv:set_list("main", p_inv:get_list("main"))
 		p_inv:set_list("main", {})
 	end
