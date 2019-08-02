@@ -117,12 +117,12 @@ minetest.register_on_joinplayer(function(player)
 		sneak = true,
 		new_move = false,
 	})
-	sprinting[player:get_player_name()] = false
-	sprint(player)
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
 	player:hud_set_hotbar_image("player_hotbar.png")
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
+	sprinting[player:get_player_name()] = false
+	sprint(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
