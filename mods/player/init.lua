@@ -122,7 +122,7 @@ minetest.register_on_joinplayer(function(player)
 	player:set_inventory_formspec(formspec_default)
 	player:hud_set_hotbar_image("player_hotbar.png")
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
-	--sprint(player)
+	sprint(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
