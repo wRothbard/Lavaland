@@ -112,6 +112,7 @@ minetest.register_on_dieplayer(function(player, reason)
 end)
 
 minetest.register_on_joinplayer(function(player)
+	sprinting[player:get_player_name()] = false
 	player:set_physics_override({
 		sneak_glitch = true,
 		sneak = true,
@@ -121,9 +122,7 @@ minetest.register_on_joinplayer(function(player)
 	player:set_inventory_formspec(formspec_default)
 	player:hud_set_hotbar_image("player_hotbar.png")
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
-	sprinting[player:get_player_name()] = false
-	minetest.after(0, sprint, player)
-	--sprint(player)
+	minetest.after(2, sprint, player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
