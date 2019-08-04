@@ -113,16 +113,29 @@ end)
 
 minetest.register_on_joinplayer(function(player)
 	sprinting[player:get_player_name()] = false
+
 	player:set_physics_override({
 		sneak_glitch = true,
 		sneak = true,
 		new_move = false,
 	})
+
+	sprint(player)
+
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
+
 	player:hud_set_hotbar_image("player_hotbar.png")
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
-	sprint(player)
+	player:hud_set_flags({
+		minimap = true,
+		minimap_radar = true,
+	})
+
+	player:set_properties({
+		zoom_fov = 34,
+	})
+
 end)
 
 minetest.register_on_leaveplayer(function(player)
