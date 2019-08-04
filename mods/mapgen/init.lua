@@ -97,7 +97,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	mapgen.homes[minetest.get_player_by_name()] = nil
+	mapgen.homes[player:get_player_name()] = nil
 end)
 
 print("mapgen loaded")
