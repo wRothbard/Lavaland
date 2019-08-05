@@ -86,7 +86,7 @@ local formspec_default = "size[8,7.25]" ..
 		"list[current_player;main;0,4.5;8,3;8]" ..
 		"listring[current_player;main]" ..
 		"listring[current_player;craft]" ..
-		get_hotbar_bg(0, 3.25)
+		stats.get_hotbar_bg(0, 3.25)
 
 minetest.register_item(":", {
 	type = "none",
@@ -156,7 +156,9 @@ minetest.register_chatcommand("gender", {
 			return true, "You're gender is " .. gender .. "."
 		end
 
-		player_api.set_textures(player, {"player_" .. param .. ".png"})
+		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+		multiskin.update_player_visuals(player)
+
 		meta:set_string("gender", param)
 	end,
 })
