@@ -194,11 +194,35 @@ minetest.register_abm({
 	action = function(pos, node)
 		pos.y = pos.y + 1
 		local nn = minetest.get_node(pos).name
-		local a = minetest.find_node_near(pos, 1, {"lava:source", "air"})
-		if nn == "air" and a then
+		if nn ~= "air" then
+			return
+		end
+		local l = minetest.find_node_near(pos, 1, "lava:source")
+		if l then
 			minetest.set_node(pos, {name = "mese:crystal_ore1"})
 		end
 	end,
+})
+
+minetest.register_craftitem("mese:crystal_fragment", {
+	description = "Mese Crystal Fragment",
+	inventory_image = "mese_crystal_fragment.png",
+	on_use = minetest.item_eat(3),
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "mese:crystal_fragment 9",
+	recipe = {"mese:crystal"},
+})
+
+minetest.register_craft({
+	output = "mese:crystal",
+	recipe = {
+		{"mese:crystal_fragment", "mese:crystal_fragment", "mese:crystal_fragment"},
+		{"mese:crystal_fragment", "mese:crystal_fragment", "mese:crystal_fragment"},
+		{"mese:crystal_fragment", "mese:crystal_fragment", "mese:crystal_fragment"},
+	},
 })
 
 minetest.register_craft({
