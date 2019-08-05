@@ -88,6 +88,13 @@ end
 local player_set_animation = player_api.set_animation
 local player_attached = player_api.player_attached
 
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	player_model[name] = nil
+	player_anim[name] = nil
+	player_textures[name] = nil
+end)
+
 -- Check each player and apply animations
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do

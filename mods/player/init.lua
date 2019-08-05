@@ -205,11 +205,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	local name = player:get_player_name()
-	player_model[name] = nil
-	player_anim[name] = nil
-	player_textures[name] = nil
-	sprinting[name] = nil
+	sprinting[player:get_player_name()] = nil
 end)
 
 print("player loaded")
