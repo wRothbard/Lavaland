@@ -52,8 +52,8 @@ end
 minetest.register_abm({
 	nodenames = {"stone:mossycobble"},
 	neighbors = {"air"},
-	chance = 10,
-	interval = 30,
+	chance = 5,
+	interval = 60,
 	catch_up = false,
 	action = function(pos, node)
 		pos.y = pos.y + 1
