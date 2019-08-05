@@ -91,6 +91,10 @@ local function swap_node(pos, name)
 	minetest.swap_node(pos, node)
 end
 
+local function find_lava(pos)
+	return minetest.find_node_near(pos, 1, "lava:source")
+end
+
 local function furnace_node_timer(pos, elapsed)
 	--
 	-- Inizialize metadata
@@ -252,7 +256,7 @@ minetest.register_node("furnace:furnace", {
 		"default_furnace_side.png", "default_furnace_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {cracky=2},
+	groups = {cracky = 2, oddly_breakable_by_hand = 2},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
 	--sounds = default.node_sound_stone_defaults(),
@@ -332,6 +336,24 @@ minetest.register_craft({
 		{"group:stone", "", "group:stone"},
 		{"group:stone", "group:stone", "group:stone"},
 	},
+})
+
+minetest.register_abm({
+	nodenames = {"furnace:furnace"},
+	neighbors = {"lava:source"},
+	interval = 1.0,
+	chance = 1,
+	catch_up = false,
+	action = function(pos, node)
+		local inv = minetest.get_meta(pos):get_inventory()
+		if inv:is_empty("fuel") then
+			inv:add_item("fuel", "lava:source")
+			local l = find_lava(pos)
+			if l then
+				minetest.set_node(l, {name = "lava:flowing"})
+			end
+		end
+	end,
 })
 
 print("furnace loaded")

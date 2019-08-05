@@ -89,4 +89,24 @@ minetest.register_node("lava:flowing", {
 		not_in_creative_inventory = 1},
 })
 
+minetest.register_craft({
+	type = "fuel",
+	recipe = "bucket:bucket_lava",
+	burntime = 60,
+	replacements = {{"bucket:bucket_lava", "bucket:bucket_empty"}},
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "lava:source",
+	burntime = 60,
+})
+
+minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
+	if action == "put" and inventory_info.stack:get_name() == "lava:source" then
+		player:set_hp(0)
+		minetest.set_node(player:get_pos(), {name = "lava:source"})
+	end
+end)
+
 print("lava loaded")

@@ -15,7 +15,7 @@ minetest.register_node("stone:stone", {
 minetest.register_node("stone:stone_with_iron", {
 	description = "Iron Ore",
 	tiles = {"default_stone.png^default_mineral_iron.png"},
-	groups = {cracky = 2},
+	groups = {cracky = 2, oddly_breakable_by_hand = 1},
 	drop = {
 		max_items = 1,
 		items = {
