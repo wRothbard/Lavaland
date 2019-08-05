@@ -1,3 +1,23 @@
+dofile(minetest.get_modpath("player") .. "/api.lua")
+
+-- Default player appearance
+player_api.register_model("character.b3d", {
+	animation_speed = 30,
+	textures = {"player_male.png"},
+	animations = {
+		-- Standard animations.
+		stand     = {x = 0,   y = 79},
+		lay       = {x = 162, y = 166},
+		walk      = {x = 168, y = 187},
+		mine      = {x = 189, y = 198},
+		walk_mine = {x = 200, y = 219},
+		sit       = {x = 81,  y = 160},
+	},
+	collisionbox = {-0.3, 0.0, -0.3, 0.3, 1.7, 0.3},
+	stepheight = 0.6,
+	eye_height = 1.47,
+})
+
 local sprinting = {}
 
 local function control(player, field)
@@ -119,6 +139,28 @@ minetest.register_on_dieplayer(function(player, reason)
 	end
 end)
 
+minetest.register_chatcommand("gender", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Must be player!"
+		end
+
+		local meta = player:get_meta()
+		local gender = meta:get_string("gender")
+		if gender == "" then
+			gender = "male"
+		end
+
+		if param ~= "female" and param ~= "male" then
+			return true, "You're gender is " .. gender .. "."
+		end
+
+		player_api.set_textures(player, {"player_" .. param .. ".png"})
+		meta:set_string("gender", param)
+	end,
+})
+
 minetest.register_on_joinplayer(function(player)
 	sprinting[player:get_player_name()] = false
 
@@ -129,6 +171,21 @@ minetest.register_on_joinplayer(function(player)
 	})
 
 	sprint(player)
+
+	player_api.player_attached[player:get_player_name()] = false
+	player_api.set_model(player, "character.b3d")
+	player:set_local_animation(
+		{x = 0,   y = 79},
+		{x = 168, y = 187},
+		{x = 189, y = 198},
+		{x = 200, y = 219},
+		30
+	)
+
+	local gender = player:get_meta():get_string("gender")
+	if gender ~= "" then
+		player_api.set_textures(player, {"player_" .. gender .. ".png"})
+	end
 
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
@@ -143,11 +200,14 @@ minetest.register_on_joinplayer(function(player)
 	player:set_properties({
 		zoom_fov = 34,
 	})
-
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	sprinting[player:get_player_name()] = nil
+	local name = player:get_player_name()
+	player_model[name] = nil
+	player_anim[name] = nil
+	player_textures[name] = nil
+	sprinting[name] = nil
 end)
 
 print("player loaded")

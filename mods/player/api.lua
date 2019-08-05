@@ -84,13 +84,6 @@ function player_api.set_animation(player, anim_name, speed)
 	player:set_animation(anim, speed or model.animation_speed, animation_blend)
 end
 
-minetest.register_on_leaveplayer(function(player)
-	local name = player:get_player_name()
-	player_model[name] = nil
-	player_anim[name] = nil
-	player_textures[name] = nil
-end)
-
 -- Localize for better performance.
 local player_set_animation = player_api.set_animation
 local player_attached = player_api.player_attached
