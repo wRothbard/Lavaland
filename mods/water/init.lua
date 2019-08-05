@@ -93,10 +93,14 @@ local cool_lava = function(pos, node)
 	if node.name == "lava:source" then
 		minetest.set_node(pos, {name = "obsidian:node"})
 	else -- Lava flowing
-		minetest.set_node(pos, {name = "stone:stone"})
+		local n = "stone:stone"
+		if math.random() < 0.15 then
+			n = "stone:stone_with_iron"
+		end
+		minetest.set_node(pos, {name = n})
 	end
 	minetest.sound_play("default_cool_lava",
-		{pos = pos, max_hear_distance = 16, gain = 0.25})
+			{pos = pos, max_hear_distance = 16, gain = 0.25})
 end
 
 minetest.register_abm({

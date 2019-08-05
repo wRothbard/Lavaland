@@ -12,4 +12,33 @@ minetest.register_node("stone:stone", {
 	},
 })
 
+minetest.register_node("stone:stone_with_iron", {
+	description = "Iron Ore",
+	tiles = {"default_stone.png^default_mineral_iron.png"},
+	groups = {cracky = 2},
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 2,
+				items = {"stone:stone", "stone:iron_lump 2"}
+			},
+			{
+				items = {"stone:stone", "stone:iron_lump"}
+			},
+		}
+	},
+})
+
+minetest.register_craftitem("stone:iron_lump", {
+	description = "Iron Lump",
+	inventory_image = "default_iron_lump.png"
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "steel:ingot",
+	recipe = "stone:iron_lump",
+})
+
 print("stone loaded")
