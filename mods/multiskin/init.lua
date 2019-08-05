@@ -39,17 +39,7 @@ local function get_player_skin(player)
 	local name = player:get_player_name()
 	if name then
 		local skin = nil
-		if skin_mod == "skins" or skin_mod == "simple_skins" then
-			skin = skins.skins[name]
-		elseif skin_mod == "u_skins" then
-			skin = u_skins.u_skins[name]
-		elseif skin_mod == "wardrobe" then
-			local skins = wardrobe.playerSkins or {}
-			if skins[name] then
-				return skins[name]
-			end
-		end
-		if skin then
+			if skin then
 			return skin..".png"
 		end
 		for _, fn in pairs(dir_list) do
@@ -232,3 +222,5 @@ minetest.register_chatcommand("multiskin", {
 		end
 	end,
 })
+
+print("multiskin loaded")
