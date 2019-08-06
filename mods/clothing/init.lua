@@ -105,3 +105,5 @@ minetest.register_on_joinplayer(function(player)
 		clothing:set_player_clothing(minetest.get_player_by_name(name))
 	end, name)
 end)
+
+print("clothing loaded")

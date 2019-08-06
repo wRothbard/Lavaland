@@ -1,3 +1,7 @@
+local sounds = {
+	footstep = {name = "water_footstep", gain = 0.2},
+}
+
 minetest.register_node("water:source", {
 	description = "Water Source",
 	drawtype = "liquid",
@@ -39,7 +43,7 @@ minetest.register_node("water:source", {
 	liquid_viscosity = 1,
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cools_lava = 1},
-	--sounds = default.node_sound_water_defaults(),
+	sounds = sounds,
 })
 
 minetest.register_node("water:flowing", {
@@ -86,7 +90,7 @@ minetest.register_node("water:flowing", {
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, not_in_creative_inventory = 1,
 		cools_lava = 1},
-	--sounds = default.node_sound_water_defaults(),
+	sounds = sounds,
 })
 
 local cool_lava = function(pos, node)
@@ -99,8 +103,8 @@ local cool_lava = function(pos, node)
 		end
 		minetest.set_node(pos, {name = n})
 	end
-	minetest.sound_play("default_cool_lava",
-			{pos = pos, max_hear_distance = 16, gain = 0.25})
+	minetest.sound_play("water_cool_lava",
+			{pos = pos, max_hear_distance = 16, gain = 0.15})
 end
 
 minetest.register_abm({
