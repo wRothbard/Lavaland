@@ -119,12 +119,6 @@ local function init_player_armor(player)
 		count = 0,
 		groups = {},
 	}
-	for _, phys in pairs(armor.physics) do
-		armor.def[name][phys] = 1
-	end
-	for _, attr in pairs(armor.attributes) do
-		armor.def[name][attr] = 0
-	end
 	for group, _ in pairs(armor.registered_groups) do
 		armor.def[name].groups[group] = 0
 	end

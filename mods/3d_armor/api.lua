@@ -28,11 +28,6 @@ local armor_textures = setmetatable({}, {
 armor = {
 	timer = 0,
 	elements = {"head", "torso", "legs", "feet"},
-	physics = {"jump", "speed", "gravity"},
-	attributes = {"heal", "fire", "water"},
-	formspec = "image[2.5,0;2,4;armor_preview]"..
-		"list[current_player;main;0,4.7;8,1;]"..
-		"list[current_player;main;0,5.85;8,3;8]",
 	def = armor_def,
 	textures = armor_textures,
 	default_skin = "player_male.png",
@@ -42,20 +37,11 @@ armor = {
 		steel = "steel:ingot",
 		bronze = "default:bronze_ingot",
 		diamond = "default:diamond",
+		mese = "mese:crystal",
 		gold = "default:gold_ingot",
+		obsidian = "obsidian:obsidian",
 		mithril = "moreores:mithril_ingot",
 		crystal = "ethereal:crystal_ingot",
-	},
-	fire_nodes = {
-		{"default:lava_source",     5, 8},
-		{"default:lava_flowing",    5, 8},
-		{"fire:basic_flame",        3, 4},
-		{"fire:permanent_flame",    3, 4},
-		{"ethereal:crystal_spike",  2, 1},
-		{"ethereal:fire_flower",    2, 1},
-		{"default:torch",           1, 1},
-		{"default:torch_ceiling",   1, 1},
-		{"default:torch_wall",      1, 1},
 	},
 	registered_groups = {["fleshy"]=100},
 	registered_callbacks = {
@@ -187,12 +173,6 @@ armor.set_player_armor = function(self, player)
 	if use_multiskin then
 		preview = multiskin.get_preview(player) or preview
 	end
-	for _, phys in pairs(self.physics) do
-		physics[phys] = 1
-	end
-	for _, attr in pairs(self.attributes) do
-		attributes[attr] = 0
-	end
 	for group, _ in pairs(self.registered_groups) do
 		change[group] = 1
 		levels[group] = 0
@@ -232,14 +212,6 @@ armor.set_player_armor = function(self, player)
 			preview = preview.."^"..prev..".png"
 			state = state + stack:get_wear()
 			count = count + 1
-			for _, phys in pairs(self.physics) do
-				local value = def.groups["physics_"..phys] or 0
-				physics[phys] = physics[phys] + value
-			end
-			for _, attr in pairs(self.attributes) do
-				local value = def.groups["armor_"..attr] or 0
-				attributes[attr] = attributes[attr] + value
-			end
 			local mat = string.match(item, "%:.+_(.+)$")
 			if material.name then
 				if material.name == mat then
@@ -265,27 +237,7 @@ armor.set_player_armor = function(self, player)
 		groups[group] = base - level
 		change[group] = groups[group] / base
 	end
-	for _, attr in pairs(self.attributes) do
-		self.def[name][attr] = attributes[attr]
-	end
-	for _, phys in pairs(self.physics) do
-		self.def[name][phys] = physics[phys]
-	end
-	if use_armor_monoid then
-		armor_monoid.monoid:add_change(player, change, "3d_armor:armor")
-	else
-		player:set_armor_groups(groups)
-	end
-	if use_player_monoids then
-		player_monoids.speed:add_change(player, physics.speed,
-			"3d_armor:physics")
-		player_monoids.jump:add_change(player, physics.jump,
-			"3d_armor:physics")
-		player_monoids.gravity:add_change(player, physics.gravity,
-			"3d_armor:physics")
-	else
-		player:set_physics_override(physics)
-	end
+	player:set_armor_groups(groups)
 	self.textures[name].armor = texture
 	self.textures[name].preview = preview
 	self.def[name].level = self.def[name].groups.fleshy or 0
@@ -380,28 +332,6 @@ armor.damage = function(self, player, index, stack, use)
 	end
 end
 
-armor.get_armor_formspec = function(self, name, listring)
-	if armor.def[name].init_time == 0 then
-		return "label[0,0;Armor not initialized!]"
-	end
-	local formspec = armor.formspec..
-		"list[detached:"..name.."_armor;armor;0,0.5;2,3;]"
-	if listring == true then
-		formspec = formspec.."listring[current_player;main]"..
-			"listring[detached:"..name.."_armor;armor]"
-	end
-	formspec = formspec:gsub("armor_preview", armor.textures[name].preview)
-	formspec = formspec:gsub("armor_level", armor.def[name].level)
-	for _, attr in pairs(self.attributes) do
-		formspec = formspec:gsub("armor_attr_"..attr, armor.def[name][attr])
-	end
-	for group, _ in pairs(self.registered_groups) do
-		formspec = formspec:gsub("armor_group_"..group,
-			armor.def[name].groups[group])
-	end
-	return formspec
-end
-
 armor.serialize_inventory_list = function(self, list)
 	local list_table = {}
 	for _, stack in ipairs(list) do
@@ -450,11 +380,7 @@ armor.save_armor_inventory = function(self, player)
 		minetest.log("warning", S("3d_armor: Detached armor inventory is nil @1", msg))
 		return
 	end
-	player:set_attribute("3d_armor_inventory", self:serialize_inventory_list(armor_inv:get_list("armor")))
-end
-
-armor.update_inventory = function(self, player)
-	-- DEPRECATED: Legacy inventory support
+	player:get_meta():set_string("3d_armor_inventory", self:serialize_inventory_list(armor_inv:get_list("armor")))
 end
 
 armor.set_inventory_stack = function(self, player, i, stack)
@@ -464,7 +390,8 @@ armor.set_inventory_stack = function(self, player, i, stack)
 		minetest.log("warning", "3d_armor: Player name is nil "..msg)
 		return
 	end
-	local armor_inv = minetest.get_inventory({type="detached", name=name.."_armor"})
+	local armor_inv = minetest.get_inventory({type="detached",
+			name = name .. "_armor"})
 	if not armor_inv then
 		minetest.log("warning", S("3d_armor: Detached armor inventory is nil @1", msg))
 		return

@@ -1,4 +1,8 @@
-local S = function(s) return s end
+local S = function(s)
+	return s
+end
+
+-- Steel
 armor:register_armor("3d_armor:shield_steel", {
 	description = ("Steel Shield"),
 	inventory_image = "shields_inv_shield_steel.png",
@@ -105,6 +109,66 @@ if armor.materials.diamond then
 		damage_groups = {cracky=2, snappy=1, choppy=1, level=3},
 	})
 end
+
+-- Obsidian
+armor:register_armor("3d_armor:helmet_obsidian", {
+	description = "Obsidian Helmet",
+	inventory_image = "3d_armor_inv_helmet_obsidian.png^[colorize:black:75",
+	groups = {armor_head = 1, armor_use = 300},
+	armor_groups = {fleshy = 10},
+	damage_groups = {cracky = 1, snappy = 2, choppy = 2, crumly = 3, level = 2},
+})
+armor:register_armor("3d_armor:chestplate_obsidian", {
+	description = S("Obsidian Chestplate"),
+	inventory_image = "3d_armor_inv_chestplate_obsidian.png^[colorize:black:75",
+	groups = {armor_torso=1, armor_use=300},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+armor:register_armor("3d_armor:leggings_obsidian", {
+	description = S("Obsidian Leggings"),
+	inventory_image = "3d_armor_inv_leggings_obsidian.png^[colorize:black:75",
+	groups = {armor_legs=1, armor_use=300},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+armor:register_armor("3d_armor:boots_obsidian", {
+	description = S("Obsidian Boots"),
+	inventory_image = "3d_armor_inv_boots_obsidian.png^[colorize:black:75",
+	groups = {armor_feet=1, armor_use=300},
+	armor_groups = {fleshy=10},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+
+-- Mese
+armor:register_armor("3d_armor:helmet_mese", {
+	description = S("Mese Helmet"),
+	inventory_image = "3d_armor_inv_helmet_mese.png",
+	groups = {armor_head=1, armor_use=300},
+	armor_groups = {fleshy=10},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+armor:register_armor("3d_armor:chestplate_mese", {
+	description = S("Mese Chestplate"),
+	inventory_image = "3d_armor_inv_chestplate_mese.png",
+	groups = {armor_torso=1, armor_use=300},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+armor:register_armor("3d_armor:leggings_mese", {
+	description = S("Mese Leggings"),
+	inventory_image = "3d_armor_inv_leggings_mese.png",
+	groups = {armor_legs=1, armor_use=300},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
+armor:register_armor("3d_armor:boots_mese", {
+	description = S("Mese Boots"),
+	inventory_image = "3d_armor_inv_boots_mese.png",
+	groups = {armor_feet=1, armor_use=300},
+	armor_groups = {fleshy=10},
+	damage_groups = {cracky=1, snappy=2, choppy=2, crumbly=3, level=2},
+})
 
 if armor.materials.gold then
 	armor:register_armor("3d_armor:helmet_gold", {
