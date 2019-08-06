@@ -50,7 +50,7 @@ minetest.register_node("water:flowing", {
 	description = "Flowing Water",
 	drawtype = "flowingliquid",
 	waving = 3,
-	tiles = {"water.png"},
+	tiles = {"water_water.png"},
 	special_tiles = {
 		{
 			name = "water_flowing_animated.png",
