@@ -1,6 +1,21 @@
 music = {}
 music.players = {}
 
+music.sounds = {
+	material = {
+		metal = {},
+		stone = {},
+		wood = {},
+		water = {},
+		glass = {},
+		lava = {},
+	},
+	player = {
+		breath = {},
+		damage = {},
+	},
+}
+
 local rand = math.random
 
 minetest.register_abm({
