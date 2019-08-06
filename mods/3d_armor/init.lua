@@ -230,11 +230,6 @@ minetest.register_on_player_hpchange(function(player, hp_change)
 	if player and hp_change < 0 then
 		local name = player:get_player_name()
 		if name then
-			local heal = armor.def[name].heal
-			heal = heal * armor.config.heal_multiplier
-			if heal >= math.random(100) then
-				hp_change = 0
-			end
 			-- check if armor damage was handled by fire or on_punchplayer
 			local time = last_punch_time[name] or 0
 			if time == 0 or time + 1 < minetest.get_gametime() then
