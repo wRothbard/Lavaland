@@ -7,7 +7,7 @@ local sounds = {
 
 minetest.register_node("stone:stone", {
 	description = "Stone",
-	tiles = {"default_stone.png"},
+	tiles = {"stone_stone.png"},
 	groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 1},
 	drop = "stone:cobble",
 	legacy_mineral = true,
@@ -16,7 +16,7 @@ minetest.register_node("stone:stone", {
 
 minetest.register_node("stone:stone_with_iron", {
 	description = "Iron Ore",
-	tiles = {"default_stone.png^default_mineral_iron.png"},
+	tiles = {"stone_stone.png^default_mineral_iron.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
 	drop = {
 		max_items = 1,

@@ -75,7 +75,7 @@ minetest.register_craft({
 
 minetest.register_node("obsidian:glass", {
 	description = "Obsidian Glass",
-	drawtype = "glasslike_framed_optional",
+	drawtype = "glasslike_framed",--_optional",
 	tiles = {"obsidian_glass.png", "obsidian_glass_detail.png"},
 	paramtype = "light",
 	paramtype2 = "glasslikeliquidlevel",
