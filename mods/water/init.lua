@@ -89,13 +89,13 @@ minetest.register_node("water:flowing", {
 	liquid_viscosity = 1,
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, not_in_creative_inventory = 1,
-		cools_lava = 1},
+			cools_lava = 1},
 	sounds = sounds,
 })
 
 local cool_lava = function(pos, node)
 	if node.name == "lava:source" then
-		minetest.set_node(pos, {name = "obsidian:node"})
+		minetest.set_node(pos, {name = "obsidian:obsidian"})
 	else -- Lava flowing
 		local n = "stone:stone"
 		if math.random() < 0.15 then
