@@ -5,7 +5,7 @@ dofile(modpath.."/clothing.lua")
 
 local function is_clothing(item)
 	return minetest.get_item_group(item, "clothing") > 0 or
-		minetest.get_item_group(item, "cape") > 0
+			minetest.get_item_group(item, "cape") > 0
 end
 
 local function save_clothing_metadata(player, clothing_inv)
@@ -17,7 +17,7 @@ local function save_clothing_metadata(player, clothing_inv)
 		-- Move all non-clothes back to the player inventory
 		if not stack:is_empty() and not is_clothing(stack:get_name()) then
 			player_inv:add_item("main",
-				clothing_inv:remove_item("clothing", stack))
+					clothing_inv:remove_item("clothing", stack))
 			stack:clear()
 		end
 		if not stack:is_empty() then
@@ -25,11 +25,12 @@ local function save_clothing_metadata(player, clothing_inv)
 			is_empty = false
 		end
 	end
+	local meta = player:get_meta()
 	if is_empty then
-		player:set_attribute("clothing:inventory", nil)
+		meta:set_string("clothing:inventory", nil)
 	else
-		player:set_attribute("clothing:inventory",
-			minetest.serialize(clothes))
+		meta:set_string("clothing:inventory",
+				minetest.serialize(clothes))
 	end
 end
 
@@ -95,9 +96,6 @@ minetest.register_on_joinplayer(function(player)
 			return count
 		end,
 	}, name)
-	if clothing.inv_mod == "inventory_plus" then
-		inventory_plus.register_button(player,"clothing", "Clothing")
-	end
 
 	load_clothing_metadata(player, clothing_inv)
 	minetest.after(1, function(name)
