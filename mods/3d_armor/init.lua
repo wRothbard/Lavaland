@@ -268,3 +268,5 @@ minetest.register_globalstep(function(dtime)
 		timer = 0
 	end
 end)
+
+print("3d_armor loaded")

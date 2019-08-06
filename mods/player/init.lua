@@ -147,13 +147,20 @@ minetest.register_chatcommand("gender", {
 		end
 
 		local meta = player:get_meta()
+
 		local gender = meta:get_string("gender")
 		if gender == "" then
 			gender = "male"
+		else
+			gender = nil
 		end
 
 		if param ~= "female" and param ~= "male" then
 			return true, "You're gender is " .. gender .. "."
+		end
+		
+		if not gender then
+			gender = param
 		end
 
 		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
