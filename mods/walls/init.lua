@@ -39,10 +39,10 @@ walls.register = function(wall_name, wall_desc, wall_texture_table, wall_mat, wa
 
 end
 
-walls.register("walls:cobble", "Cobblestone Wall", {"default_cobble.png"},
+walls.register("walls:cobble", "Cobblestone Wall", {"stone_cobble.png"},
 		"stone:cobble", {})
 
-walls.register("walls:mossycobble", "Mossy Cobblestone Wall", {"default_mossycobble.png"},
+walls.register("walls:mossycobble", "Mossy Cobblestone Wall", {"stone_mossycobble.png"},
 		"stone:mossycobble", {})
 
 print("walls loaded")

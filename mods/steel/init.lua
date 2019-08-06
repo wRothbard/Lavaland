@@ -7,12 +7,12 @@ local sounds = {
 
 minetest.register_craftitem("steel:ingot", {
 	description = "Steel Ingot",
-	inventory_image = "default_steel_ingot.png"
+	inventory_image = "steel_ingot.png"
 })
 
 minetest.register_node("steel:block", {
 	description = "Steel Block",
-	tiles = {"default_steel_block.png"},
+	tiles = {"steel_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 1, level = 2},
 	sounds = sounds,

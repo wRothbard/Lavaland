@@ -16,7 +16,7 @@ minetest.register_node("stone:stone", {
 
 minetest.register_node("stone:stone_with_iron", {
 	description = "Iron Ore",
-	tiles = {"stone_stone.png^default_mineral_iron.png"},
+	tiles = {"stone_stone.png^stone_mineral_iron.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
 	drop = {
 		max_items = 1,
@@ -39,7 +39,7 @@ minetest.register_node("stone:stone_with_iron", {
 
 minetest.register_node("stone:cobble", {
 	description = "Cobblestone",
-	tiles = {"default_cobble.png"},
+	tiles = {"stone_cobble.png"},
 	is_ground_content = false,
 	groups = {cracky = 3, stone = 2, oddly_breakable_by_hand = 2},
 	sounds = sounds,
@@ -47,7 +47,7 @@ minetest.register_node("stone:cobble", {
 
 minetest.register_craftitem("stone:iron_lump", {
 	description = "Iron Lump",
-	inventory_image = "default_iron_lump.png"
+	inventory_image = "stone_iron_lump.png"
 })
 
 minetest.register_craft({
@@ -66,7 +66,7 @@ minetest.register_node("stone:brick", {
 	description = "Stone Brick",
 	paramtype2 = "facedir",
 	place_param2 = 0,
-	tiles = {"default_stone_brick.png"},
+	tiles = {"stone_brick.png"},
 	is_ground_content = false,
 	groups = {cracky = 2, stone = 1},
 	sounds = sounds,
@@ -82,7 +82,7 @@ minetest.register_craft({
 
 minetest.register_node("stone:block", {
 	description = "Stone Block",
-	tiles = {"default_stone_block.png"},
+	tiles = {"stone_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 2, stone = 1},
 	sounds = sounds,
@@ -91,15 +91,15 @@ minetest.register_node("stone:block", {
 minetest.register_craft({
 	output = "stone:block 9",
 	recipe = {
-		{"default:stone", "default:stone", "default:stone"},
-		{"default:stone", "default:stone", "default:stone"},
-		{"default:stone", "default:stone", "default:stone"},
+		{"stone:stone", "stone:stone", "stone:stone"},
+		{"stone:stone", "stone:stone", "stone:stone"},
+		{"stone:stone", "stone:stone", "stone:stone"},
 	}
 })
 
 minetest.register_node("stone:mossycobble", {
 	description = "Mossy Cobblestone",
-	tiles = {"default_mossycobble.png"},
+	tiles = {"stone_mossycobble.png"},
 	is_ground_content = false,
 	groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 2},
 	sounds = sounds, 
