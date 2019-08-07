@@ -1,6 +1,19 @@
 trees = {}
 local random = math.random
 
+minetest.register_craftitem("trees:stick", {
+	description = "Stick",
+	inventory_image = "default_stick.png",
+	groups = {stick = 1, flammable = 2},
+})
+
+minetest.register_craft({
+	output = "default:stick 4",
+	recipe = {
+		{"group:wood"},
+	}
+})
+
 function trees.can_grow(pos)
 	local node_under = minetest.get_node_or_nil({x = pos.x, y = pos.y - 1, z = pos.z})
 	if not node_under then
