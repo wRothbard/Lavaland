@@ -1,10 +1,6 @@
 tnt = {}
 
--- Default to enabled when in singleplayer
-local enable_tnt = minetest.settings:get_bool("enable_tnt")
-if enable_tnt == nil then
-	enable_tnt = minetest.is_singleplayer()
-end
+local rand = math.random
 
 -- loss probabilities array (one in X will be lost)
 local loss_prob = {}
@@ -37,8 +33,8 @@ local function rand_pos(center, pos, radius)
 			pos.x, pos.z = center.x, center.z
 			break
 		end
-		pos.x = center.x + math.random(-radius, radius)
-		pos.z = center.z + math.random(-radius, radius)
+		pos.x = center.x + rand(-radius, radius)
+		pos.z = center.z + rand(-radius, radius)
 		def = reg_nodes[minetest.get_node(pos).name]
 		i = i + 1
 	until def and not def.walkable
@@ -59,9 +55,9 @@ local function eject_drops(drops, pos, radius)
 			if obj then
 				obj:get_luaentity().collect = true
 				obj:set_acceleration({x = 0, y = -10, z = 0})
-				obj:set_velocity({x = math.random(-3, 3),
-						y = math.random(0, 10),
-						z = math.random(-3, 3)})
+				obj:set_velocity({x = rand(-3, 3),
+						y = rand(0, 10),
+						z = rand(-3, 3)})
 			end
 			count = count - take
 		end
@@ -71,7 +67,7 @@ end
 local function add_drop(drops, item)
 	item = ItemStack(item)
 	local name = item:get_name()
-	if loss_prob[name] ~= nil and math.random(1, loss_prob[name]) == 1 then
+	if loss_prob[name] ~= nil and rand(1, loss_prob[name]) == 1 then
 		return
 	end
 
@@ -136,9 +132,9 @@ local function calc_velocity(pos1, pos2, old_vel, power)
 
 	-- randomize it a bit
 	vel = vector.add(vel, {
-		x = math.random() - 0.5,
-		y = math.random() - 0.5,
-		z = math.random() - 0.5,
+		x = rand() - 0.5,
+		y = rand() - 0.5,
+		z = rand() - 0.5,
 	})
 
 	-- Limit to terminal velocity
@@ -445,7 +441,7 @@ minetest.register_node("tnt:gunpowder", {
 	--sounds = default.node_sound_leaves_defaults(),
 
 	on_punch = function(pos, node, puncher)
-		if puncher:get_wielded_item():get_name() == "default:torch" then
+		if puncher:get_wielded_item():get_name() == "torch:torch" then
 			minetest.set_node(pos, {name = "tnt:gunpowder_burning"})
 			minetest.log("action", puncher:get_player_name() ..
 				" ignites tnt:gunpowder at " ..
@@ -543,7 +539,7 @@ minetest.register_node("tnt:gunpowder_burning", {
 minetest.register_craft({
 	output = "tnt:gunpowder 5",
 	type = "shapeless",
-	recipe = {"default:coal_lump", "default:gravel"}
+	recipe = {"stone:coal_lump", "gravel:gravel"}
 })
 
 minetest.register_craftitem("tnt:tnt_stick", {
@@ -552,36 +548,34 @@ minetest.register_craftitem("tnt:tnt_stick", {
 	groups = {flammable = 5},
 })
 
-if enable_tnt then
-	minetest.register_craft({
-		output = "tnt:tnt_stick 2",
-		recipe = {
-			{"tnt:gunpowder", "", "tnt:gunpowder"},
-			{"tnt:gunpowder", "default:paper", "tnt:gunpowder"},
-			{"tnt:gunpowder", "", "tnt:gunpowder"},
-		}
-	})
+minetest.register_craft({
+	output = "tnt:tnt_stick 2",
+	recipe = {
+		{"tnt:gunpowder", "", "tnt:gunpowder"},
+		{"tnt:gunpowder", "paper:paper", "tnt:gunpowder"},
+		{"tnt:gunpowder", "", "tnt:gunpowder"},
+	}
+})
 
-	minetest.register_craft({
-		output = "tnt:tnt",
-		recipe = {
-			{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
-			{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
-			{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"}
-		}
-	})
+minetest.register_craft({
+	output = "tnt:tnt",
+	recipe = {
+		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
+		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
+		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"}
+	}
+})
 
-	minetest.register_abm({
-		label = "TNT ignition",
-		nodenames = {"group:tnt", "tnt:gunpowder"},
-		neighbors = {"fire:basic_flame", "lava:source", "lava:flowing"},
-		interval = 4,
-		chance = 1,
-		action = function(pos, node)
-			tnt.burn(pos, node.name)
-		end,
-	})
-end
+minetest.register_abm({
+	label = "TNT ignition",
+	nodenames = {"group:tnt", "tnt:gunpowder"},
+	neighbors = {"fire:basic_flame", "lava:source", "lava:flowing"},
+	interval = 4,
+	chance = 1,
+	action = function(pos, node)
+		tnt.burn(pos, node.name)
+	end,
+})
 
 function tnt.register_tnt(def)
 	local name
@@ -598,50 +592,48 @@ function tnt.register_tnt(def)
 	local tnt_burning = def.tiles.burning or def.name .. "_top_burning_animated.png"
 	if not def.damage_radius then def.damage_radius = def.radius * 2 end
 
-	if enable_tnt then
-		minetest.register_node(":" .. name, {
-			description = def.description,
-			tiles = {tnt_top, tnt_bottom, tnt_side},
-			is_ground_content = false,
-			groups = {dig_immediate = 2, mesecon = 2, tnt = 1, flammable = 5},
-			--sounds = default.node_sound_wood_defaults(),
-			after_place_node = function(pos, placer)
-				if placer:is_player() then
-					local meta = minetest.get_meta(pos)
-					meta:set_string("owner", placer:get_player_name())
-				end
-			end,
-			on_punch = function(pos, node, puncher)
-				if puncher:get_wielded_item():get_name() == "default:torch" then
-					minetest.swap_node(pos, {name = name .. "_burning"})
-					minetest.registered_nodes[name .. "_burning"].on_construct(pos)
-					minetest.log("action", puncher:get_player_name() ..
-						" ignites " .. node.name .. " at " ..
-						minetest.pos_to_string(pos))
-				end
-			end,
-			on_blast = function(pos, intensity)
-				minetest.after(0.1, function()
+	minetest.register_node(":" .. name, {
+		description = def.description,
+		tiles = {tnt_top, tnt_bottom, tnt_side},
+		is_ground_content = false,
+		groups = {dig_immediate = 2, mesecon = 2, tnt = 1, flammable = 5},
+		--sounds = default.node_sound_wood_defaults(),
+		after_place_node = function(pos, placer)
+			if placer:is_player() then
+				local meta = minetest.get_meta(pos)
+				meta:set_string("owner", placer:get_player_name())
+			end
+		end,
+		on_punch = function(pos, node, puncher)
+			if puncher:get_wielded_item():get_name() == "torch:torch" then
+				minetest.swap_node(pos, {name = name .. "_burning"})
+				minetest.registered_nodes[name .. "_burning"].on_construct(pos)
+				minetest.log("action", puncher:get_player_name() ..
+					" ignites " .. node.name .. " at " ..
+					minetest.pos_to_string(pos))
+			end
+		end,
+		on_blast = function(pos, intensity)
+			minetest.after(0.1, function()
+				tnt.boom(pos, def)
+			end)
+		end,
+		mesecons = {effector =
+			{action_on =
+				function(pos)
 					tnt.boom(pos, def)
-				end)
-			end,
-			mesecons = {effector =
-				{action_on =
-					function(pos)
-						tnt.boom(pos, def)
-					end
-				}
-			},
-			on_burn = function(pos)
-				minetest.swap_node(pos, {name = name .. "_burning"})
-				minetest.registered_nodes[name .. "_burning"].on_construct(pos)
-			end,
-			on_ignite = function(pos, igniter)
-				minetest.swap_node(pos, {name = name .. "_burning"})
-				minetest.registered_nodes[name .. "_burning"].on_construct(pos)
-			end,
-		})
-	end
+				end
+			}
+		},
+		on_burn = function(pos)
+			minetest.swap_node(pos, {name = name .. "_burning"})
+			minetest.registered_nodes[name .. "_burning"].on_construct(pos)
+		end,
+		on_ignite = function(pos, igniter)
+			minetest.swap_node(pos, {name = name .. "_burning"})
+			minetest.registered_nodes[name .. "_burning"].on_construct(pos)
+		end,
+	})
 
 	minetest.register_node(":" .. name .. "_burning", {
 		tiles = {
