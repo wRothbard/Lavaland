@@ -45,4 +45,7 @@ walls.register("walls:cobble", "Cobblestone Wall", {"stone_cobble.png"},
 walls.register("walls:mossycobble", "Mossy Cobblestone Wall", {"stone_mossycobble.png"},
 		"stone:mossycobble", {})
 
+walls.register("walls:obsidian", "Obsidian Wall", {"obsidian_obsidian.png"},
+		"obsidian:obsidian", {})
+
 print("walls loaded")
