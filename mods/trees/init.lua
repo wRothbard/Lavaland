@@ -99,7 +99,7 @@ minetest.register_node("trees:apple", {
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
 		if oldnode.param2 == 0 then
 			minetest.set_node(pos, {name = "trees:apple_mark"})
-			minetest.get_node_timer(pos):start(math.random(300, 1500))
+			minetest.get_node_timer(pos):start(random(300, 1500))
 		end
 	end,
 })
@@ -198,7 +198,7 @@ minetest.register_node("trees:sapling", {
 	--sounds = default.node_sound_leaves_defaults(),
 
 	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(math.random(300, 1500))
+		minetest.get_node_timer(pos):start(random(300, 1500))
 	end,
 
 	on_place = function(itemstack, placer, pointed_thing)
@@ -214,6 +214,79 @@ minetest.register_node("trees:sapling", {
 		return itemstack
 	end,
 })
+
+-- Leafdecay
+--
+
+-- Prevent decay of placed leaves
+
+local after_place_leaves = function(pos, placer, itemstack, pointed_thing)
+	if placer and placer:is_player() and not placer:get_player_control().sneak then
+		local node = minetest.get_node(pos)
+		node.param2 = 1
+		minetest.set_node(pos, node)
+	end
+end
+
+-- Leafdecay
+local function leafdecay_after_destruct(pos, oldnode, def)
+	for _, v in pairs(minetest.find_nodes_in_area(vector.subtract(pos, def.radius),
+			vector.add(pos, def.radius), def.leaves)) do
+		local node = minetest.get_node(v)
+		local timer = minetest.get_node_timer(v)
+		if node.param2 == 0 and not timer:is_started() then
+			timer:start(random(20, 120) / 10)
+		end
+	end
+end
+
+local function leafdecay_on_timer(pos, def)
+	if minetest.find_node_near(pos, def.radius, def.trunks) then
+		return false
+	end
+
+	local node = minetest.get_node(pos)
+	local drops = minetest.get_node_drops(node.name)
+	for _, item in ipairs(drops) do
+		local is_leaf
+		for _, v in pairs(def.leaves) do
+			if v == item then
+				is_leaf = true
+			end
+		end
+		if minetest.get_item_group(item, "leafdecay_drop") ~= 0 or
+				not is_leaf then
+			minetest.add_item({
+				x = pos.x - 0.5 + random,
+				y = pos.y - 0.5 + random,
+				z = pos.z - 0.5 + random,
+			}, item)
+		end
+	end
+
+	minetest.remove_node(pos)
+	minetest.check_for_falling(pos)
+end
+
+local function register_leafdecay(def)
+	assert(def.leaves)
+	assert(def.trunks)
+	assert(def.radius)
+	for _, v in pairs(def.trunks) do
+		minetest.override_item(v, {
+			after_destruct = function(pos, oldnode)
+				leafdecay_after_destruct(pos, oldnode, def)
+			end,
+		})
+	end
+	for _, v in pairs(def.leaves) do
+		minetest.override_item(v, {
+			on_timer = function(pos)
+				leafdecay_on_timer(pos, def)
+			end,
+		})
+	end
+end
 
 minetest.register_alias("default:leaves", "trees:leaves")
 minetest.register_node("trees:leaves", {
@@ -271,6 +344,12 @@ minetest.register_craft({
 	recipe = {
 		{"trees:tree"},
 	}
+})
+
+register_leafdecay({
+	trunks = {"trees:tree"},
+	leaves = {"trees:apple", "trees:leaves"},
+	radius = 3,
 })
 
 print("trees loaded")
