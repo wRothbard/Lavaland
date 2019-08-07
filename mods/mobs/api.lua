@@ -82,7 +82,7 @@ local node_permanent_flame = "fire:permanent_flame"
 local node_ice = "default:ice"
 local node_snowblock = "default:snowblock"
 local node_snow = "default:snow"
-mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "default:dirt"
+mobs.fallback_node = minetest.registered_aliases["mapgen_dirt"] or "dirt:dirt"
 
 
 -- play sound
@@ -717,20 +717,20 @@ end
 -- jump if facing a solid node (not fences or gates)
 local do_jump = function(self)
 
-	if not self.jump
-	or self.jump_height == 0
-	or self.fly
-	or self.child
-	or self.order == "stand" then
+	if not self.jump or
+			self.jump_height == 0 or
+			self.fly or
+			self.child or
+			self.order == "stand" then
 		return false
 	end
 
 	self.facing_fence = false
 
 	-- something stopping us while moving?
-	if self.state ~= "stand"
-	and get_velocity(self) > 0.5
-	and self.object:get_velocity().y ~= 0 then
+	if self.state ~= "stand" and
+			get_velocity(self) > 0.5 and
+			self.object:get_velocity().y ~= 0 then
 		return false
 	end
 
@@ -2849,7 +2849,7 @@ local mob_step = function(self, dtime)
 		end
 		-- what is mob standing in?
 		self.standing_in = node_ok({
-			x = pos.x, y = pos.y + y_level + 0.25, z = pos.z}, "air").name
+				x = pos.x, y = pos.y + y_level + 0.25, z = pos.z}, "air").name
 --		print ("standing in " .. self.standing_in)
 		-- check for mob expiration (0.25 instead of dtime since were in a timer)
 		mob_expire(self, pos, 0.25)
@@ -3740,7 +3740,7 @@ end
 function mobs:protect(self, clicker)
 	local name = clicker:get_player_name()
 	local tool = clicker:get_wielded_item()
-	if tool:get_name() ~= "default:mese_crystal" then
+	if tool:get_name() ~= "mese:crystal" then
 		return false
 	end
 	if self.tamed == false then
