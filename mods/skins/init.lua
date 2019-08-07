@@ -2,6 +2,7 @@ skin_list = {
 	"alien_by_jmf",
 	"thewillyrex_by_edwar_masterchieft",
 	"worker_by_krock",
+	"calinou_by_calinou",
 }
 
 local players = {}
