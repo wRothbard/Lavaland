@@ -9,9 +9,10 @@ local sounds = {
 	dug = {name = "mese_footstep", gain = 1.0},
 }
 
-minetest.register_node("mese:node", {
+minetest.register_alias("mese:node", "mese:mese")
+minetest.register_node("mese:mese", {
 	description = "Mese",
-	tiles = {"mese.png"},
+	tiles = {"mese_mese.png"},
 	paramtype = "light",
 	groups = {cracky = 2, level = 2},
 	sounds = sounds,
@@ -19,7 +20,7 @@ minetest.register_node("mese:node", {
 })
 
 minetest.register_craft({
-	output = "mese:node",
+	output = "mese:mese",
 	recipe = {
 		{"mese:crystal", "mese:crystal", "mese:crystal"},
 		{"mese:crystal", "mese:crystal", "mese:crystal"},
@@ -30,7 +31,7 @@ minetest.register_craft({
 minetest.register_craft({
 	type = "shapeless",
 	output = "mese:crystal 9",
-	recipe = {"mese:node"}
+	recipe = {"mese:mese"}
 })
 
 -- Mese Crystals by RealBadAngel
