@@ -14,7 +14,7 @@ minetest.register_node("gravel:gravel", {
 
 minetest.register_craftitem("gravel:flint", {
 	description = "Flint",
-	inventory_image = "flint_flint.png"
+	inventory_image = "gravel_flint.png"
 })
 
 minetest.register_craft({
