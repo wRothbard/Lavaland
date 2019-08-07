@@ -1,9 +1,47 @@
 minetest.register_alias("default:stone", "stone:stone")
 
+minetest.register_craft({
+	output = "stone:coalblock",
+	recipe = {
+		{"stone:coal_lump", "stone:coal_lump", "stone:coal_lump"},
+		{"stone:coal_lump", "stone:coal_lump", "stone:coal_lump"},
+		{"stone:coal_lump", "stone:coal_lump", "stone:coal_lump"},
+	}
+})
+
+minetest.register_craft({
+	output = "stone:coal_lump 9",
+	recipe = {
+		{"stone:coalblock"},
+	}
+})
+
 local sounds = {
 	footstep = {name = "stone_hard_footstep", gain = 0.3},
 	dug = {name = "stone_hard_footstep", gain = 1.0},
 }
+
+minetest.register_node("stone:stone_with_coal", {
+	description = "Coal Ore",
+	tiles = {"stone_stone.png^default_mineral_coal.png"},
+	groups = {cracky = 3},
+	drop = "stone:coal_lump",
+	--sounds = default.node_sound_stone_defaults(),
+})
+
+minetest.register_craftitem("stone:coal_lump", {
+	description = "Coal Lump",
+	inventory_image = "default_coal_lump.png",
+	groups = {coal = 1, flammable = 1}
+})
+
+minetest.register_node("stone:coalblock", {
+	description = "Coal Block",
+	tiles = {"default_coal_block.png"},
+	is_ground_content = false,
+	groups = {cracky = 3},
+	--sounds = default.node_sound_stone_defaults(),
+})
 
 minetest.register_node("stone:stone", {
 	description = "Stone",

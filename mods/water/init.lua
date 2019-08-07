@@ -1,3 +1,5 @@
+local rand = math.random
+
 local sounds = {
 	footstep = {name = "water_footstep", gain = 0.2},
 }
@@ -98,8 +100,12 @@ local cool_lava = function(pos, node)
 		minetest.set_node(pos, {name = "obsidian:obsidian"})
 	else -- Lava flowing
 		local n = "stone:stone"
-		if math.random() < 0.15 then
-			n = "stone:stone_with_iron"
+		if rand() < 0.15 then
+			if rand() < 0.5 then
+				n = "stone:stone_with_iron"
+			else
+				n = "stone:stone_with_coal"
+			end
 		end
 		minetest.set_node(pos, {name = n})
 	end

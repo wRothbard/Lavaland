@@ -1,4 +1,6 @@
-skin_list = {
+skins = {}
+
+skins.list = {
 	"alien_by_jmf",
 	"thewillyrex_by_edwar_masterchieft",
 	"worker_by_krock",
@@ -7,8 +9,8 @@ skin_list = {
 
 local players = {}
 
-for i = 1, #skin_list do
-	local skin = skin_list[i]
+for i = 1, #skins.list do
+	local skin = skins.list[i]
 	local skin_image = "skins_" .. skin .. "_inv.png"
 	minetest.register_craftitem("skins:" .. skin, {
 		description = skin,
