@@ -8,7 +8,7 @@ minetest.register_craftitem("trees:stick", {
 })
 
 minetest.register_craft({
-	output = "default:stick 4",
+	output = "trees:stick 4",
 	recipe = {
 		{"group:wood"},
 	}

@@ -2,6 +2,7 @@ local modpath = minetest.get_modpath(minetest.get_current_modname())
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/clothing.lua")
+dofile(modpath.."/loom.lua")
 
 local function is_clothing(item)
 	return minetest.get_item_group(item, "clothing") > 0 or

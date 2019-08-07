@@ -39,21 +39,8 @@ minetest.register_node("clothing:loom", {
 		},
 	},
 	after_place_node = function(pos, placer)
-		local meta = minetest.env:get_meta(pos)
-		meta:set_string("owner", (placer:get_player_name() or ""))
-		meta:set_string("infotext", "Loom (owned by " .. (placer:get_player_name() or "") .. ")")
-	end,
-	can_dig = function(pos,player)
-		local meta = minetest.env:get_meta(pos)
-		local inv = meta:get_inventory()
-		if not inv:is_empty("input") or not inv:is_empty("output") then
-			return false
-		end
-		return true
-	end,
-	on_construct = function(pos)
-		local meta = minetest.env:get_meta(pos)
-		meta:set_string("formspec", "invsize[10,11;]"..
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "size[10,11;]"..
 			"background[-0.15,-0.25;10.40,11.75;clothing_loom_background.png]"..
 			"list[current_name;input;7,2;1,1;]"..
 			"list[current_name;output;7,4;1,1;]"..
@@ -73,6 +60,14 @@ minetest.register_node("clothing:loom", {
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
 		inv:set_size("output", 1)
+	end,
+	can_dig = function(pos,player)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		if not inv:is_empty("input") or not inv:is_empty("output") then
+			return false
+		end
+		return true
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local meta = minetest.env:get_meta(pos)
@@ -118,10 +113,10 @@ minetest.register_node("clothing:loom", {
 --Craft
 
 minetest.register_craft({
-	output = 'clothing:loom',
+	output = "clothing:loom",
 	recipe = {
-		{'group:stick', "trees:wood", 'group:stick'},
-		{'group:stick', 'trees:wood', 'group:stick'},
-		{'trees:wood', "trees:wood", 'trees:wood'},
+		{"group:stick", "group:wood", "group:stick"},
+		{"group:stick", "group:wood", "group:stick"},
+		{"group:wood", "group:wood", "group:wood"},
 	},
 })
