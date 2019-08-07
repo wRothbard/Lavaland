@@ -257,9 +257,9 @@ local function leafdecay_on_timer(pos, def)
 		if minetest.get_item_group(item, "leafdecay_drop") ~= 0 or
 				not is_leaf then
 			minetest.add_item({
-				x = pos.x - 0.5 + random,
-				y = pos.y - 0.5 + random,
-				z = pos.z - 0.5 + random,
+				x = pos.x - 0.5 + random(),
+				y = pos.y - 0.5 + random(),
+				z = pos.z - 0.5 + random(),
 			}, item)
 		end
 	end
