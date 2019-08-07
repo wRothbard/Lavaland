@@ -329,7 +329,7 @@ minetest.register_node("furnace:furnace_active", {
 	paramtype2 = "facedir",
 	light_source = 8,
 	drop = "stone:cobble 4",
-	groups = {cracky=2, not_in_creative_inventory=1},
+	groups = {cracky = 2},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
 	sounds = music.sounds.nodes.furnace,
@@ -363,6 +363,7 @@ minetest.register_abm({
 			if l then
 				minetest.set_node(l, {name = "lava:flowing"})
 			end
+			minetest.get_node_timer(pos):start(1.0)
 		end
 	end,
 })
