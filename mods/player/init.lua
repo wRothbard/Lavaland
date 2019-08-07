@@ -125,6 +125,23 @@ minetest.register_item(":", {
 	},
 })
 
+minetest.register_on_newplayer(function(player)
+	local inv = player:get_inventory()
+	local s_items = {
+		"torch:torch 25",
+		"stone:cobble 50",
+		"bones:bone 2",
+		"mese:crystal_fragment 10",
+		"tools:pick_mese_bone",
+		"tools:sword_mese_bone",
+		"craftguide:book",
+	}
+	for i = 1, #s_items do
+		local s = s_items[i]
+		inv:add_item("main", s)
+	end
+end)
+
 minetest.register_on_dieplayer(function(player, reason)
 	local pos = player:get_pos()
 	local old_node = minetest.get_node(pos)
