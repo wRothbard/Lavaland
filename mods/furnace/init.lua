@@ -1,3 +1,5 @@
+local rand = math.random
+
 local function get_furnace_active_formspec(fuel_percent, item_percent)
 	return "size[8,8.5]"..
 		"list[context;src;2.75,0.5;1,1;]"..
@@ -14,8 +16,8 @@ local function get_furnace_active_formspec(fuel_percent, item_percent)
 		"listring[context;src]"..
 		"listring[current_player;main]"..
 		"listring[context;fuel]"..
-		"listring[current_player;main]"
-		--default.get_hotbar_bg(0, 4.25)
+		"listring[current_player;main]" ..
+		forms.get_hotbar_bg(0, 4.25)
 end
 
 local function get_furnace_inactive_formspec()
@@ -32,19 +34,13 @@ local function get_furnace_inactive_formspec()
 		"listring[context;src]"..
 		"listring[current_player;main]"..
 		"listring[context;fuel]"..
-		"listring[current_player;main]"
-		--default.get_hotbar_bg(0, 4.25)
+		"listring[current_player;main]" ..
+		forms.get_hotbar_bg(0, 4.25)
 end
 
 --
 -- Node callback functions that are the same for active and inactive furnace
 --
-
-local function can_dig(pos, player)
-	local meta = minetest.get_meta(pos);
-	local inv = meta:get_inventory()
-	return inv:is_empty("fuel") and inv:is_empty("dst") and inv:is_empty("src")
-end
 
 local function allow_metadata_inventory_put(pos, listname, index, stack, player)
 	if minetest.is_protected(pos, player:get_player_name()) then
@@ -93,6 +89,25 @@ end
 
 local function find_lava(pos)
 	return minetest.find_node_near(pos, 1, "lava:source")
+end
+
+local function after_dig_node(pos, oldnode, oldmetadata, digger)
+	print("---")
+	if oldmetadata and oldmetadata.inventory then
+		for _, list in pairs(oldmetadata.inventory) do
+			for _, item in pairs(list) do
+				local o = minetest.add_item(pos, item)
+				if o then
+					o:get_luaentity().collect = true
+					o:set_acceleration({x = 0, y = -10, z = 0})
+					o:set_velocity({x = rand(-2, 2),
+							y = rand(1, 4),
+							z = rand(-2, 2)})
+				end
+
+			end
+		end
+	end
 end
 
 local function furnace_node_timer(pos, elapsed)
@@ -259,12 +274,10 @@ minetest.register_node("furnace:furnace", {
 	groups = {cracky = 2, oddly_breakable_by_hand = 2},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
-	--sounds = default.node_sound_stone_defaults(),
-
-	can_dig = can_dig,
-
+	sounds = music.sounds.nodes.furnace,
+	drop = "stone:cobble 4",
 	on_timer = furnace_node_timer,
-
+	after_dig_node = after_dig_node,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", get_furnace_inactive_formspec())
@@ -315,15 +328,13 @@ minetest.register_node("furnace:furnace_active", {
 	},
 	paramtype2 = "facedir",
 	light_source = 8,
-	drop = "furnace:furnace",
+	drop = "stone:cobble 4",
 	groups = {cracky=2, not_in_creative_inventory=1},
 	legacy_facedir_simple = true,
 	is_ground_content = false,
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.furnace,
 	on_timer = furnace_node_timer,
-
-	can_dig = can_dig,
-
+	after_dig_node = after_dig_node,
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
 	allow_metadata_inventory_take = allow_metadata_inventory_take,

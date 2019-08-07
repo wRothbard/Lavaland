@@ -86,7 +86,7 @@ local formspec_default = "size[8,7.25]" ..
 		"list[current_player;main;0,4.5;8,3;8]" ..
 		"listring[current_player;main]" ..
 		"listring[current_player;craft]" ..
-		stats.get_hotbar_bg(0, 3.25)
+		forms.get_hotbar_bg(0, 3.25)
 
 minetest.register_item(":", {
 	type = "none",

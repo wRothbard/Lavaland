@@ -14,7 +14,20 @@ music.sounds = {
 		breath = {},
 		damage = {},
 	},
+	nodes = {
+		stone = {
+			footstep = {
+				name = "stone_hard_footstep",
+				gain = 0.3,
+			},
+			dug = {
+				name = "stone_hard_footstep",
+				gain = 0.1,
+			},
+		},
+	},
 }
+music.sounds.nodes["furnace"] = music.sounds.nodes.stone
 
 local rand = math.random
 
