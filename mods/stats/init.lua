@@ -43,4 +43,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+minetest.register_privilege("moderator", "Can moderate.")
+
 print("stats loaded")

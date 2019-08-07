@@ -228,7 +228,7 @@ minetest.register_on_joinplayer(function(player)
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
 	player:hud_set_flags({
 		minimap = true,
-		minimap_radar = true,
+		minimap_radar = false,
 	})
 
 	player:set_properties({
