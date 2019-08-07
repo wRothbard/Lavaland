@@ -119,7 +119,7 @@ minetest.register_craftitem("mese:crystal_seed", {
 		end
 		local pos = pointed_thing.under
 		local node = minetest.get_node(pos)
-		if node.name == "obsidian:node" then
+		if node.name == "obsidian:obsidian" then
 			local pos1 = pointed_thing.above
 			local node1 = minetest.get_node(pos1)
 			if node1.name == "air" then 
@@ -145,7 +145,7 @@ local function grow_mese_crystal_ore(pos, node)
 	local pos1 = {x = pos.x, y = pos.y, z = pos.z}
 	pos1.y = pos1.y - 1
 	local name = minetest.get_node(pos1).name
-	if name ~= "obsidian:node" then
+	if name ~= "obsidian:obsidian" then
 		return
 	end
 
@@ -178,7 +178,7 @@ end
 minetest.register_abm({
 	nodenames = {"mese:crystal_ore1", "mese:crystal_ore2",
 		"mese:crystal_ore3"},
-	neighbors = {"obsidian:node", "lava:source"},
+	neighbors = {"obsidian:obsidian", "lava:source"},
 	interval = 80,
 	chance = 20,
 	action = function(...)
@@ -187,7 +187,7 @@ minetest.register_abm({
 })
 
 minetest.register_abm({
-	nodenames = {"obsidian:node"},
+	nodenames = {"obsidian:obsidian"},
 	neighbors = {"water:source"},
 	interval = 80,
 	chance = 20,
