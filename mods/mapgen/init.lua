@@ -12,7 +12,7 @@ end
 minetest.register_chatcommand("spawn", {
 	func = function(name)
 		minetest.get_player_by_name(name):set_pos(ss)
-		minetest.sound_play("mapgen_item", {pos = ss, gain = 0.3})
+		minetest.sound_play("mapgen_item", {pos = ss})
 	end,
 })
 
