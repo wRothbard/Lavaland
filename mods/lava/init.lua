@@ -92,14 +92,14 @@ minetest.register_node("lava:flowing", {
 minetest.register_craft({
 	type = "fuel",
 	recipe = "bucket:bucket_lava",
-	burntime = 60,
+	burntime = 360,
 	replacements = {{"bucket:bucket_lava", "bucket:bucket_empty"}},
 })
 
 minetest.register_craft({
 	type = "fuel",
 	recipe = "lava:source",
-	burntime = 60,
+	burntime = 360,
 })
 
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
