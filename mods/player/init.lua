@@ -112,6 +112,14 @@ minetest.register_item(":", {
 				},
 				uses = 0,
 			},
+			crumbly = {
+				times = {
+					[1] = 5.00,
+					[2] = 3.00,
+					[3] = 1.00,
+				},
+				uses = 0,
+			},
 		},
 		damage_groups = {fleshy = 1},
 	},
