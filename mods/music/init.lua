@@ -25,6 +25,12 @@ music.sounds = {
 				gain = 0.1,
 			},
 		},
+		wood = {
+			footstep = {
+				name = "trees_wood_footstep",
+				gain = 0.3,
+			},
+		},
 	},
 }
 music.sounds.nodes["furnace"] = music.sounds.nodes.stone
