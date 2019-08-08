@@ -49,6 +49,26 @@ for i = 2, 5 do
 	})
 end
 
+minetest.register_node("grass:jungle", {
+	description = "Jungle Grass",
+	drawtype = "plantlike",
+	waving = 1,
+	visual_scale = 1.69,
+	tiles = {"default_junglegrass.png"},
+	inventory_image = "default_junglegrass.png",
+	wield_image = "default_junglegrass.png",
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	buildable_to = true,
+	groups = {snappy = 3, flora = 1, attached_node = 1, flammable = 1},
+	--sounds = default.node_sound_leaves_defaults(),
+	selection_box = {
+		type = "fixed",
+		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},
+	},
+})
+
 minetest.register_abm({
 	nodenames = {"stone:mossycobble"},
 	neighbors = {"air"},
@@ -64,4 +84,4 @@ minetest.register_abm({
 	end,
 })
 
-print("grass loaded")
+print("loaded grass")

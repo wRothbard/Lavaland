@@ -103,12 +103,11 @@ for i = 1, 5 do
 		}
 	}})
 end
---[[
-minetest.override_item("default:junglegrass", {drop = {
+
+minetest.override_item("grass:jungle", {drop = {
 	max_items = 1,
 	items = {
 		{items = {"farming:seed_cotton"},rarity = 8},
-		{items = {"default:junglegrass"}},
+		{items = {"grass:jungle"}},
 	}
 }})
---]]
