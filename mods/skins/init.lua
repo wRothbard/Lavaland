@@ -26,7 +26,7 @@ minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	local d_inv = {
 		allow_put = function(inv, listname, index, stack, player)
-			local r = minetest.get_item_group(stack:get_name(), "skin")
+			local r = minetest.get_item_group(stack:get_name(), "skin") > 0
 			if r then
 				return 1
 			else
