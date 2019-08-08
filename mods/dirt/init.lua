@@ -56,4 +56,4 @@ minetest.register_abm({
 	end,
 })
 
-print("dirt loaded")
+print("loaded dirt")

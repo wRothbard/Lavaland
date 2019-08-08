@@ -1,3 +1,5 @@
+local rand = math.random
+
 minetest.register_node("grass:grass_1", {
 	description = "Grass",
 	drawtype = "plantlike",
@@ -19,7 +21,7 @@ minetest.register_node("grass:grass_1", {
 
 	on_place = function(itemstack, placer, pointed_thing)
 		-- place a random grass node
-		local stack = ItemStack("grass:grass_" .. math.random(1,5))
+		local stack = ItemStack("grass:grass_" .. rand(1,5))
 		local ret = minetest.item_place(stack, placer, pointed_thing)
 		return ItemStack("grass:grass_1 " ..
 				itemstack:get_count() - (1 - ret:get_count()))
@@ -79,7 +81,11 @@ minetest.register_abm({
 		pos.y = pos.y + 1
 		local node = minetest.get_node(pos)
 		if node and node.name and node.name == "air" then
-			minetest.set_node(pos, {name = "grass:grass_" .. math.random(5)})
+			if rand() > 0.9 then
+				minetest.set_node(pos, {name = "grass:jungle"})
+			else
+				minetest.set_node(pos, {name = "grass:grass_" .. rand(5)})
+			end
 		end
 	end,
 })
