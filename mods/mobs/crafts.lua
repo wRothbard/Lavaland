@@ -13,10 +13,10 @@ minetest.register_craft({
 })
 
 local hairball_items = {
-	"default:stick", "default:coal_lump", "default:dry_shrub", "flowers:rose",
-	"mobs:rat", "grass::grass_1", "farming:seed_wheat", "dye:green",
+	"trees:stick", "coal:lump", "default:dry_shrub", "flowers:rose",
+	"mobs:rat", "grass:grass_1", "farming:seed_wheat", "dye:green",
 	"farming:seed_cotton", "gravel:flint", "trees:sapling", "dye:white",
-	"default:clay_lump", "paper:paper", "default:dry_grass_1", "dye:red",
+	"default:clay_lump", "papyrus:paper", "default:dry_grass_1", "dye:red",
 	"farming:string", "default:acacia_bush_sapling",
 	"default:bush_sapling", "copper:lump", "iron:lump",
 	"dye:black", "dye:brown", "obsidian:shard", "default:tin_lump"
