@@ -95,17 +95,18 @@ minetest.register_node("water:flowing", {
 	sounds = sounds,
 })
 
+local minerals = {
+	"stone:stone_with_iron",
+	"stone:stone_with_coal",
+	"stone:stone_with_copper",
+}
 local cool_lava = function(pos, node)
 	if node.name == "lava:source" then
 		minetest.set_node(pos, {name = "obsidian:obsidian"})
 	else -- Lava flowing
 		local n = "stone:stone"
 		if rand() < 0.15 then
-			if rand() < 0.5 then
-				n = "stone:stone_with_iron"
-			else
-				n = "stone:stone_with_coal"
-			end
+			n = minerals[rand(#minerals)]
 		end
 		minetest.set_node(pos, {name = n})
 	end

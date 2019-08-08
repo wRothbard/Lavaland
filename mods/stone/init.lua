@@ -26,7 +26,7 @@ minetest.register_node("stone:stone_with_coal", {
 	tiles = {"stone_stone.png^default_mineral_coal.png"},
 	groups = {cracky = 3},
 	drop = "stone:coal_lump",
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_craftitem("stone:coal_lump", {
@@ -40,7 +40,7 @@ minetest.register_node("stone:coalblock", {
 	tiles = {"default_coal_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 3},
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("stone:stone", {
@@ -50,6 +50,14 @@ minetest.register_node("stone:stone", {
 	drop = "stone:cobble",
 	legacy_mineral = true,
 	sounds = sounds,
+})
+
+minetest.register_node("stone:stone_with_copper", {
+	description = "Copper Ore",
+	tiles = {"stone_stone.png^stone_mineral_copper.png"},
+	groups = {cracky = 2},
+	drop = "copper:lump",
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("stone:stone_with_iron", {
