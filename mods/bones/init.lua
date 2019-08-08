@@ -11,7 +11,7 @@ minetest.register_node("bones:bones", {
 		"bones_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand = 2, cracky = 3},
+	groups = {oddly_breakable_by_hand = 2, cracky = 3, crumbly = 1},
 	drop = {
 		max_items = 2,
 		items = {
