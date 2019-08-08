@@ -130,7 +130,7 @@ minetest.register_on_newplayer(function(player)
 	local s_items = {
 		"torch:torch 25",
 		"stone:cobble 50",
-		"bones:bone 2",
+		"bucket:bucket_water",
 		"mese:crystal_fragment 10",
 		"tools:pick_mese_bone",
 		"tools:sword_mese_bone",

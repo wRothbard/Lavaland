@@ -71,21 +71,29 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	}
 	local data = vm:get_data()
 	local c_lava = minetest.get_content_id("lava:source")
+	local c_floor = minetest.get_content_id("map:floor")
 	for z = minp.z, maxp.z do
 		for y = minp.y, maxp.y do
 			for x = minp.x, maxp.x do
 				if y < 1 then
-					local vi = a:index(x, y, z)
-					data[vi] = c_lava
+					if y > -17 then
+						local vi = a:index(x, y, z)
+						data[vi] = c_lava
+					else--if y > -2017 then
+						local vi = a:index(x, y, z)
+						data[vi] = c_floor
+					end
 				end
 			end
 		end
 	end
 	vm:set_data(data)
+	--[[
 	vm:calc_lighting(
 		{x = minp.x - 16, y = minp.y, z = minp.z - 16},
 		{x = maxp.x + 16, y = maxp.y, z = maxp.z + 16}
 	)
+	--]]
 	vm:write_to_map(data)
 end)
 
