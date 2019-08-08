@@ -340,6 +340,9 @@ minetest.register_abm({
 	chance = 3,
 	catch_up = false,
 	action = function(pos)
+		if not minetest.get_node({x = pos.x, y = pos.y - 1, z = pos.z}).name:match("dirt") then
+			return
+		end
 		local p1 = {x = pos.x + 2, y = pos.y, z = pos.z + 2}
 		local p2 = {x = pos.x - 2, y = pos.y, z = pos.z - 2}
 		local g = minetest.find_nodes_in_area(p1, p2, grasses)
