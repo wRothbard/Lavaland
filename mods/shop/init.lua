@@ -254,37 +254,15 @@ minetest.register_node("shop:shop", {
 		    inv:is_empty("buy1") and
 		    inv:is_empty("sell1")
 	end,
-
-})
-
-minetest.register_craftitem("shop:coin", {
-
-	description = "Gold Coin",
-	inventory_image = "shop_coin.png",
-})
-
-minetest.clear_craft({recipe={{"default:gold_ingot"}}})
-minetest.register_craft({
-	output = "shop:coin 9",
-	recipe = {
-		{"default:gold_ingot"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:gold_ingot",
-	recipe = {
-		{"shop:coin", "shop:coin", "shop:coin"},
-		{"shop:coin", "shop:coin", "shop:coin"},
-		{"shop:coin", "shop:coin", "shop:coin"}
-	}
 })
 
 minetest.register_craft({
 	output = "shop:shop",
 	recipe = {
 		{"group:wood", "group:wood", "group:wood"},
-		{"group:wood", "default:gold_ingot", "group:wood"},
+		{"group:wood", "gold:block", "group:wood"},
 		{"group:wood", "group:wood", "group:wood"}
 	}
 })
+
+print("loaded shop")

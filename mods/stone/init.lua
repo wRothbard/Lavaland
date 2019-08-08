@@ -138,4 +138,12 @@ minetest.register_abm({
 	end
 })
 
+minetest.register_node("stone:stone_with_gold", {
+	description = "Gold Ore",
+	tiles = {"stone_stone.png^default_mineral_gold.png"},
+	groups = {cracky = 2},
+	drop = "gold:lump",
+	--sounds = default.node_sound_stone_defaults(),
+})
+
 print("stone loaded")

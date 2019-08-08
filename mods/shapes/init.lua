@@ -411,18 +411,17 @@ end
 
 
 -- Register default stairs and slabs
---[[
 shapes.register_stair_and_slab(
 	"wood",
-	"default:wood",
+	"trees:wood",
 	{choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
 	{"default_wood.png"},
 	"Wooden Stair",
 	"Wooden Slab",
-	default.node_sound_wood_defaults(),
+	{},
 	false
 )
-
+--[[
 shapes.register_stair_and_slab(
 	"junglewood",
 	"default:junglewood",
@@ -731,18 +730,18 @@ shapes.register_stair_and_slab(
 	default.node_sound_metal_defaults(),
 	true
 )
-
+--]]
 shapes.register_stair_and_slab(
 	"copperblock",
-	"default:copperblock",
+	"copper:block",
 	{cracky = 1, level = 2},
 	{"default_copper_block.png"},
 	"Copper Block Stair",
 	"Copper Block Slab",
-	default.node_sound_metal_defaults(),
+	{},
 	true
 )
-
+--[[
 shapes.register_stair_and_slab(
 	"bronzeblock",
 	"default:bronzeblock",
@@ -753,18 +752,18 @@ shapes.register_stair_and_slab(
 	default.node_sound_metal_defaults(),
 	true
 )
-
+--]]
 shapes.register_stair_and_slab(
 	"goldblock",
-	"default:goldblock",
+	"gold:block",
 	{cracky = 1},
 	{"default_gold_block.png"},
 	"Gold Block Stair",
 	"Gold Block Slab",
-	default.node_sound_metal_defaults(),
+	{},
 	true
 )
-
+--[[
 shapes.register_stair_and_slab(
 	"ice",
 	"default:ice",
@@ -880,3 +879,5 @@ shapes.register_stair_outer(
 	{},
 	false
 )
+
+print("loaded shapes")
