@@ -76,7 +76,7 @@ end
 
 local formspec_default = "size[8,7.25]" ..
 		"button_exit[0.5,1;2,1;home;Home]" ..
-		"button_exit[0.5,0;2,1;status;Status]" ..
+		"button[0.5,0;2,1;status;Status]" ..
 		"button_exit[7,0;1,1;quit;X]" ..
 		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
 		"list[current_player;craft;3,0;3,3;]" ..

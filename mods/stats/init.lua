@@ -14,7 +14,7 @@ local function show_status(player)
 	local formspec = "size[8,7.25]" ..
 		"real_coordinates[]" ..
 		"button_exit[0.5,1;2,1;home;Home]" ..
-		"button_exit[0.5,0;2,1;help;Help]" ..
+		"button[0.5,0;2,1;help;Help]" ..
 		"button_exit[7,0;1,1;quit;X]" ..
 		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
 		"list[detached:" .. name .. "_clothing;clothing;3,1;4,1]" ..
