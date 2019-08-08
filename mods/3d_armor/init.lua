@@ -258,4 +258,4 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-print("3d_armor loaded")
+print("loaded 3d_armor")

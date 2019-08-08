@@ -14,12 +14,12 @@ minetest.register_craft({
 
 local hairball_items = {
 	"default:stick", "default:coal_lump", "default:dry_shrub", "flowers:rose",
-	"mobs:rat", "default:grass_1", "farming:seed_wheat", "dye:green",
-	"farming:seed_cotton", "default:flint", "default:sapling", "dye:white",
-	"default:clay_lump", "default:paper", "default:dry_grass_1", "dye:red",
+	"mobs:rat", "grass::grass_1", "farming:seed_wheat", "dye:green",
+	"farming:seed_cotton", "gravel:flint", "trees:sapling", "dye:white",
+	"default:clay_lump", "paper:paper", "default:dry_grass_1", "dye:red",
 	"farming:string", "default:acacia_bush_sapling",
-	"default:bush_sapling", "default:copper_lump", "default:iron_lump",
-	"dye:black", "dye:brown", "default:obsidian_shard", "default:tin_lump"
+	"default:bush_sapling", "copper:lump", "iron:lump",
+	"dye:black", "dye:brown", "obsidian:shard", "default:tin_lump"
 }
 minetest.register_craftitem("mobs:hairball", {
 	description = S("Lucky Hairball"),
@@ -52,7 +52,7 @@ minetest.register_craftitem("mobs:nametag", {
 minetest.register_craft({
 	type = "shapeless",
 	output = "mobs:nametag",
-	recipe = {"default:paper", "dye:black", "farming:string"},
+	recipe = {"paper:paper", "dye:black", "farming:string"},
 })
 
 -- leather
@@ -95,8 +95,8 @@ minetest.register_tool("mobs:shears", {
 minetest.register_craft({
 	output = "mobs:shears",
 	recipe = {
-		{"", "default:steel_ingot", ""},
-		{"", "group:stick", "default:steel_ingot"},
+		{"", "steel:ingot", ""},
+		{"", "group:stick", "steel:ingot"},
 	}
 })
 

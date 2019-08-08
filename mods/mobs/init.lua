@@ -14,3 +14,5 @@ dofile(path .. "/kitten.lua")
 dofile(path .. "/dungeon_master.lua")
 dofile(path .. "/oerkki.lua")
 dofile(path .. "/zombies.lua")
+
+print("loaded mobs")

@@ -140,7 +140,7 @@ minetest.register_tool("fire:flint_and_steel", {
 minetest.register_craft({
 	output = "fire:flint_and_steel",
 	recipe = {
-		{"default:flint", "default:steel_ingot"}
+		{"gravel:flint", "steel:ingot"}
 	}
 })
 
@@ -333,3 +333,4 @@ minetest.register_abm({
 	end,
 })
 
+print("loaded fire")
