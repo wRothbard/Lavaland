@@ -80,7 +80,7 @@ local function init_player_armor(player)
 			for _, element in pairs(armor.elements) do
 				if def.groups["armor_"..element] then
 					allowed = 1
-					for i = 1, 6 do
+					for i = 1, 5 do
 						local item = inv:get_stack("armor", i):get_name()
 						if minetest.get_item_group(item, "armor_"..element) > 0 then
 							return 0
@@ -97,18 +97,18 @@ local function init_player_armor(player)
 			return count
 		end,
 	}, name)
-	armor_inv:set_size("armor", 6)
+	armor_inv:set_size("armor", 5)
 	if not armor:load_armor_inventory(player) and armor.migrate_old_inventory then
 		local player_inv = player:get_inventory()
-		player_inv:set_size("armor", 6)
-		for i=1, 6 do
+		player_inv:set_size("armor", 5)
+		for i = 1, 6 do
 			local stack = player_inv:get_stack("armor", i)
 			armor_inv:set_stack("armor", i, stack)
 		end
 		armor:save_armor_inventory(player)
 		player_inv:set_size("armor", 0)
 	end
-	for i=1, 6 do
+	for i = 1, 5 do
 		local stack = armor_inv:get_stack("armor", i)
 		armor:run_callbacks("on_equip", player, i, stack)
 	end
@@ -176,7 +176,7 @@ minetest.register_on_dieplayer(function(player)
 		return
 	end
 	local drop = {}
-	for i=1, armor_inv:get_size("armor") do
+	for i = 1, armor_inv:get_size("armor") do
 		local stack = armor_inv:get_stack("armor", i)
 		if stack:get_count() > 0 then
 			table.insert(drop, stack)

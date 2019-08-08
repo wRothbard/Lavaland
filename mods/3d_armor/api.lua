@@ -1,6 +1,4 @@
 local use_multiskin = minetest.global_exists("multiskin")
-local use_player_monoids = minetest.global_exists("player_monoids")
-local use_armor_monoid = minetest.global_exists("armor_monoid")
 local armor_def = setmetatable({}, {
 	__index = function()
 		return setmetatable({
@@ -27,21 +25,17 @@ local armor_textures = setmetatable({}, {
 
 armor = {
 	timer = 0,
-	elements = {"head", "torso", "legs", "feet"},
+	elements = {"head", "torso", "legs", "feet", "shield"},
 	def = armor_def,
 	textures = armor_textures,
 	default_skin = "player_male.png",
 	materials = {
-		wood = "group:wood",
-		cactus = "default:cactus",
 		steel = "steel:ingot",
 		bronze = "default:bronze_ingot",
 		diamond = "default:diamond",
 		mese = "mese:crystal",
 		gold = "default:gold_ingot",
 		obsidian = "obsidian:obsidian",
-		mithril = "moreores:mithril_ingot",
-		crystal = "ethereal:crystal_ingot",
 	},
 	registered_groups = {["fleshy"]=100},
 	registered_callbacks = {
@@ -63,12 +57,12 @@ armor.config = {
 	destroy = false,
 	level_multiplier = 1,
 	heal_multiplier = 1,
-	material_wood = false,
-	material_cactus = false,
 	material_steel = true,
+	material_mese = true,
 	material_bronze = false,
 	material_diamond = false,
 	material_gold = false,
+	material_obsidian = true,
 	punch_damage = true,
 }
 
@@ -81,9 +75,6 @@ end
 armor.register_armor_group = function(self, group, base)
 	base = base or 100
 	self.registered_groups[group] = base
-	if use_armor_monoid then
-		armor_monoid.register_armor_group(group, base)
-	end
 end
 
 -- Armor callbacks

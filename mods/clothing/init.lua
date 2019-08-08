@@ -13,7 +13,7 @@ local function save_clothing_metadata(player, clothing_inv)
 	local player_inv = player:get_inventory()
 	local is_empty = true
 	local clothes = {}
-	for i = 1, 6 do
+	for i = 1, 4 do
 		local stack = clothing_inv:get_stack("clothing", i)
 		-- Move all non-clothes back to the player inventory
 		if not stack:is_empty() and not is_clothing(stack:get_name()) then
@@ -42,7 +42,7 @@ local function load_clothing_metadata(player, clothing_inv)
 	local dirty_meta = false
 	if not clothing_meta then
 		-- Backwards compatiblity
-		for i = 1, 6 do
+		for i = 1, 4 do
 			local stack = player_inv:get_stack("clothing", i)
 			if not stack:is_empty() then
 				clothes[i] = stack:to_string()
@@ -51,8 +51,8 @@ local function load_clothing_metadata(player, clothing_inv)
 		end
 	end
 	-- Fill detached slots
-	clothing_inv:set_size("clothing", 6)
-	for i = 1, 6 do
+	clothing_inv:set_size("clothing", 4)
+	for i = 1, 4 do
 		clothing_inv:set_stack("clothing", i, clothes[i] or "")
 	end
 
@@ -105,4 +105,4 @@ minetest.register_on_joinplayer(function(player)
 	end, name)
 end)
 
-print("clothing loaded")
+print("loaded clothing")
