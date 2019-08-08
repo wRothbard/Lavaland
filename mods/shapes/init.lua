@@ -411,7 +411,7 @@ end
 
 
 -- Register default stairs and slabs
-shapes.register_stair_and_slab(
+shapes.register_shapes(
 	"wood",
 	"trees:wood",
 	{choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
@@ -731,7 +731,7 @@ shapes.register_stair_and_slab(
 	true
 )
 --]]
-shapes.register_stair_and_slab(
+shapes.register_shapes(
 	"copperblock",
 	"copper:block",
 	{cracky = 1, level = 2},
@@ -753,7 +753,7 @@ shapes.register_stair_and_slab(
 	true
 )
 --]]
-shapes.register_stair_and_slab(
+shapes.register_shapes(
 	"goldblock",
 	"gold:block",
 	{cracky = 1},
