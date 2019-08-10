@@ -49,6 +49,9 @@ local function physics(player, enabled)
 end
 
 local function sprint(player)
+	if not player then
+		return
+	end
 	local stam = stamina.get_stamina(player)
 	local name = player:get_player_name()
 	local c = control(player)
