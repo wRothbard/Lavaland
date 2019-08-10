@@ -68,9 +68,9 @@ local function sprint(player)
 	if sprinting[name] and stam > 0 and
 			(c.up or c.down or c.left or
 			c.right or c.jump) then
-		stamina.add_stamina(player, -0.05)
+		stamina.add_stamina(player, -0.1)
 	elseif stam < 20 and not cooldown[name] then
-		stamina.add_stamina(player, 0.2)
+		stamina.add_stamina(player, 0.25)
 	end
 
 	if stam < 1 and not cooldown[name] then
@@ -89,7 +89,7 @@ local function sprint(player)
 		})
 	elseif cooldown[name] then
 		if stam >= 1 and stam < 20 then
-			stamina.add_stamina(player, 0.1)
+			stamina.add_stamina(player, 0.25)
 		end
 	end
 
