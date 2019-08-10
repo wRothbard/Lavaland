@@ -26,6 +26,16 @@ sb_armor = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
 	text = "shields_inv_shield_steel.png",
+	number = 0,
+	direction = 0,
+	size = {x = 24, y = 24},
+	offset = {x = 25, y = -(48 + 48 + 16)},
+}
+
+sb_hunger = {
+	hud_elem_type = "statbar",
+	position = {x = 0.5, y = 1},
+	text = "farming_bread.png",
 	number = 20,
 	direction = 0,
 	size = {x = 24, y = 24},
@@ -34,9 +44,13 @@ sb_armor = {
 
 hud.update = function(player, elem, stat, value, modifier)
 	local name = player:get_player_name()
+	if not players[name] then
+		return
+	end
 	
 	local cooldown = modifier and modifier.name == "cooldown"
 	local armor = modifier and modifier.name == "armor"
+	local hungry = modifier and modifier.name == "hunger"
 
 	if cooldown then
 		player:hud_change(players[name][elem],
@@ -60,6 +74,9 @@ hud.update = function(player, elem, stat, value, modifier)
 		bar = math.ceil(bar)
 		player:hud_change(players[name][elem],
 				"number", bar)
+	elseif hungry then
+		player:hud_change(players[name][elem],
+				"number", hunger.status(player))
 	else
 		player:hud_change(players[name][elem], stat, value)
 	end
@@ -74,13 +91,10 @@ end)
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	players[name] = {
-		stamina = -1,
-		armor = -1,
-		hunger = -1,
+		stamina = player:hud_add(sb_stamina),
+		armor = player:hud_add(sb_armor),
+		hunger = player:hud_add(sb_hunger),
 	}
-
-	players[name].stamina = player:hud_add(sb_stamina)
-	players[name].armor = player:hud_add(sb_armor)
 end)
 
 print("loaded hud")
