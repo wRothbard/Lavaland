@@ -97,4 +97,8 @@ minetest.register_on_joinplayer(function(player)
 	}
 end)
 
+minetest.register_on_leaveplayer(function(player)
+	players[player:get_player_name()] = nil
+end)
+
 print("loaded hud")
