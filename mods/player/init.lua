@@ -73,9 +73,17 @@ local function sprint(player)
 	if stam < 1 and not cooldown[name] then
 		cooldown[name] = true
 		stamina.add_stamina(player, -20)
-		minetest.after(1, stamina.add_stamina, player, 1)
+		minetest.after(2, stamina.add_stamina, player, 1)
+		hud.update(player, "stamina", nil, nil, {
+			name = "cooldown",
+			action = "red",
+		})
 	elseif stam >= 20 and cooldown[name] then
 		cooldown[name] = false
+		hud.update(player, "stamina", nil, nil, {
+			name = "cooldown",
+			action = "green",
+		})
 	elseif cooldown[name] then
 		if stam >= 1 and stam < 20 then
 			stamina.add_stamina(player, 0.1)

@@ -15,16 +15,24 @@ minetest.hud_replace_builtin("breath", {
 sb_stamina = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
-	text = "bubble.png",
+	text = "bubble.png^[colorize:green:100",
 	number = 0,
 	direction = 0,
 	size = {x = 24, y = 24},
 	offset = {x = 25, y = -(48 + 24 + 16)},
 }
 
-hud.update = function(player, elem, stat, value)
+hud.update = function(player, elem, stat, value, modifier)
 	local name = player:get_player_name()
-	player:hud_change(players[name][elem], stat, value)
+	
+	local cooldown = modifier and modifier.name == "cooldown"
+	if cooldown then
+		player:hud_change(players[name][elem],
+				"text", "bubble.png^[colorize:" ..
+				modifier.action .. ":100")
+	else
+		player:hud_change(players[name][elem], stat, value)
+	end
 end
 
 minetest.register_on_joinplayer(function(player)
