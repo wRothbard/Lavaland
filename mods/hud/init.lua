@@ -57,13 +57,19 @@ hud.update = function(player, elem, stat, value, modifier)
 		end
 		local d = 65535 * count - wear
 		local bar = d / (65535 / 2) * 2
-
+		bar = math.ceil(bar)
 		player:hud_change(players[name][elem],
 				"number", bar)
 	else
 		player:hud_change(players[name][elem], stat, value)
 	end
 end
+
+minetest.register_on_player_hpchange(function(player, hp_change)
+	if hp_change < 0 then
+		hud.update(player, "armor", "number", nil, {name = "armor"})
+	end
+end)
 
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
