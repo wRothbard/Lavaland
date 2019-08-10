@@ -52,7 +52,12 @@ local function sprint(player)
 	if not player then
 		return
 	end
+
 	local stam = stamina.get_stamina(player)
+	if not stam then
+		return
+	end
+
 	local name = player:get_player_name()
 	local c = control(player)
 	local s = sprinting[name]
