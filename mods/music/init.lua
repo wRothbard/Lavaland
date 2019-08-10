@@ -40,7 +40,7 @@ local rand = math.random
 minetest.register_abm({
 	label = "Lava sounds",
 	nodenames = "lava:source",
-	neighbors = "air",
+	neighbors = {"obsidian:obsidian"},
 	interval = 6.0,
 	chance = 3,
 	catch_up = false,
