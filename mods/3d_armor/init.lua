@@ -53,6 +53,10 @@ armor:register_on_destroy(function(player, index, stack)
 	end
 end)
 
+armor:register_on_update(function(player)
+	hud.update(player, "armor", "number", nil, {name = "armor"})
+end)
+
 local function init_player_armor(player)
 	local name = player:get_player_name()
 	local pos = player:getpos()
