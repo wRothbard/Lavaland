@@ -23,9 +23,17 @@ stamina.get_stamina = function(player)
 	return players[name]
 end
 
-minetest.register_on_joinplayer(function(player)
-	stamina.add_stamina(player, 1)
+minetest.register_on_respawnplayer(function(player)
+	players[player:get_player_name()] = 20
+end)
 
+minetest.register_on_joinplayer(function(player)
+	players[player:get_player_name()] = 20
+
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	players[player:get_player_name()] = nil
 end)
 
 print("loaded stamina")

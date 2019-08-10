@@ -32,6 +32,7 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 	local name = user:get_player_name()
 	local sat = players[name]
 	if sat < 20 and hp_change > 0 then
+		itemstack:take_item()
 		sat = sat + hp_change
 		if sat > 20 then
 			sat = 20
@@ -40,6 +41,10 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 	end
 	hud.update(user, "hunger", "number", nil, {name = "hunger"})
 	return itemstack
+end)
+
+minetest.register_on_respawnplayer(function(player)
+	players[player:get_player_name()] = 20
 end)
 
 minetest.register_on_joinplayer(function(player)
@@ -51,6 +56,12 @@ minetest.register_on_joinplayer(function(player)
 	end
 	players[name] = sat
 	cons(player)
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	player:get_meta():set_int("satiation", players[name])
+	players[name] = nil
 end)
 
 print("loaded hunger")
