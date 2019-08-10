@@ -10,6 +10,9 @@ local function cons(player)
 	local name = player:get_player_name()
 	local hp = player:get_hp()
 	local sat = players[name]
+	if not sat then
+		return
+	end
 	if sat <= 1 then
 		sat = 1
 		player:set_hp(player:get_hp() - 4)
