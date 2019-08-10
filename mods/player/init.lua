@@ -1,3 +1,6 @@
+local players = {}
+local cooldown = {}
+
 dofile(minetest.get_modpath("player") .. "/api.lua")
 
 -- Default player appearance
@@ -46,33 +49,68 @@ local function physics(player, enabled)
 end
 
 local function sprint(player)
+	local stam = stamina.get_stamina(player)
 	local name = player:get_player_name()
-	local aux1 = control(player, "aux1")
+	local c = control(player)
 	local s = sprinting[name]
-	if s and not aux1 then
-		sprinting[name] = false
-		physics(player, false)
-	elseif aux1 and not s then
+
+	if stam >= 1 and not s and c.aux1 and not cooldown[name] then
 		sprinting[name] = true
 		physics(player, true)
+	elseif s and (not c.aux1 or stam < 1) then
+		sprinting[name] = false
+		physics(player, false)
 	end
+
+	if sprinting[name] and stam > 0 and
+			(c.up or c.down or c.left or
+			c.right or c.jump) then
+		stamina.add_stamina(player, -0.05)
+	elseif stam < 20 and not cooldown[name] then
+		stamina.add_stamina(player, 0.2)
+	end
+
+	if stam < 1 and not cooldown[name] then
+		cooldown[name] = true
+		stamina.add_stamina(player, -20)
+		minetest.after(1, stamina.add_stamina, player, 1)
+	elseif stam >= 20 and cooldown[name] then
+		cooldown[name] = false
+	elseif cooldown[name] then
+		if stam >= 1 and stam < 20 then
+			stamina.add_stamina(player, 0.1)
+		end
+	end
+
+	hud.update(player, "stamina", "number", stamina.get_stamina(player))
+
 	minetest.after(0, function()
 		sprint(player)
 	end)
 end
 
+--[[
+local function breath(player)
+	local s = stamina.get_stamina(player)
+	local name = player:get_player_name()
+	local c = player:get_player_control()
+	local moving = c.up or c.down or
+			c.left or c.right or c.jump
+	if sprinting[name] and s > 0 and moving then
+		stamina.add_stamina(player, -1)
+	elseif s < 20 then
+		stamina.add_stamina(player, 1)
+	end
+	hud.update(player, "stamina", "number", tonumber(s))
+	minetest.after(0, function()
+		breath(player)
+	end)
+end
+--]]
+
 local formspec_prepend = "bgcolor[#080808BB;false]" ..
 		"background[1,1;1,1;player_background.png;true]" ..
 		"listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF"
-
-local function get_hotbar_bg(x, y)
-	local out = ""
-	for i= 0, 7, 1 do
-		out = out .. "image[" .. x + i ..
-				"," .. y .. ";1,1;player_hb_bg.png]"
-	end
-	return out
-end
 
 local formspec_default = "size[8,7.25]" ..
 		"button_exit[0.5,1;2,1;home;Home]" ..
@@ -120,6 +158,15 @@ minetest.register_item(":", {
 				},
 				uses = 0,
 			},
+			choppy = {
+				times = {
+					[1] = 5.00,
+					[2] = 3.00,
+					[3] = 1.00,
+				},
+				uses = 0,
+			},
+
 		},
 		damage_groups = {fleshy = 1},
 	},
@@ -164,39 +211,10 @@ minetest.register_on_dieplayer(function(player, reason)
 	end
 end)
 
-minetest.register_chatcommand("gender", {
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return false, "Must be player!"
-		end
-
-		local meta = player:get_meta()
-
-		local gender = meta:get_string("gender")
-		if gender == "" then
-			gender = "male"
-		else
-			gender = nil
-		end
-
-		if param ~= "female" and param ~= "male" then
-			return true, "You're gender is " .. gender .. "."
-		end
-		
-		if not gender then
-			gender = param
-		end
-
-		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
-		multiskin.update_player_visuals(player)
-
-		meta:set_string("gender", param)
-	end,
-})
-
 minetest.register_on_joinplayer(function(player)
-	sprinting[player:get_player_name()] = false
+	local name = player:get_player_name()
+	sprinting[name] = false
+	cooldown[name] = false
 
 	player:set_physics_override({
 		sneak_glitch = true,
@@ -206,7 +224,7 @@ minetest.register_on_joinplayer(function(player)
 
 	sprint(player)
 
-	player_api.player_attached[player:get_player_name()] = false
+	player_api.player_attached[name] = false
 	player_api.set_model(player, "character.b3d")
 	player:set_local_animation(
 		{x = 0,   y = 79},
@@ -237,7 +255,39 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	sprinting[player:get_player_name()] = nil
+	local name = player:get_player_name()
+	sprinting[name] = nil
 end)
+
+minetest.register_chatcommand("gender", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Must be player!"
+		end
+
+		local meta = player:get_meta()
+
+		local gender = meta:get_string("gender")
+		if gender == "" then
+			gender = "male"
+		else
+			gender = nil
+		end
+
+		if param ~= "female" and param ~= "male" then
+			return true, "You're gender is " .. gender .. "."
+		end
+		
+		if not gender then
+			gender = param
+		end
+
+		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+		multiskin.update_player_visuals(player)
+
+		meta:set_string("gender", param)
+	end,
+})
 
 print("player loaded")
