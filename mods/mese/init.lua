@@ -208,7 +208,14 @@ minetest.register_abm({
 minetest.register_craftitem("mese:crystal_fragment", {
 	description = "Mese Crystal Fragment",
 	inventory_image = "mese_crystal_fragment.png",
-	on_use = minetest.item_eat(3),
+	on_use = function(itemstack, user, pointed_thing)
+		local hp = user:get_hp()
+		if hp < user:get_properties().hp_max then
+			user:set_hp(user:get_hp() + 3)
+			itemstack:take_item()
+		end
+		return itemstack
+	end,
 })
 
 minetest.register_craft({

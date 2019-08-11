@@ -41,6 +41,9 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 			sat = 20
 		end
 		players[name] = sat
+	elseif hp_change < 0 then
+		itemstack:take_item()
+		user:set_hp(user:get_hp() + hp_change)
 	end
 	hud.update(user, "hunger", "number", nil, {name = "hunger"})
 	return itemstack
