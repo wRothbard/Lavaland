@@ -9,13 +9,6 @@ else
 	ss = {x = 0, y = 5, z = 0}
 end
 
-minetest.register_chatcommand("spawn", {
-	func = function(name)
-		minetest.get_player_by_name(name):set_pos(ss)
-		minetest.sound_play("mapgen_item", {pos = ss})
-	end,
-})
-
 minetest.register_chatcommand("sethome", {
 	func = function(name)
 		local player = minetest.get_player_by_name(name)

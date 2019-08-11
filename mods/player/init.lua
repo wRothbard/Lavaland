@@ -2,6 +2,7 @@ local sprinting = {}
 local players = {}
 local cooldown = {}
 local accelerating = {}
+local dead = {}
 
 dofile(minetest.get_modpath("player") .. "/api.lua")
 
@@ -219,6 +220,22 @@ minetest.register_on_newplayer(function(player)
 end)
 
 minetest.register_on_dieplayer(function(player, reason)
+	local name = player:get_player_name()
+	if dead[name] then
+		return
+	end
+
+	local p_inv = player:get_inventory()
+	local items = {}
+	for k, list in pairs(p_inv:get_lists()) do
+		for i, n in pairs(list) do
+			if not n:is_empty() then
+				items[#items + 1] = n
+			end
+		end
+		p_inv:set_list(k, {})
+	end
+
 	local pos = player:get_pos()
 	local old_node = minetest.get_node(pos)
 	if old_node.name:match("lava") then
@@ -227,7 +244,6 @@ minetest.register_on_dieplayer(function(player, reason)
 	local an = minetest.find_node_near(pos, 3, "air", true)
 	if an then
 		minetest.set_node(an, {name = "bones:bones"})
-		local p_inv = player:get_inventory()
 		local meta = minetest.get_meta(an)
 		local inv = meta:get_inventory()
 		inv:set_size("main", 8 * 4)
@@ -235,9 +251,17 @@ minetest.register_on_dieplayer(function(player, reason)
 				"list[context;main;0,0;8,4]" ..
 				"list[current_player;main;0,5;8,4]" ..
 				"listring[]")
-		inv:set_list("main", p_inv:get_list("main"))
-		p_inv:set_list("main", {})
+		inv:set_list("main", items)
 	end
+
+	dead[name] = true
+end)
+
+minetest.register_on_respawnplayer(function(player)
+	local name = player:get_player_name()
+	dead[name] = false
+	player:set_pos(spawn.pos)
+	return true
 end)
 
 minetest.register_on_joinplayer(function(player)
@@ -246,6 +270,12 @@ minetest.register_on_joinplayer(function(player)
 	cooldown[name] = false
 	players[name] = 0
 	accelerating[name] = false
+
+	if player:get_hp() == 0 then
+		dead[name] = true
+	else
+		dead[name] = false
+	end
 
 	player:set_physics_override({
 		sneak_glitch = false,
@@ -291,6 +321,7 @@ minetest.register_on_leaveplayer(function(player)
 	cooldown[name] = nil
 	players[name] = nil
 	accelerating[name] = nil
+	dead[name] = nil
 end)
 
 minetest.register_chatcommand("gender", {
@@ -324,4 +355,4 @@ minetest.register_chatcommand("gender", {
 	end,
 })
 
-print("player loaded")
+print("loaded player")
