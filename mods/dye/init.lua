@@ -98,3 +98,5 @@ for _, mix in pairs(dye_recipes) do
 		recipe = {"dye:" .. mix[1], "dye:" .. mix[2]},
 	})
 end
+
+print("loaded dye")

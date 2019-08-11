@@ -191,4 +191,4 @@ minetest.register_craft({
 	}
 })
 
-print("bucket loaded")
+print("loaded bucket")

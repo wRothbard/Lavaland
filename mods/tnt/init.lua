@@ -670,3 +670,5 @@ tnt.register_tnt({
 	description = "TNT",
 	radius = tnt_radius,
 })
+
+print("loaded tnt")

@@ -1,1 +1,1 @@
-print("backpacks loaded")
+print("loaded backpacks")

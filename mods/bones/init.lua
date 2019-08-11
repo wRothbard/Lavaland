@@ -61,4 +61,4 @@ minetest.register_craftitem("bones:skull", {
 	inventory_image = "bones_skull.png",
 })
 
-print("bones loaded")
+print("loaded bones")

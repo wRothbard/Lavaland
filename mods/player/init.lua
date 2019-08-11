@@ -1,6 +1,7 @@
 local sprinting = {}
 local players = {}
 local cooldown = {}
+local accelerating = {}
 
 dofile(minetest.get_modpath("player") .. "/api.lua")
 
@@ -56,7 +57,7 @@ local function boost(player, old_pos)
 	local vel = player:get_player_velocity()
 	local sneak = player:get_player_control().sneak 
 	if vel.y >= 6.5 and players[name] < 1 and
-			sneak then
+			sneak and accelerating[name] then
 		players[name] = players[name] + 1
 		local boost = vector.multiply(vel, 0.35)
 		player:add_player_velocity(boost)
@@ -79,7 +80,15 @@ local function sprint(player)
 	local name = player:get_player_name()
 	local c = control(player)
 	local s = sprinting[name]
-	local y = player:get_player_velocity().y < -10 
+	local vel = player:get_player_velocity()
+	local y = vel.y < -10 
+
+	if vel.x > 5 or vel.z > 5 or
+			vel.x < -5 or vel.z < -5 then
+		accelerating[name] = true
+	else
+		accelerating[name] = false
+	end
 
 	if stam >= 1 and not s and c.aux1 and
 			not cooldown[name] and not y then
@@ -236,6 +245,7 @@ minetest.register_on_joinplayer(function(player)
 	sprinting[name] = false
 	cooldown[name] = false
 	players[name] = 0
+	accelerating[name] = false
 
 	player:set_physics_override({
 		sneak_glitch = false,
@@ -280,6 +290,7 @@ minetest.register_on_leaveplayer(function(player)
 	sprinting[name] = nil
 	cooldown[name] = nil
 	players[name] = nil
+	accelerating[name] = nil
 end)
 
 minetest.register_chatcommand("gender", {
