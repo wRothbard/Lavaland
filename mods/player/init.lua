@@ -1,3 +1,4 @@
+local sprinting = {}
 local players = {}
 local cooldown = {}
 
@@ -20,8 +21,6 @@ player_api.register_model("character.b3d", {
 	stepheight = 0.6,
 	eye_height = 1.47,
 })
-
-local sprinting = {}
 
 local function control(player, field)
 	local controls = player:get_player_control()
@@ -48,6 +47,20 @@ local function physics(player, enabled)
 	end
 end
 
+local function boost(player, old_pos)
+	local name = player:get_player_name()
+	local vel = player:get_player_velocity()
+	local sneak = player:get_player_control().sneak 
+	if vel.y >= 6.5 and players[name] < 1 and
+			sneak then
+		players[name] = players[name] + 1
+		local boost = vector.multiply(vel, 0.35)
+		player:add_player_velocity(boost)
+	elseif vel.y <= 0 and not sneak then
+		players[name] = 0
+	end
+end
+
 local function sprint(player)
 	if not player then
 		return
@@ -58,6 +71,7 @@ local function sprint(player)
 		return
 	end
 
+	local pos = player:get_pos()
 	local name = player:get_player_name()
 	local c = control(player)
 	local s = sprinting[name]
@@ -73,6 +87,9 @@ local function sprint(player)
 	if sprinting[name] and stam > 0 and
 			(c.up or c.down or c.left or
 			c.right or c.jump) then
+		if players[name] <= 1 then
+			boost(player, pos)
+		end
 		stamina.add_stamina(player, -0.1)
 	elseif stam < 20 and not cooldown[name] then
 		stamina.add_stamina(player, 0.25)
@@ -104,25 +121,6 @@ local function sprint(player)
 		sprint(player)
 	end)
 end
-
---[[
-local function breath(player)
-	local s = stamina.get_stamina(player)
-	local name = player:get_player_name()
-	local c = player:get_player_control()
-	local moving = c.up or c.down or
-			c.left or c.right or c.jump
-	if sprinting[name] and s > 0 and moving then
-		stamina.add_stamina(player, -1)
-	elseif s < 20 then
-		stamina.add_stamina(player, 1)
-	end
-	hud.update(player, "stamina", "number", tonumber(s))
-	minetest.after(0, function()
-		breath(player)
-	end)
-end
---]]
 
 local formspec_prepend = "bgcolor[#080808BB;false]" ..
 		"background[1,1;1,1;player_background.png;true]" ..
@@ -231,6 +229,7 @@ minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	sprinting[name] = false
 	cooldown[name] = false
+	players[name] = 0
 
 	player:set_physics_override({
 		sneak_glitch = true,
@@ -273,6 +272,8 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	sprinting[name] = nil
+	cooldown[name] = nil
+	players[name] = nil
 end)
 
 minetest.register_chatcommand("gender", {
