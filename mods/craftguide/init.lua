@@ -1016,7 +1016,7 @@ else
 	M.register_craft({
 		output = "craftguide:book",
 		recipe = {
-			{"default:book"}
+			{"books:book"}
 		}
 	})
 
@@ -1029,7 +1029,7 @@ else
 	M.register_craft({
 		output = "craftguide:sign",
 		recipe = {
-			{"default:sign_wall_wood"}
+			{"signs:sign_wall_wood"}
 		}
 	})
 

@@ -735,7 +735,7 @@ shapes.register_shapes(
 	"copperblock",
 	"copper:block",
 	{cracky = 1, level = 2},
-	{"default_copper_block.png"},
+	{"copper_block.png"},
 	"Copper Block Stair",
 	"Copper Block Slab",
 	{},
