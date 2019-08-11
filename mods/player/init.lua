@@ -37,12 +37,16 @@ local function physics(player, enabled)
 			speed = 2,
 			jump = 1.5,
 			gravity = 0.96,
+			new_move = false,
+			sneak_glitch = true,
 		})
 	else
 		player:set_physics_override({
 			speed = 1,
 			jump = 1,
 			gravity = 1,
+			new_move = true,
+			sneak_glitch = false,
 		})
 	end
 end
@@ -75,11 +79,13 @@ local function sprint(player)
 	local name = player:get_player_name()
 	local c = control(player)
 	local s = sprinting[name]
+	local y = player:get_player_velocity().y < -10 
 
-	if stam >= 1 and not s and c.aux1 and not cooldown[name] then
+	if stam >= 1 and not s and c.aux1 and
+			not cooldown[name] and not y then
 		sprinting[name] = true
 		physics(player, true)
-	elseif s and (not c.aux1 or stam < 1) then
+	elseif s and (not c.aux1 or stam < 1 or y) then
 		sprinting[name] = false
 		physics(player, false)
 	end
@@ -232,9 +238,9 @@ minetest.register_on_joinplayer(function(player)
 	players[name] = 0
 
 	player:set_physics_override({
-		sneak_glitch = true,
+		sneak_glitch = false,
 		sneak = true,
-		new_move = false,
+		new_move = true,
 	})
 
 	sprint(player)
