@@ -15,7 +15,7 @@ minetest.hud_replace_builtin("breath", {
 sb_stamina = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
-	text = "bubble.png^[colorize:green:100",
+	text = "hud_sb_stamina_green.png",
 	number = 0,
 	direction = 0,
 	size = {x = 24, y = 24},
@@ -25,7 +25,7 @@ sb_stamina = {
 sb_armor = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
-	text = "shields_inv_shield_steel.png",
+	text = "hud_sb_armor.png",
 	number = 0,
 	direction = 0,
 	size = {x = 24, y = 24},
@@ -35,7 +35,7 @@ sb_armor = {
 sb_hunger = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
-	text = "farming_bread.png",
+	text = "hud_sb_hunger.png",
 	number = 20,
 	direction = 0,
 	size = {x = 24, y = 24},
@@ -54,8 +54,7 @@ hud.update = function(player, elem, stat, value, modifier)
 
 	if cooldown then
 		player:hud_change(players[name][elem],
-				"text", "bubble.png^[colorize:" ..
-				modifier.action .. ":100")
+				"text", "hud_sb_stamina_" .. modifier.action .. ".png")
 	elseif armor then
 		local inv = minetest.get_inventory({type = "detached",
 				name = name .. "_armor"})
