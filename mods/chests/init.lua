@@ -325,4 +325,4 @@ minetest.register_craft( {
 	recipe = {"chests:chest", "steel:ingot"},
 })
 
-print("chests loaded")
+print("loaded chests")

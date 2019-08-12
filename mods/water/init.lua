@@ -100,6 +100,7 @@ local minerals = {
 	"stone:stone_with_coal",
 	"stone:stone_with_copper",
 	"stone:stone_with_gold",
+	"stone:stone_with_diamond",
 }
 local cool_lava = function(pos, node)
 	if node.name == "lava:source" then

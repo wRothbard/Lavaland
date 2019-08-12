@@ -30,12 +30,11 @@ armor = {
 	textures = armor_textures,
 	default_skin = "player_male.png",
 	materials = {
-		steel = "steel:ingot",
-		bronze = "default:bronze_ingot",
-		diamond = "default:diamond",
-		mese = "mese:crystal",
-		gold = "default:gold_ingot",
 		obsidian = "obsidian:obsidian",
+		steel = "steel:ingot",
+		mese = "mese:crystal",
+		bronze = "bronze:ingot",
+		diamond = "diamond:diamond",
 	},
 	registered_groups = {["fleshy"]=100},
 	registered_callbacks = {
@@ -57,12 +56,11 @@ armor.config = {
 	destroy = false,
 	level_multiplier = 1,
 	heal_multiplier = 1,
+	material_obsidian = true,
 	material_steel = true,
 	material_mese = true,
-	material_bronze = false,
-	material_diamond = false,
-	material_gold = false,
-	material_obsidian = true,
+	material_bronze = true,
+	material_diamond = true,
 	punch_damage = true,
 }
 

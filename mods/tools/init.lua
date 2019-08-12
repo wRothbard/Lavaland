@@ -220,4 +220,102 @@ minetest.register_craft({
 	},
 })
 
-print("tools loaded")
+-- Diamond
+minetest.register_tool("tools:shovel_diamond", {
+	description = "Diamond Shovel",
+	inventory_image = "default_tool_diamondshovel.png",
+	wield_image = "default_tool_diamondshovel.png^[transformR90",
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		max_drop_level=1,
+		groupcaps={
+			crumbly = {times={[1]=1.10, [2]=0.50, [3]=0.30}, uses=30, maxlevel=3},
+		},
+		damage_groups = {fleshy=4},
+	},
+	sound = {breaks = "default_tool_breaks"},
+	groups = {shovel = 1}
+})
+
+minetest.register_tool("tools:pick_diamond", {
+	description = "Diamond Pickaxe",
+	inventory_image = "default_tool_diamondpick.png",
+	tool_capabilities = {
+		full_punch_interval = 0.9,
+		max_drop_level=3,
+		groupcaps={
+			cracky = {times={[1]=2.0, [2]=1.0, [3]=0.50}, uses=30, maxlevel=3},
+		},
+		damage_groups = {fleshy=5},
+	},
+	sound = {breaks = "default_tool_breaks"},
+	groups = {pickaxe = 1}
+})
+
+minetest.register_tool("tools:sword_diamond", {
+	description = "Diamond Sword",
+	inventory_image = "default_tool_diamondsword.png",
+	tool_capabilities = {
+		full_punch_interval = 0.7,
+		max_drop_level=1,
+		groupcaps={
+			snappy={times={[1]=1.90, [2]=0.90, [3]=0.30}, uses=40, maxlevel=3},
+		},
+		damage_groups = {fleshy=8},
+	},
+	sound = {breaks = "default_tool_breaks"},
+	groups = {sword = 1}
+})
+
+minetest.register_tool("tools:axe_diamond", {
+	description = "Diamond Axe",
+	inventory_image = "default_tool_diamondaxe.png",
+	tool_capabilities = {
+		full_punch_interval = 0.9,
+		max_drop_level=1,
+		groupcaps={
+			choppy={times={[1]=2.10, [2]=0.90, [3]=0.50}, uses=30, maxlevel=3},
+		},
+		damage_groups = {fleshy=7},
+	},
+	sound = {breaks = "default_tool_breaks"},
+	groups = {axe = 1}
+})
+
+minetest.register_craft({
+	output = "tools:sword_diamond",
+	recipe = {
+		{"diamond:diamond"},
+		{"diamond:diamond"},
+		{"group:stick"},
+	}
+})
+
+minetest.register_craft({
+	output = "tools:axe_diamond",
+	recipe = {
+		{"diamond:diamond", "diamond:diamond"},
+		{"diamond:diamond", "group:stick"},
+		{"", "group:stick"},
+	}
+})
+
+minetest.register_craft({
+	output = "tools:shovel_diamond",
+	recipe = {
+		{"diamond:diamond"},
+		{"group:stick"},
+		{"group:stick"},
+	}
+})
+
+minetest.register_craft({
+	output = "tools:pick_diamond",
+	recipe = {
+		{"diamond:diamond", "diamond:diamond", "diamond:diamond"},
+		{"", "group:stick", ""},
+		{"", "group:stick", ""},
+	}
+})
+
+print("loaded tools")

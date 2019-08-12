@@ -1,13 +1,5 @@
 minetest.register_alias("default:stone", "stone:stone")
 
-minetest.register_node("stone:stone_with_coal", {
-	description = "Coal Ore",
-	tiles = {"stone_stone.png^default_mineral_coal.png"},
-	groups = {cracky = 3},
-	drop = "coal:lump",
-	sounds = music.sounds.nodes.stone,
-})
-
 minetest.register_node("stone:stone", {
 	description = "Stone",
 	tiles = {"stone_stone.png"},
@@ -17,10 +9,18 @@ minetest.register_node("stone:stone", {
 	sounds = music.sounds.nodes.stone,
 })
 
+minetest.register_node("stone:stone_with_coal", {
+	description = "Coal Ore",
+	tiles = {"stone_stone.png^default_mineral_coal.png"},
+	groups = {cracky = 2, oddly_breakable_by_hand = 1},
+	drop = "coal:lump",
+	sounds = music.sounds.nodes.stone,
+})
+
 minetest.register_node("stone:stone_with_copper", {
 	description = "Copper Ore",
 	tiles = {"stone_stone.png^stone_mineral_copper.png"},
-	groups = {cracky = 2},
+	groups = {cracky = 2, oddly_breakable_by_hand = 1},
 	drop = "copper:lump",
 	sounds = music.sounds.nodes.stone,
 })
@@ -30,6 +30,14 @@ minetest.register_node("stone:stone_with_gold", {
 	tiles = {"stone_stone.png^default_mineral_gold.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
 	drop = "gold:lump",
+	sounds = music.sounds.nodes.stone,
+})
+
+minetest.register_node("stone:stone_with_diamond", {
+	description = "Diamond Ore",
+	tiles = {"stone_stone.png^default_mineral_diamond.png"},
+	groups = {cracky = 1},
+	drop = "diamond:diamond",
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -135,4 +143,5 @@ minetest.register_abm({
 		end
 	end
 })
+
 print("loaded stone")

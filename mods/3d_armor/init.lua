@@ -105,7 +105,7 @@ local function init_player_armor(player)
 	if not armor:load_armor_inventory(player) and armor.migrate_old_inventory then
 		local player_inv = player:get_inventory()
 		player_inv:set_size("armor", 5)
-		for i = 1, 6 do
+		for i = 1, 5 do
 			local stack = player_inv:get_stack("armor", i)
 			armor_inv:set_stack("armor", i, stack)
 		end

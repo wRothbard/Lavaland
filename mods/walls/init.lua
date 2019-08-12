@@ -48,4 +48,4 @@ walls.register("walls:mossycobble", "Mossy Cobblestone Wall", {"stone_mossycobbl
 walls.register("walls:obsidian", "Obsidian Wall", {"obsidian_obsidian.png"},
 		"obsidian:obsidian", {})
 
-print("walls loaded")
+print("loaded walls")

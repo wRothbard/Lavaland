@@ -1,1 +1,1 @@
-print("default loaded")
+print("loaded default")
