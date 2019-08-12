@@ -21,6 +21,7 @@ minetest.register_abm({
 				local n = music.players[name]
 				if n < 3 then
 					music.players[name] = n + 1
+					pos.y = pos.y - 5
 					minetest.sound_play("lava", {
 						pos = pos,
 						gain = rand(),

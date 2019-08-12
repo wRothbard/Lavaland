@@ -38,7 +38,7 @@ music.sounds = {
 			dug = {
 				name = "stone_dug",
 				gain = 0.9,
-				pitch = 1.5,
+				--pitch = 1.1,
 			},
 			place = {
 				name = "stone_place",
