@@ -33,4 +33,10 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_craft({
+	type = "cooking",
+	output = "steel:ingot",
+	recipe = "steel:iron_lump",
+})
+
 print("steel loaded")

@@ -74,12 +74,6 @@ minetest.register_node("stone:cobble", {
 
 minetest.register_craft({
 	type = "cooking",
-	output = "steel:ingot",
-	recipe = "steel:iron_lump",
-})
-
-minetest.register_craft({
-	type = "cooking",
 	output = "stone:stone",
 	recipe = "stone:cobble",
 })
