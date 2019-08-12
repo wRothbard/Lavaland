@@ -1,25 +1,22 @@
-local sounds = {
-	dirt = {},
-	grass = {},
-}
-sounds.grass = sounds.dirt
-sounds.grass.footstep = {}
-
 minetest.register_node("dirt:dirt", {
 	description = "Dirt",
 	tiles = {"dirt_dirt.png"},
 	groups = {crumbly = 3, soil = 1, oddly_breakable_by_hand = 3},
-	sounds = sounds.dirt,
+	sounds = music.sounds.nodes.dirt,
 })
 
 minetest.register_node("dirt:grass", {
 	description = "Dirt with Grass",
-	tiles = {"dirt_grass.png", "dirt_dirt.png",
-		{name = "dirt_dirt.png^dirt_grass_side.png",
-			tileable_vertical = false}},
+	tiles = {
+		"dirt_grass.png", "dirt_dirt.png",
+		{
+			name = "dirt_dirt.png^dirt_grass_side.png",
+			tileable_vertical = false,
+		}
+	},
 	groups = {crumbly = 3, soil = 1, spreading_dirt_type = 1, oddly_breakable_by_hand = 3},
 	drop = "dirt:dirt",
-	sounds = sounds.grass,
+	sounds = music.sounds.nodes.dirt,
 })
 
 minetest.register_abm({

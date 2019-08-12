@@ -1,39 +1,7 @@
 music = {}
 music.players = {}
 
-music.sounds = {
-	material = {
-		metal = {},
-		stone = {},
-		wood = {},
-		water = {},
-		glass = {},
-		lava = {},
-	},
-	player = {
-		breath = {},
-		damage = {},
-	},
-	nodes = {
-		stone = {
-			footstep = {
-				name = "stone_hard_footstep",
-				gain = 0.3,
-			},
-			dug = {
-				name = "stone_hard_footstep",
-				gain = 0.1,
-			},
-		},
-		wood = {
-			footstep = {
-				name = "trees_wood_footstep",
-				gain = 0.3,
-			},
-		},
-	},
-}
-music.sounds.nodes["furnace"] = music.sounds.nodes.stone
+dofile(minetest.get_modpath("music") .. "/sounds.lua")
 
 local rand = math.random
 

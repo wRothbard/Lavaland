@@ -10,6 +10,12 @@ minetest.register_craftitem("steel:ingot", {
 	inventory_image = "steel_ingot.png"
 })
 
+minetest.register_alias("stone:iron_lump", "steel:iron_lump")
+minetest.register_craftitem("steel:iron_lump", {
+	description = "Iron Lump",
+	inventory_image = "stone_iron_lump.png"
+})
+
 minetest.register_node("steel:block", {
 	description = "Steel Block",
 	tiles = {"steel_block.png"},

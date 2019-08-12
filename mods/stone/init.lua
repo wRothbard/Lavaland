@@ -1,10 +1,5 @@
 minetest.register_alias("default:stone", "stone:stone")
 
-local sounds = {
-	footstep = {name = "stone_hard_footstep", gain = 0.3},
-	dug = {name = "stone_hard_footstep", gain = 1.0},
-}
-
 minetest.register_node("stone:stone_with_coal", {
 	description = "Coal Ore",
 	tiles = {"stone_stone.png^default_mineral_coal.png"},
@@ -19,7 +14,7 @@ minetest.register_node("stone:stone", {
 	groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 1},
 	drop = "stone:cobble",
 	legacy_mineral = true,
-	sounds = sounds,
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("stone:stone_with_copper", {
@@ -27,6 +22,14 @@ minetest.register_node("stone:stone_with_copper", {
 	tiles = {"stone_stone.png^stone_mineral_copper.png"},
 	groups = {cracky = 2},
 	drop = "copper:lump",
+	sounds = music.sounds.nodes.stone,
+})
+
+minetest.register_node("stone:stone_with_gold", {
+	description = "Gold Ore",
+	tiles = {"stone_stone.png^default_mineral_gold.png"},
+	groups = {cracky = 2, oddly_breakable_by_hand = 1},
+	drop = "gold:lump",
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -43,14 +46,14 @@ minetest.register_node("stone:stone_with_iron", {
 			},
 {
 				rarity = 3,
-				items = {"stone:cobble", "stone:iron_lump 2"}
+				items = {"stone:cobble", "steel:iron_lump 2"}
 			},
 			{
-				items = {"stone:cobble", "stone:iron_lump"}
+				items = {"stone:cobble", "steel:iron_lump"}
 			},
 		}
 	},
-	sounds = sounds,
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("stone:cobble", {
@@ -58,18 +61,13 @@ minetest.register_node("stone:cobble", {
 	tiles = {"stone_cobble.png"},
 	is_ground_content = false,
 	groups = {cracky = 3, stone = 2, oddly_breakable_by_hand = 2},
-	sounds = sounds,
-})
-
-minetest.register_craftitem("stone:iron_lump", {
-	description = "Iron Lump",
-	inventory_image = "stone_iron_lump.png"
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_craft({
 	type = "cooking",
 	output = "steel:ingot",
-	recipe = "stone:iron_lump",
+	recipe = "steel:iron_lump",
 })
 
 minetest.register_craft({
@@ -85,7 +83,7 @@ minetest.register_node("stone:brick", {
 	tiles = {"stone_brick.png"},
 	is_ground_content = false,
 	groups = {cracky = 2, stone = 1},
-	sounds = sounds,
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_craft({
@@ -101,7 +99,7 @@ minetest.register_node("stone:block", {
 	tiles = {"stone_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 2, stone = 1},
-	sounds = sounds,
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_craft({
@@ -118,7 +116,7 @@ minetest.register_node("stone:mossycobble", {
 	tiles = {"stone_mossycobble.png"},
 	is_ground_content = false,
 	groups = {cracky = 3, stone = 1, oddly_breakable_by_hand = 2},
-	sounds = sounds, 
+	sounds = music.sounds.nodes.stone, 
 })
 
 minetest.register_abm({
@@ -137,13 +135,4 @@ minetest.register_abm({
 		end
 	end
 })
-
-minetest.register_node("stone:stone_with_gold", {
-	description = "Gold Ore",
-	tiles = {"stone_stone.png^default_mineral_gold.png"},
-	groups = {cracky = 2},
-	drop = "gold:lump",
-	--sounds = default.node_sound_stone_defaults(),
-})
-
-print("stone loaded")
+print("loaded stone")

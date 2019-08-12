@@ -92,7 +92,6 @@ local function find_lava(pos)
 end
 
 local function after_dig_node(pos, oldnode, oldmetadata, digger)
-	print("---")
 	if oldmetadata and oldmetadata.inventory then
 		for _, list in pairs(oldmetadata.inventory) do
 			for _, item in pairs(list) do
@@ -296,9 +295,9 @@ minetest.register_node("furnace:furnace", {
 	end,
 	on_blast = function(pos)
 		local drops = {}
-		--default.get_inventory_drops(pos, "src", drops)
-		--default.get_inventory_drops(pos, "fuel", drops)
-		--default.get_inventory_drops(pos, "dst", drops)
+		inventory.get_inventory_drops(pos, "src", drops)
+		inventory.get_inventory_drops(pos, "fuel", drops)
+		inventory.get_inventory_drops(pos, "dst", drops)
 		drops[#drops+1] = "furnace:furnace"
 		minetest.remove_node(pos)
 		return drops
@@ -368,4 +367,4 @@ minetest.register_abm({
 	end,
 })
 
-print("furnace loaded")
+print("loaded furnace")
