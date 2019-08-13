@@ -125,7 +125,7 @@ fences.register_fence("fences:fence_wood", {
 				"default_fence_overlay.png^[makealpha:255,126,126",
 	material = "trees:wood",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
-	--sounds = default.node_sound_wood_defaults()
+	sounds = music.sounds.nodes.wood,
 })
 
 fences.register_fence_rail("fences:fence_rail_wood", {
@@ -137,7 +137,31 @@ fences.register_fence_rail("fences:fence_rail_wood", {
 				"default_fence_rail_overlay.png^[makealpha:255,126,126",
 	material = "trees:wood",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
-	--sounds = default.node_sound_wood_defaults()
+	sounds = music.sounds.nodes.wood,
+})
+
+fences.register_fence("fences:fence_steel", {
+	description = "Steel Fence",
+	texture = "steel_block.png",
+	inventory_image = "default_fence_overlay.png^steel_block.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_overlay.png^steel_block.png^" ..
+				"default_fence_overlay.png^[makealpha:255,126,126",
+	material = "steel:ingot",
+	groups = {cracky = 2},
+	sounds = music.sounds.material.metal,
+})
+
+fences.register_fence_rail("fences:fence_rail_steel", {
+	description = "Steel Fence Rail",
+	texture = "steel_block.png",
+	inventory_image = "default_fence_rail_overlay.png^steel_block.png^" ..
+				"default_fence_rail_overlay.png^[makealpha:255,126,126",
+	wield_image = "default_fence_rail_overlay.png^steel_block.png^" ..
+				"default_fence_rail_overlay.png^[makealpha:255,126,126",
+	material = "steel:ingot",
+	groups = {cracky = 2},
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({
