@@ -242,4 +242,54 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_node("mese:lamp", {
+	description = "Mese Lamp",
+	drawtype = "glasslike",
+	tiles = {"default_meselamp.png"},
+	paramtype = "light",
+	sunlight_propagates = true,
+	is_ground_content = false,
+	groups = {cracky = 3, oddly_breakable_by_hand = 3},
+	--sounds = default.node_sound_glass_defaults(),
+	light_source = minetest.LIGHT_MAX,
+})
+
+minetest.register_node("mese:post_light", {
+	description = "Mese Post Light",
+	tiles = {"default_mese_post_light_top.png", "default_mese_post_light_top.png",
+		"default_mese_post_light_side_dark.png", "default_mese_post_light_side_dark.png",
+		"default_mese_post_light_side.png", "default_mese_post_light_side.png"},
+	wield_image = "default_mese_post_light_side.png",
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-2 / 16, -8 / 16, -2 / 16, 2 / 16, 8 / 16, 2 / 16},
+		},
+	},
+	paramtype = "light",
+	light_source = minetest.LIGHT_MAX,
+	sunlight_propagates = true,
+	is_ground_content = false,
+	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
+	--sounds = default.node_sound_wood_defaults(),
+})
+
+minetest.register_craft({
+	output = "mese:lamp",
+	recipe = {
+		{"glass:glass"},
+		{"mese:crystal"},
+	}
+})
+
+minetest.register_craft({
+	output = "mese:post_light 3",
+	recipe = {
+		{"", "glass:glass", ""},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
+		{"", "group:wood", ""},
+	}
+})
+
 print("mese loaded")

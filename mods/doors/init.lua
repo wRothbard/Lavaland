@@ -474,22 +474,22 @@ doors.register("door_steel", {
 			{"steel:ingot", "steel:ingot"},
 		}
 })
---[[
+
 doors.register("door_glass", {
 		tiles = {"doors_door_glass.png"},
 		description = "Glass Door",
 		inventory_image = "doors_item_glass.png",
 		groups = {cracky=3, oddly_breakable_by_hand=3},
-		sounds = default.node_sound_glass_defaults(),
+		--sounds = default.node_sound_glass_defaults(),
 		sound_open = "doors_glass_door_open",
 		sound_close = "doors_glass_door_close",
 		recipe = {
-			{"default:glass", "default:glass"},
-			{"default:glass", "default:glass"},
-			{"default:glass", "default:glass"},
+			{"glass:glass", "glass:glass"},
+			{"glass:glass", "glass:glass"},
+			{"glass:glass", "glass:glass"},
 		}
 })
---]]
+
 doors.register("door_obsidian_glass", {
 		tiles = {"doors_door_obsidian_glass.png"},
 		description = "Obsidian Glass Door",
