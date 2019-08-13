@@ -56,4 +56,4 @@ minetest.register_on_joinplayer(function(player)
 	players[name]:set_stack("skin", 1, inv:get_stack("skin", 1))
 end)
 
-print("skins loaded")
+print("loaded skins")

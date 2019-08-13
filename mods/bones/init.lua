@@ -20,11 +20,7 @@ minetest.register_node("bones:bones", {
 			{rarity = 1, items = {"bones:bones"}},
 		},
 	},
-	sounds = {
-		footstep = {name = "bones_footstep", gain = 0.4},
-		dug = {name = "bones_footstep", gain = 1.0},
-		place = {name = "nodes_place", gain = 1.0},
-	},
+	sounds = music.sounds.nodes.bones,
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()

@@ -1,6 +1,23 @@
 music.sounds = {
 	material = {
-		metal = {},
+		metal = {
+			footstep = {
+				name = "default_metal_footstep",
+				gain = 0.4,
+			},
+			dig = {
+				name = "default_dig_metal",
+				gain = 0.5,
+			},
+			dug = {
+				name = "default_dug_metal",
+				gain = 0.5,
+			},
+			place = {
+				name = "default_place_node_metal",
+				gain = 0.5,
+			},
+		},
 		stone = {},
 		wood = {},
 		water = {},
@@ -17,6 +34,8 @@ music.sounds = {
 				name = "",
 				gain = 1.0,
 			},
+			dig = {
+			},
 			dug = {
 				name = "default_dug_node",
 				gain = 0.25,
@@ -24,6 +43,10 @@ music.sounds = {
 			place = {
 				name = "default_place_node_hard",
 				gain = 1.0,
+			},
+			place_failed = {
+			},
+			fall = {
 			},
 		},
 		stone = {
@@ -45,12 +68,6 @@ music.sounds = {
 				gain = 1.0,
 			},
 		},
-		wood = {
-			footstep = {
-				name = "trees_wood_footstep",
-				gain = 0.3,
-			},
-		},
 		dirt = {
 			footstep = {
 				name = "dirt_footstep",
@@ -62,6 +79,64 @@ music.sounds = {
 			},
 			place = {
 				name = "default_place_node",
+				gain = 1.0,
+			},
+		},
+		wood = {
+			footstep = {
+				name = "trees_wood_footstep",
+				gain = 0.3,
+			},
+			dug = {
+				name = "trees_wood_footstep",
+				gain = 1.0,
+			},
+		},
+		leaves = {
+			footstep = {
+				name = "grass_footstep",
+				gain = 0.45,
+			},
+			dug = {
+				name = "grass_footstep",
+				gain = 0.7,
+			},
+			place = {
+				name = "grass_footstep",
+				gain = 1.0,
+			},
+		},
+		bones = {
+			footstep = {
+				name = "bones_footstep",
+				gain = 0.4,
+			},
+			dug = {
+				name = "bones_footstep",
+				gain = 1.0,
+			},
+			place = {
+				name = "nodes_place",
+				gain = 1.0,
+			},
+		},
+		water = {
+			footstep = {
+				name = "water_footstep",
+				gain = 0.2,
+			},
+		},
+		obsidian = {
+			footstep = {
+				name = "obsidian_footstep",
+				gain = 0.3,
+			},
+			dig = {
+				name = "obsidian_footstep",
+				gain = 1.0,
+			},
+			dug = {
+				name = "obsidian_footstep",
 				gain = 1.0,
 			},
 		},

@@ -47,4 +47,4 @@ minetest.register_on_leaveplayer(function(player)
 	music.players[player:get_player_name()] = nil
 end)
 
-print("music loaded")
+print("loaded music")

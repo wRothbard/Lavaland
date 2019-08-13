@@ -368,4 +368,4 @@ register_leafdecay({
 	radius = 3,
 })
 
-print("trees loaded")
+print("loaded trees")

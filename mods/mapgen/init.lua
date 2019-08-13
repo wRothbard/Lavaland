@@ -101,4 +101,4 @@ minetest.register_on_leaveplayer(function(player)
 	mapgen.homes[player:get_player_name()] = nil
 end)
 
-print("mapgen loaded")
+print("loaded mapgen")

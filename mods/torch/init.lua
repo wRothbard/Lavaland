@@ -144,5 +144,4 @@ minetest.register_craft({
 	burntime = 4,
 })
 
-
-print("torch loaded")
+print("loaded torch")

@@ -292,4 +292,4 @@ minetest.register_craft({
 	}
 })
 
-print("mese loaded")
+print("loaded mese")

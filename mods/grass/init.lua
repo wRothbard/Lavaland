@@ -13,7 +13,7 @@ minetest.register_node("grass:grass_1", {
 	walkable = false,
 	buildable_to = true,
 	groups = {snappy = 3, flora = 1, attached_node = 1, grass = 1, flammable = 1},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 	selection_box = {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -5 / 16, 6 / 16},
@@ -43,7 +43,7 @@ for i = 2, 5 do
 		drop = "grass:grass_1",
 		groups = {snappy = 3, flora = 1, attached_node = 1,
 			not_in_creative_inventory = 1, grass = 1, flammable = 1},
-		--sounds = default.node_sound_leaves_defaults(),
+		sounds = music.sounds.nodes.leaves,
 		selection_box = {
 			type = "fixed",
 			fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -3 / 16, 6 / 16},
@@ -64,7 +64,7 @@ minetest.register_node("grass:jungle", {
 	walkable = false,
 	buildable_to = true,
 	groups = {snappy = 3, flora = 1, attached_node = 1, flammable = 1},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.grass,
 	selection_box = {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},

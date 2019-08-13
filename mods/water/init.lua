@@ -1,9 +1,5 @@
 local rand = math.random
 
-local sounds = {
-	footstep = {name = "water_footstep", gain = 0.2},
-}
-
 minetest.register_node("water:source", {
 	description = "Water Source",
 	drawtype = "liquid",
@@ -45,7 +41,7 @@ minetest.register_node("water:source", {
 	liquid_viscosity = 1,
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, cools_lava = 1},
-	sounds = sounds,
+	sounds = music.sounds.nodes.water,
 })
 
 minetest.register_node("water:flowing", {
@@ -92,7 +88,7 @@ minetest.register_node("water:flowing", {
 	post_effect_color = {a = 103, r = 30, g = 60, b = 90},
 	groups = {water = 3, liquid = 3, not_in_creative_inventory = 1,
 			cools_lava = 1},
-	sounds = sounds,
+	sounds = music.sounds.nodes.water,
 })
 
 local minerals = {
@@ -102,6 +98,7 @@ local minerals = {
 	"stone:stone_with_gold",
 	"stone:stone_with_diamond",
 }
+
 local cool_lava = function(pos, node)
 	if node.name == "lava:source" then
 		minetest.set_node(pos, {name = "obsidian:obsidian"})
@@ -112,6 +109,7 @@ local cool_lava = function(pos, node)
 		end
 		minetest.set_node(pos, {name = n})
 	end
+	pos.y = pos.y - 2
 	minetest.sound_play("water_cool_lava",
 			{pos = pos, max_hear_distance = 16, gain = 0.15})
 end
@@ -128,4 +126,4 @@ minetest.register_abm({
 	end,
 })
 
-print("water loaded")
+print("loaded water")

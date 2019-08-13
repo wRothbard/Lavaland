@@ -9,7 +9,7 @@ minetest.register_node("sand:sandstone", {
 	description = "Sandstone",
 	tiles = {"default_sandstone.png"},
 	groups = {crumbly = 1, cracky = 3},
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("sand:sandstone_brick", {
@@ -19,7 +19,7 @@ minetest.register_node("sand:sandstone_brick", {
 	tiles = {"default_sandstone_brick.png"},
 	is_ground_content = false,
 	groups = {cracky = 2},
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_node("sand:sandstone_block", {
@@ -27,7 +27,7 @@ minetest.register_node("sand:sandstone_block", {
 	tiles = {"default_sandstone_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 2},
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.nodes.stone,
 })
 
 minetest.register_craft({
@@ -68,4 +68,4 @@ minetest.register_craft({
 	}
 })
 
-print("sand loaded")
+print("loaded sand")

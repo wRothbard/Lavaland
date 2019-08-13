@@ -1,13 +1,7 @@
-local sounds = {
-	footstep = {name = "obsidian_footstep", gain = 0.3},
-	dig = {name = "obsidian_footstep", gain = 1.0},
-	dug = {name = "obsidian_footstep", gain = 1.0},
-}
-
 minetest.register_node("obsidian:obsidian", {
 	description = "Obsidian",
 	tiles = {"obsidian_obsidian.png"},
-	sounds = sounds,
+	sounds = music.sounds.nodes.obsidian,
 	groups = {oddly_breakable_by_hand = 1, cracky = 3},
 })
 minetest.register_alias("obsidian:node", "obsidian:obsidian")
@@ -18,7 +12,7 @@ minetest.register_node("obsidian:brick", {
 	place_param2 = 0,
 	tiles = {"obsidian_brick.png"},
 	is_ground_content = false,
-	sounds = sounds,
+	sounds = music.sounds.nodes.obsidian,
 	groups = {cracky = 1, level = 2},
 })
 
@@ -26,7 +20,7 @@ minetest.register_node("obsidian:block", {
 	description = "Obsidian Block",
 	tiles = {"obsidian_block.png"},
 	is_ground_content = false,
-	sounds = sounds,
+	sounds = music.sounds.nodes.obsidian,
 	groups = {cracky = 1, level = 2},
 })
 
@@ -81,8 +75,8 @@ minetest.register_node("obsidian:glass", {
 	paramtype2 = "glasslikeliquidlevel",
 	is_ground_content = false,
 	sunlight_propagates = true,
-	sounds = sounds,
+	sounds = music.sounds.nodes.obsidian,
 	groups = {cracky = 3},
 })
 
-print("obsidian loaded")
+print("loaded obsidian")

@@ -37,4 +37,4 @@ function protector.can_interact_with_node(player, pos)
 	return false
 end
 
-print("protector loaded")
+print("loaded protector")

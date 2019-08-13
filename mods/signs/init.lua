@@ -50,12 +50,13 @@ local function register_sign(material, desc, def)
 end
 
 register_sign("wood", "Wooden", {
-	--sounds = default.node_sound_wood_defaults(),
-	groups = {choppy = 2, attached_node = 1, flammable = 2, oddly_breakable_by_hand = 3}
+	sounds = music.sounds.nodes.wood,
+	groups = {choppy = 2, attached_node = 1,
+			flammable = 2, oddly_breakable_by_hand = 3}
 })
 
 register_sign("steel", "Steel", {
-	--sounds = default.node_sound_metal_defaults(),
+	sounds = music.sounds.material.metal,
 	groups = {cracky = 2, attached_node = 1}
 })
 
@@ -83,4 +84,4 @@ minetest.register_craft({
 	}
 })
 
-print("loading signs")
+print("loaded signs")

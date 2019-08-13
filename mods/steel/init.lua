@@ -1,10 +1,3 @@
-local sounds = {
-	footstep = {name = "default_metal_footstep", gain = 0.4},
-	dig = {name = "default_dig_metal", gain = 0.5},
-	dug = {name = "default_dug_metal", gain = 0.5},
-	place = {name = "default_place_node_metal", gain = 0.5},
-}
-
 minetest.register_craftitem("steel:ingot", {
 	description = "Steel Ingot",
 	inventory_image = "steel_ingot.png"
@@ -21,7 +14,7 @@ minetest.register_node("steel:block", {
 	tiles = {"steel_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 1, level = 2},
-	sounds = sounds,
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({
@@ -39,4 +32,4 @@ minetest.register_craft({
 	recipe = "steel:iron_lump",
 })
 
-print("steel loaded")
+print("loaded steel")

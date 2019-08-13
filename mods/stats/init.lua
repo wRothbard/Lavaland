@@ -1,14 +1,5 @@
 stats = {}
 
-function stats.get_hotbar_bg(x, y)
-	local out = ""
-	for i= 0, 7, 1 do
-		out = out .. "image[" .. x + i ..
-				"," .. y .. ";1,1;player_hb_bg.png]"
-	end
-	return out
-end
-
 local function show_status(player)
 	local name = player:get_player_name()
 	local formspec = "size[8,7.25]" ..
@@ -32,7 +23,7 @@ local function show_status(player)
 		"item_image[7,2;1,1;3d_armor:shield_steel]" ..
 		"list[current_player;main;0,3.25;8,1;]" ..
 		"list[current_player;main;0,4.5;8,3;8]" ..
-		stats.get_hotbar_bg(0, 3.25) ..
+		forms.get_hotbar_bg(0, 3.25) ..
 	""
 	minetest.show_formspec(name, "stats:status", formspec)
 end
@@ -45,4 +36,4 @@ end)
 
 minetest.register_privilege("moderator", "Can moderate.")
 
-print("stats loaded")
+print("loaded stats")
