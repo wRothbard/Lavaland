@@ -42,37 +42,22 @@ mobs:register_mob("mobs:bunny", {
 		punch_start = 16,
 		punch_end = 24,
 	},
-	follow = {"default:grass_1", "default:grass_2", "default:grass_3", "default:grass_4", "default:grass_5",},
+	follow = {"grass:grass_1", "grass:grass_2", "grass:grass_3",
+			"default:grass_4", "default:grass_5",},
 	--view_range = 8,
 	--replace_rate = 10,
 	--replace_what = {"farming:carrot_7", "farming:carrot_8", "farming_plus:carrot"},
 	--replace_with = "air",
-	--[[
-	on_spawn = function(self)
-		local pos = self.object:get_pos() ; pos.y = pos.y - 1
-		-- white snowy bunny
-		if minetest.find_node_near(pos, 1,
-				{"default:snow", "default:snowblock", "default:dirt_with_snow"}) then
-			self.base_texture = {"mobs_bunny_white.png"}
-			self.object:set_properties({textures = self.base_texture})
-		-- brown desert bunny
-		elseif minetest.find_node_near(pos, 1,
-				{"default:desert_sand", "default:desert_stone"}) then
-			self.base_texture = {"mobs_bunny_brown.png"}
-			self.object:set_properties({textures = self.base_texture})
-		-- grey stone bunny
-		elseif minetest.find_node_near(pos, 1,
-				{"default:stone", "default:gravel"}) then
-			self.base_texture = {"mobs_bunny_grey.png"}
-			self.object:set_properties({textures = self.base_texture})
-		end
-		return true -- run only once, false/nil runs every activation
-	end,
-	--]]
 	on_rightclick = function(self, clicker)
-		if mobs:feed_tame(self, clicker, 4, true, true) then return end
-		if mobs:protect(self, clicker) then return end
-		if mobs:capture_mob(self, clicker, 50, 50, 90, false, nil) then return end
+		if mobs:feed_tame(self, clicker, 4, true, true) then
+			return
+		end
+		if mobs:protect(self, clicker) then
+			return
+		end
+		if mobs:capture_mob(self, clicker, 50, 50, 90, false, nil) then
+			return
+		end
 
 		-- by right-clicking owner can switch between staying and walking
 		if self.owner and self.owner == clicker:get_player_name() then
@@ -90,4 +75,5 @@ mobs:register_mob("mobs:bunny", {
 	attack_type = "dogfight",
 	damage = 5,
 })
+
 mobs:register_egg("mobs:bunny", S("Bunny"), "mobs_bunny_inv.png", 0)

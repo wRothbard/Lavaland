@@ -5,6 +5,7 @@ minetest.register_craftitem("mobs:rotten_flesh", {
 	inventory_image = "mobs_rotten_flesh.png",
 	on_use = minetest.item_eat(-2),
 })
+
 minetest.register_craft({
 	type = "cooking",
 	output = "mobs:meat",
@@ -92,6 +93,7 @@ minetest.register_tool("mobs:shears", {
 	inventory_image = "mobs_shears.png",
 	groups = {flammable = 2, tool = 1, trade_value = 3,},
 })
+
 minetest.register_craft({
 	output = "mobs:shears",
 	recipe = {

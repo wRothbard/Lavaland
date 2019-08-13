@@ -41,8 +41,8 @@ mobs:register_mob("mobs:dungeon_master", {
 	--jump = true,
 	view_range = 7,
 	drops = {
-		{name = "default:mese_crystal", chance = 1, min = 1, max = 2},
-		{name = "default:diamond", chance = 2, min = 0, max = 1},
+		{name = "mese:crystal", chance = 1, min = 1, max = 2},
+		{name = "diamond:diamond", chance = 2, min = 0, max = 1},
 	},
 	water_damage = 1,
 	lava_damage = 1,

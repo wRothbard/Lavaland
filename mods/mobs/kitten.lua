@@ -92,4 +92,5 @@ mobs:register_mob("mobs:kitten", {
 		})
 	end,
 })
+
 mobs:register_egg("mobs:kitten", S("Kitten"), "mobs_kitten_ginger.png", 1)

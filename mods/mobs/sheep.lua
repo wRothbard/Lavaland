@@ -73,7 +73,7 @@ for _, col in ipairs(all_colours) do
 			walk_start = 81,
 			walk_end = 100,
 		},
-		follow = {"farming:wheat", "default:grass_5"},
+		follow = {"farming:wheat", "grass:grass_5"},
 		--view_range = 8,
 		--replace_rate = 10,
 		--replace_what = {"default:grass_3", "default:grass_4", "default:grass_5", "farming:wheat_8"},

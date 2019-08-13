@@ -99,7 +99,7 @@ npc_drops = {
 	{name = "gravel:gravel", chance = 0.8, count = {15, 25}},
 	{name = "dirt:dirt", chance = 0.67, count = {11, 33}},
 	{name = "craftguide:book", chance = 0.8},
-	--{name = "default:book", chance = 0.8},
+	{name = "books:book", chance = 0.8},
 	{name = "mese:crystal_fragment", chance = 0.8, count = {3, 11}},
 	{name = "papyrus:papyrus", chance = 0.8},
 	{name = "paper:paper", chance = 0.8, count = {3, 5}},
@@ -289,13 +289,13 @@ mobs:register_mob("mobs:npc", {
 	jump = true,
 	drops = {
 		{name = "shop:coin", chance = 1, min = 1, max = 6},
-		{name = "shop:gold_ingot", chance = 2, min = 0, max = 2},
-		{name = "shop:goldblock", chance = 3, min = 0, max = 1},
+		{name = "gold:ingot", chance = 2, min = 0, max = 2},
+		{name = "gold:block", chance = 3, min = 0, max = 1},
 	},
 	water_damage = 0,
 	lava_damage = 2,
 	light_damage = 0,
-	follow = {"farming:flour", "mobs:meat_raw", "default:gold_lump"},
+	follow = {"farming:flour", "mobs:meat_raw", "gold:lump"},
 	--view_range = 8,
 	owner = "",
 	order = "follow",
@@ -333,7 +333,6 @@ mobs:register_mob("mobs:npc", {
 
 			local ls = {
 				-- Skin(s)
-				--"dresser:skin_" .. dresser.skins[random(#dresser.skins)][1],
 				"skins:" .. skins.list[random(#skins.list)],
 
 			}

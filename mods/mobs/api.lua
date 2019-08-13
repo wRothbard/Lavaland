@@ -8,7 +8,6 @@
 -- Intllib and CMI support check
 local MP = minetest.get_modpath(minetest.get_current_modname())
 local S, NS = dofile(MP .. "/intllib.lua")
-local use_cmi = minetest.global_exists("cmi")
 local undercrowd = mobs.undercrowd
 mobs.intllib = S
 mobs.invis = {}
@@ -119,9 +118,7 @@ end
 
 -- calculate distance
 local get_distance = function(a, b)
-
 	local x, y, z = a.x - b.x, a.y - b.y, a.z - b.z
-
 	return square(x * x + y * y + z * z)
 end
 
@@ -136,9 +133,7 @@ local collision = function(self)
 				not object:get_luaentity() then
 			break
 		end
-		if object:is_player() or
-				(object:get_luaentity()._cmi_is_mob == true and
-				object ~= self.object) then
+		if object:is_player() or object ~= self.object then
 			local pos2 = object:get_pos()
 			local vec  = {x = pos.x - pos2.x, z = pos.z - pos2.z}
 			x = x + vec.x
@@ -156,7 +151,7 @@ local set_velocity = function(self, v)
 		c_x, c_y = unpack(collision(self))
 	end
 	-- halt mob if it has been ordered to stay
-	--[[
+	---[[
 	if self.order == "stand" then
 		self.object:set_velocity({x = 0, y = 0, z = 0})
 		return
@@ -170,15 +165,11 @@ local set_velocity = function(self, v)
 	})
 end
 
-
 -- calculate mob velocity
 local get_velocity = function(self)
-
 	local v = self.object:get_velocity()
-
 	return (v.x * v.x + v.z * v.z) ^ 0.5
 end
-
 
 -- set and return valid yaw
 local set_yaw = function(self, yaw, delay)
@@ -432,17 +423,6 @@ local item_drop = function(self)
 			num = random(self.drops[n].min or 0, self.drops[n].max or 1)
 			item = self.drops[n].name
 
-			-- cook items on a hot death
-			if self.cause_of_death.hot then
-
-				local output = minetest.get_craft_result({
-					method = "cooking", width = 1, items = {item}})
-
-				if output and output.item and not output.item:is_empty() then
-					item = output.item:get_name()
-				end
-			end
-
 			-- only drop rare items (drops.min=0) if killed by player
 			if death_by_player then
 				obj = minetest.add_item(pos, ItemStack(item .. " " .. num))
@@ -470,7 +450,7 @@ end
 
 
 -- check if mob is dead or only hurt
-local check_for_death = function(self, cmi_cause)
+local check_for_death = function(self)
 
 	-- has health actually changed?
 	if self.health == self.old_health and self.health > 0 then
@@ -494,9 +474,7 @@ local check_for_death = function(self, cmi_cause)
 			self.nametag2 = self.nametag or ""
 		end
 
-		if show_health
-		and (cmi_cause and cmi_cause.type == "punch") then
-
+		if show_health then
 			self.htimer = 2
 			self.nametag = "♥ " .. self.health .. " / " .. self.hp_max
 			--]]
@@ -505,8 +483,6 @@ local check_for_death = function(self, cmi_cause)
 		--]]
 		return false
 	end
-
-	self.cause_of_death = cmi_cause
 
 	-- drop items
 	item_drop(self)
@@ -517,15 +493,8 @@ local check_for_death = function(self, cmi_cause)
 
 	-- execute custom death function
 	if self.on_die then
-
 		self.on_die(self, pos)
-
-		if use_cmi then
-			cmi.notify_die(self.object, cmi_cause)
-		end
-
 		self.object:remove()
-
 		return true
 	end
 
@@ -548,19 +517,9 @@ local check_for_death = function(self, cmi_cause)
 		set_animation(self, "die")
 
 		minetest.after(length, function(self)
-
-			if use_cmi and self.object:get_luaentity() then
-				cmi.notify_die(self.object, cmi_cause)
-			end
-
 			self.object:remove()
 		end, self)
 	else
-
-		if use_cmi then
-			cmi.notify_die(self.object, cmi_cause)
-		end
-
 		self.object:remove()
 	end
 
@@ -1409,8 +1368,7 @@ local general_attack = function(self)
 			end
 
 		-- or are we a mob?
-		elseif ent and ent._cmi_is_mob then
-
+		elseif ent then
 			-- remove mobs not to attack
 			if self.name == ent.name
 			or (not self.attack_animals and ent.type == "animal")
@@ -2319,13 +2277,8 @@ local falling = function(self, pos)
 	end
 end
 
-
--- is Took Ranks mod active?
-local tr = minetest.get_modpath("toolranks")
-
 -- deal damage and effects when mob punched
 local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
-
 	-- mob health check
 	if self.health <= 0 then
 		return
@@ -2364,23 +2317,18 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 		tflp = 0.2
 	end
 
-	if use_cmi then
-		damage = cmi.calculate_damage(self.object, hitter, tflp, tool_capabilities, dir)
-	else
+	for group,_ in pairs( (tool_capabilities.damage_groups or {}) ) do
 
-		for group,_ in pairs( (tool_capabilities.damage_groups or {}) ) do
+		tmp = tflp / (tool_capabilities.full_punch_interval or 1.4)
 
-			tmp = tflp / (tool_capabilities.full_punch_interval or 1.4)
-
-			if tmp < 0 then
-				tmp = 0.0
-			elseif tmp > 1 then
-				tmp = 1.0
-			end
-
-			damage = damage + (tool_capabilities.damage_groups[group] or 0)
-				* tmp * ((armor[group] or 0) / 100.0)
+		if tmp < 0 then
+			tmp = 0.0
+		elseif tmp > 1 then
+			tmp = 1.0
 		end
+
+		damage = damage + (tool_capabilities.damage_groups[group] or 0)
+			* tmp * ((armor[group] or 0) / 100.0)
 	end
 
 	-- check for tool immunity or special damage
@@ -2405,11 +2353,6 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 
 --	print ("Mob Damage is", damage)
 
-	if use_cmi
-	and cmi.notify_punch(self.object, hitter, tflp, tool_capabilities, dir, damage) then
-		return
-	end
-
 	-- add weapon wear
 	punch_interval = tool_capabilities.full_punch_interval or 1.4
 
@@ -2417,21 +2360,10 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 	local wear = floor((punch_interval / 75) * 9000)
 
 	if mobs.is_creative(hitter:get_player_name()) then
-
-		if tr then
-			wear = 1
-		else
-			wear = 0
-		end
+		wear = 0
 	end
 
-	if tr then
-		if weapon_def.original_description then
-			weapon:add_wear(toolranks.new_afteruse(weapon, hitter, nil, {wear = wear}))
-		end
-	else
-		weapon:add_wear(wear)
-	end
+	weapon:add_wear(wear)
 
 	hitter:set_wielded_item(weapon)
 
@@ -2554,27 +2486,25 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 	local name = hitter:get_player_name() or ""
 
 	-- attack puncher and call other mobs for help
-	if self.passive == false
-	and self.state ~= "flop"
-	and self.child == false
-	and self.attack_players == true
-	and hitter:get_player_name() ~= self.owner
-	and not mobs.invis[ name ] then
+	if self.passive == false and
+			self.state ~= "flop" and
+			self.child == false and
+			self.attack_players == true and
+			hitter:get_player_name() ~= self.owner and
+			not mobs.invis[ name ] then
 
 		-- attack whoever punched mob
 		self.state = ""
 		do_attack(self, hitter)
 
 		-- alert others to the attack
-		local objs = minetest.get_objects_inside_radius(hitter:get_pos(), self.view_range)
+		local objs = minetest.get_objects_inside_radius(hitter:get_pos(),
+				self.view_range)
 		local obj = nil
 
 		for n = 1, #objs do
-
 			obj = objs[n]:get_luaentity()
-
-			if obj and obj._cmi_is_mob then
-
+			if obj then
 				-- only alert members of same mob
 				if obj.group_attack == true
 				and obj.state ~= "attack"
@@ -2595,19 +2525,12 @@ end
 
 -- get entity staticdata
 local mob_staticdata = function(self)
-
 	-- remove mob when out of range unless tamed
-	if remove_far
-	and self.remove_ok
-	and self.type ~= "npc"
-	and self.state ~= "attack"
-	and not self.tamed
-	and self.lifetimer < 20000 then
-
+	if remove_far and self.remove_ok and self.type ~= "npc"	and
+			self.state ~= "attack" and not self.tamed and
+			self.lifetimer < 20000 then
 		--print ("REMOVED " .. self.name)
-
 		self.object:remove()
-
 		return ""-- nil
 	end
 
@@ -2617,25 +2540,17 @@ local mob_staticdata = function(self)
 	self.state = "stand"
 
 	-- used to rotate older mobs
-	if self.drawtype
-	and self.drawtype == "side" then
+	if self.drawtype and self.drawtype == "side" then
 		self.rotate = math.rad(90)
 	end
 
-	if use_cmi then
-		self.serialized_cmi_components = cmi.serialize_components(self._cmi_components)
-	end
-
 	local tmp = {}
-
-	for _,stat in pairs(self) do
-
+	for _, stat in pairs(self) do
 		local t = type(stat)
-
-		if  t ~= "function"
-		and t ~= "nil"
-		and t ~= "userdata"
-		and _ ~= "_cmi_components" then
+		if  t ~= "function" and
+				t ~= "nil" and
+				t ~= "userdata" and
+				_ ~= "_cmi_components" then
 			tmp[_] = self[_]
 		end
 	end
@@ -2644,19 +2559,8 @@ local mob_staticdata = function(self)
 	return minetest.serialize(tmp)
 end
 
-
 -- activate mob and reload settings
 local mob_activate = function(self, staticdata, def, dtime)
-
-	-- remove monsters in peaceful mode
-	if self.type == "monster"
-	and peaceful_only then
-
-		self.object:remove()
-
-		return
-	end
-
 	-- load entity variables
 	local tmp = minetest.deserialize(staticdata)
 
@@ -2707,7 +2611,6 @@ local mob_activate = function(self, staticdata, def, dtime)
 
 	-- set child objects to half size
 	if self.child == true then
-
 		vis_size = {
 			x = self.base_size.x * .5,
 			y = self.base_size.y * .5,
@@ -2785,37 +2688,21 @@ local mob_activate = function(self, staticdata, def, dtime)
 	if def.after_activate then
 		def.after_activate(self, staticdata, def, dtime)
 	end
-
-	if use_cmi then
-		self._cmi_components = cmi.activate_components(self.serialized_cmi_components)
-		cmi.notify_activate(self.object, dtime)
-	end
 end
-
 
 -- handle mob lifetimer and expiration
 local mob_expire = function(self, pos, dtime)
-
 	-- when lifetimer expires remove mob (except npc and tamed)
-	if self.type ~= "npc"
-	and not self.tamed
-	and self.state ~= "attack"
-	and remove_far ~= true
-	and self.lifetimer < 20000 then
-
+	if self.type ~= "npc" and not self.tamed and
+			self.state ~= "attack" and remove_far ~= true and
+			self.lifetimer < 20000 then
 		self.lifetimer = self.lifetimer - dtime
-
 		if self.lifetimer <= 0 then
-
 			-- only despawn away from player
 			local objs = minetest.get_objects_inside_radius(pos, 15)
-
 			for n = 1, #objs do
-
 				if objs[n]:is_player() then
-
 					self.lifetimer = 20
-
 					return
 				end
 			end
@@ -2826,7 +2713,6 @@ local mob_expire = function(self, pos, dtime)
 			effect(pos, 15, "tnt_smoke.png", 2, 4, 2, 0)
 
 			self.object:remove()
-
 			return
 		end
 	end
@@ -2834,9 +2720,6 @@ end
 
 -- main mob function
 local mob_step = function(self, dtime)
-	if use_cmi then
-		cmi.notify_step(self.object, dtime)
-	end
 	local pos = self.object:get_pos()
 	local yaw = 0
 	-- get node at foot level every quarter second
@@ -2849,7 +2732,10 @@ local mob_step = function(self, dtime)
 		end
 		-- what is mob standing in?
 		self.standing_in = node_ok({
-				x = pos.x, y = pos.y + y_level + 0.25, z = pos.z}, "air").name
+			x = pos.x,
+			y = pos.y + y_level + 0.25,
+			z = pos.z
+		}, "air").name
 --		print ("standing in " .. self.standing_in)
 		-- check for mob expiration (0.25 instead of dtime since were in a timer)
 		mob_expire(self, pos, 0.25)
@@ -2878,8 +2764,12 @@ local mob_step = function(self, dtime)
 					yaw = yaw + dif / self.delay -- need to add
 				end
 			end
-			if yaw > (pi * 2) then yaw = yaw - (pi * 2) end
-			if yaw < 0 then yaw = yaw + (pi * 2) end
+			if yaw > (pi * 2) then
+				yaw = yaw - (pi * 2)
+			end
+			if yaw < 0 then
+				yaw = yaw + (pi * 2)
+			end
 		end
 		self.delay = self.delay - 1
 		self.object:set_yaw(yaw)
@@ -2915,8 +2805,8 @@ local mob_step = function(self, dtime)
 	end
 	-- environmental damage timer (every 1 second)
 	self.env_damage_timer = self.env_damage_timer + dtime
-	if (self.state == "attack" and self.env_damage_timer > 1)
-	or self.state ~= "attack" then
+	if (self.state == "attack" and self.env_damage_timer > 1) or
+			self.state ~= "attack" then
 		self.env_damage_timer = 0
 		-- check for environmental damage (water, fire, lava etc.)
 		do_env_damage(self)
@@ -2996,17 +2886,13 @@ end
 
 -- default function when mobs are blown up with TNT
 local do_tnt = function(obj, damage)
-
 	--print ("----- Damage", damage)
-
 	obj.object:punch(obj.object, 1.0, {
 		full_punch_interval = 1.0,
 		damage_groups = {fleshy = damage},
 	}, nil)
-
 	return false, true, {}
 end
-
 
 mobs.spawning_mobs = {}
 -- register mob entity
@@ -3044,7 +2930,7 @@ function mobs:register_mob(name, def)
 		light_damage_min = def.light_damage_min or 14,
 		light_damage_max = def.light_damage_max or 15,
 		water_damage = def.water_damage or 0,
-		lava_damage = def.lava_damage or 0,
+		lava_damage = def.lava_damage or 20,
 		suffocation = def.suffocation or 2,
 		fall_damage = def.fall_damage or 9,
 		fall_speed = def.fall_speed or -10, -- must be lower than -2 (default: -10)
@@ -3112,7 +2998,6 @@ function mobs:register_mob(name, def)
 		owner_loyal = def.owner_loyal,
 		facing_fence = false,
 		pushable = def.pushable,
-		_cmi_is_mob = true,
 		on_spawn = def.on_spawn,
 		on_blast = def.on_blast or do_tnt,
 		on_step = mob_step,
@@ -3151,12 +3036,6 @@ local count_mobs = function(pos, type)
 end
 
 -- global functions
-function mobs:spawn_abm_check(pos, node, name)
-	-- global function to add additional spawn checks
-	-- return true to stop spawning mob
-end
-
-
 function mobs:spawn_specific(name, nodes, neighbors, min_light, max_light,
 	interval, chance, aoc, min_height, max_height, day_toggle, on_spawn)
 
@@ -3196,11 +3075,6 @@ function mobs:spawn_specific(name, nodes, neighbors, min_light, max_light,
 			if not mobs.spawning_mobs[name]
 			or not minetest.registered_entities[name] then
 --print ("--- mob doesn't exist", name)
-				return
-			end
-
-			-- additional custom checks for spawning mob
-			if mobs:spawn_abm_check(pos, node, name) == true then
 				return
 			end
 
@@ -3435,7 +3309,6 @@ function mobs:register_arrow(name, def)
 
 					if entity
 					and self.hit_mob
-					and entity._cmi_is_mob == true
 					and tostring(player) ~= self.owner_id
 					and entity.name ~= self.object:get_luaentity().name then
 
@@ -3863,8 +3736,6 @@ function mobs:feed_tame(self, clicker, feed_count, breed, tame)
 		local tag = self.nametag or ""
 
 		return minetest.show_formspec(name, "mobs_nametag", "size[8,4]"
-			.. default.gui_bg
-			.. default.gui_bg_img
 			.. "field[0.5,1;7.5,0;name;"
 			.. minetest.formspec_escape(S("Enter name:")) .. ";" .. tag .. "]"
 			.. "button_exit[2.5,3.5;3,1;mob_rename;"
