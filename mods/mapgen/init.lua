@@ -69,7 +69,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		for y = minp.y, maxp.y do
 			for x = minp.x, maxp.x do
 				if y < 1 then
-					if y > -17 then
+					if y > -4 then
 						local vi = a:index(x, y, z)
 						data[vi] = c_lava
 					else--if y > -2017 then
@@ -82,10 +82,17 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end
 	vm:set_data(data)
 	---[[
-	vm:calc_lighting(
-		{x = minp.x - 16, y = minp.y, z = minp.z - 16},
-		{x = maxp.x + 16, y = maxp.y, z = maxp.z + 16}
-	)
+	if minp.y > -4 then
+		vm:calc_lighting(
+			{x = minp.x - 16, y = minp.y, z = minp.z - 16},
+			{x = maxp.x + 16, y = maxp.y, z = maxp.z + 16}
+		)
+	else
+		vm:set_lighting({day = 14, night = 14},
+			{x = minp.x - 16, y = minp.y, z = minp.z - 16},
+			{x = maxp.x + 16, y = maxp.y, z = maxp.z + 16}
+		)
+	end
 	--]]
 	vm:write_to_map(data)
 end)
