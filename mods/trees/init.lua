@@ -71,8 +71,7 @@ minetest.register_node("trees:tree", {
 	paramtype2 = "facedir",
 	is_ground_content = false,
 	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
-	--sounds = default.node_sound_wood_defaults(),
-
+	sounds = music.sounds.nodes.wood,
 	on_place = minetest.rotate_node
 })
 
@@ -83,7 +82,7 @@ minetest.register_node("trees:wood", {
 	tiles = {"default_wood.png"},
 	is_ground_content = false,
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2, wood = 1},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 })
 
 minetest.register_alias("default:apple", "trees:apple")
@@ -103,12 +102,10 @@ minetest.register_node("trees:apple", {
 	groups = {fleshy = 3, dig_immediate = 3, flammable = 2,
 		leafdecay = 3, leafdecay_drop = 1, food_apple = 1},
 	on_use = minetest.item_eat(2),
-	--sounds = default.node_sound_leaves_defaults(),
-
+	sounds = music.sounds.nodes.wood,
 	after_place_node = function(pos, placer, itemstack)
 		minetest.set_node(pos, {name = "trees:apple", param2 = 1})
 	end,
-
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
 		if oldnode.param2 == 0 then
 			minetest.set_node(pos, {name = "trees:apple_mark"})

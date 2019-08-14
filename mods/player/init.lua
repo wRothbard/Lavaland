@@ -260,8 +260,10 @@ end)
 minetest.register_on_respawnplayer(function(player)
 	local name = player:get_player_name()
 	dead[name] = false
-	player:set_pos(spawn.pos)
-	return true
+	if not beds.spawn[name] then
+		player:set_pos(spawn.pos)
+		return true
+	end
 end)
 
 minetest.register_on_joinplayer(function(player)

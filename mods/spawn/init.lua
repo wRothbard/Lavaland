@@ -17,4 +17,19 @@ minetest.register_chatcommand("spawn", {
 	end,
 })
 
+minetest.register_chatcommand("setspawn", {
+	description = "Set your respawn location",
+	params = "none",
+	privs = "interact",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "You must be in the game for this command to work."
+		end
+		local pos = player:get_pos()
+		beds.spawn[name] = pos
+		return true, "Your respawn position has been saved."
+	end,
+})
+
 print("loaded spawn")
