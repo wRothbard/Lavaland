@@ -81,6 +81,8 @@ local sn = {
 	"flowers:viola",
 	"flowers:dandelion_white",
 	"flowers:tulip_black",
+	"flowers:mushroom_red",
+	"flowers:mushroom_brown",
 }
 
 minetest.register_abm({
@@ -98,19 +100,21 @@ minetest.register_abm({
 	end,
 })
 
-local node_names = {"grass:grass_1", "grass:grass_2", "grass:grass_3"}
+local node_names = {"grass:grass_1", "grass:grass_2", "grass:grass_3",
+		"grass:grass_4", "grass:grass_5"}
 
 minetest.register_abm({
-	nodenames = node_names,
-	neighbors = {"dirt:grass"},
+	nodenames = {"dirt:grass"},
+	neighbors = node_names,
 	chance = 30,
 	interval = 90,
 	catch_up = false,
 	action = function(pos, node)
+		pos.y = pos.y + 1
 		local p1 = {x = pos.x + 1, y = pos.y, z = pos.z + 1}
 		local p2 = {x = pos.x - 1, y = pos.y, z = pos.z - 1}
 		local a, b = minetest.find_nodes_in_area(p1, p2, node_names)
-		if #a >= 3 then
+		if #a >= 8 then
 			minetest.set_node(pos, {name = sn[rand(#sn)]})
 		end
 	end,
