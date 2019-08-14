@@ -71,6 +71,18 @@ minetest.register_node("grass:jungle", {
 	},
 })
 
+local sn = {
+	"grass:jungle",
+	"flowers:rose",
+	"flowers:tulip",
+	"flowers:dandelion_yellow",
+	"flowers:chrysanthemum_green",
+	"flowers:geranium",
+	"flowers:viola",
+	"flowers:dandelion_white",
+	"flowers:tulip_black",
+}
+
 minetest.register_abm({
 	nodenames = {"stone:mossycobble"},
 	neighbors = {"air"},
@@ -81,11 +93,25 @@ minetest.register_abm({
 		pos.y = pos.y + 1
 		local node = minetest.get_node(pos)
 		if node and node.name and node.name == "air" then
-			if rand() > 0.9 then
-				minetest.set_node(pos, {name = "grass:jungle"})
-			else
-				minetest.set_node(pos, {name = "grass:grass_" .. rand(5)})
-			end
+			minetest.set_node(pos, {name = "grass:grass_" .. rand(5)})
+		end
+	end,
+})
+
+local node_names = {"grass:grass_1", "grass:grass_2", "grass:grass_3"}
+
+minetest.register_abm({
+	nodenames = node_names,
+	neighbors = {"dirt:grass"},
+	chance = 30,
+	interval = 90,
+	catch_up = false,
+	action = function(pos, node)
+		local p1 = {x = pos.x + 1, y = pos.y, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y, z = pos.z - 1}
+		local a, b = minetest.find_nodes_in_area(p1, p2, node_names)
+		if #a >= 3 then
+			minetest.set_node(pos, {name = sn[rand(#sn)]})
 		end
 	end,
 })

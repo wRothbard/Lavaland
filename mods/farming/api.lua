@@ -57,15 +57,12 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 		gain = 0.5,
 	})
 
-	if not (creative and creative.is_enabled_for
-			and creative.is_enabled_for(user:get_player_name())) then
-		-- wear tool
-		local wdef = itemstack:get_definition()
-		itemstack:add_wear(65535/(uses-1))
-		-- tool break sound
-		if itemstack:get_count() == 0 and wdef.sound and wdef.sound.breaks then
-			minetest.sound_play(wdef.sound.breaks, {pos = pt.above, gain = 0.5})
-		end
+	-- wear tool
+	local wdef = itemstack:get_definition()
+	itemstack:add_wear(65535/(uses-1))
+	-- tool break sound
+	if itemstack:get_count() == 0 and wdef.sound and wdef.sound.breaks then
+		minetest.sound_play(wdef.sound.breaks, {pos = pt.above, gain = 0.5})
 	end
 	return itemstack
 end
@@ -174,10 +171,7 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	-- add the node and remove 1 item from the itemstack
 	minetest.add_node(pt.above, {name = plantname, param2 = 1})
 	tick(pt.above)
-	if not (creative and creative.is_enabled_for
-			and creative.is_enabled_for(player_name)) then
-		itemstack:take_item()
-	end
+	itemstack:take_item()
 	return itemstack
 end
 
@@ -342,7 +336,7 @@ farming.register_plant = function(name, def)
 				{items = {mname .. ":seed_" .. pname}, rarity = base_rarity * 2},
 			}
 		}
-		local nodegroups = {snappy = 3, flammable = 2, plant = 1, not_in_creative_inventory = 1, attached_node = 1}
+		local nodegroups = {snappy = 3, flammable = 2, plant = 1, attached_node = 1}
 		nodegroups[pname] = i
 
 		local next_plant = nil
