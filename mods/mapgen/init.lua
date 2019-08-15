@@ -55,7 +55,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 minetest.set_mapgen_setting("mg_name", "singlenode")
-
+minetest.register_alias("map:floor", "obsidian:obsidian")
 minetest.register_on_generated(function(minp, maxp, seed)
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local a = VoxelArea:new{
@@ -64,7 +64,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	}
 	local data = vm:get_data()
 	local c_lava = minetest.get_content_id("lava:source")
-	local c_floor = minetest.get_content_id("map:floor")
+	local c_floor = minetest.get_content_id("obsidian:obsidian")
 	for z = minp.z, maxp.z do
 		for y = minp.y, maxp.y do
 			for x = minp.x, maxp.x do

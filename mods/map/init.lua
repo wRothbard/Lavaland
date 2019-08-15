@@ -1,12 +1,12 @@
 map = {}
-
+--[[
 minetest.register_node("map:floor", {
 	description = "Map Floor (You hacker you!)",
 	tiles = {"map_floor.png"},
 	on_blast = function(pos, intensity)
 	end,
 })
-
+--]]
 function map.dig_up(pos, node, digger)
 	if digger == nil then return end
 	local np = {x = pos.x, y = pos.y + 1, z = pos.z}
