@@ -3,6 +3,8 @@ map = {}
 minetest.register_node("map:floor", {
 	description = "Map Floor (You hacker you!)",
 	tiles = {"map_floor.png"},
+	on_blast = function(pos, intensity)
+	end,
 })
 
 function map.dig_up(pos, node, digger)
