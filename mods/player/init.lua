@@ -131,7 +131,11 @@ local function sprint(player)
 		end
 	end
 
-	hud.update(player, "stamina", "number", stamina.get_stamina(player))
+	if player:get_hp() == 0 then
+		hud.update(player, "stamina", "number", 0)
+	else
+		hud.update(player, "stamina", "number", stamina.get_stamina(player))
+	end
 
 	minetest.after(0, function()
 		sprint(player)
