@@ -13,7 +13,22 @@ minetest.register_node("stone:stone_with_coal", {
 	description = "Coal Ore",
 	tiles = {"stone_stone.png^default_mineral_coal.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = "coal:lump",
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 5,
+				items = {"stone:cobble"}
+			},
+			{
+				rarity = 3,
+				items = {"stone:cobble", "coal:lump 2"}
+			},
+			{
+				items = {"stone:cobble", "coal:lump"}
+			},
+		}
+	},
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -21,7 +36,22 @@ minetest.register_node("stone:stone_with_copper", {
 	description = "Copper Ore",
 	tiles = {"stone_stone.png^stone_mineral_copper.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = "copper:lump",
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 5,
+				items = {"stone:cobble"}
+			},
+			{
+				rarity = 3,
+				items = {"stone:cobble", "copper:lump 2"}
+			},
+			{
+				items = {"stone:cobble", "copper:lump"}
+			},
+		}
+	},
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -29,7 +59,22 @@ minetest.register_node("stone:stone_with_gold", {
 	description = "Gold Ore",
 	tiles = {"stone_stone.png^default_mineral_gold.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = "gold:lump",
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 5,
+				items = {"stone:cobble"}
+			},
+			{
+				rarity = 3,
+				items = {"stone:cobble", "gold:lump 2"}
+			},
+			{
+				items = {"stone:cobble", "gold:lump"}
+			},
+		}
+	},
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -37,7 +82,22 @@ minetest.register_node("stone:stone_with_diamond", {
 	description = "Diamond Ore",
 	tiles = {"stone_stone.png^default_mineral_diamond.png"},
 	groups = {cracky = 1},
-	drop = "diamond:diamond",
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 5,
+				items = {"stone:cobble"}
+			},
+			{
+				rarity = 3,
+				items = {"stone:cobble", "diamond:diamond 2"}
+			},
+			{
+				items = {"stone:cobble", "diamond:diamond"}
+			},
+		}
+	},
 	sounds = music.sounds.nodes.stone,
 })
 
@@ -52,7 +112,7 @@ minetest.register_node("stone:stone_with_iron", {
 				rarity = 5,
 				items = {"stone:cobble"}
 			},
-{
+			{
 				rarity = 3,
 				items = {"stone:cobble", "steel:iron_lump 2"}
 			},
