@@ -531,7 +531,6 @@ end
 
 -- is mob facing a cliff
 local is_at_cliff = function(self)
-
 	if self.fear_height == 0 then -- 0 for no falling protection!
 		return false
 	end
@@ -542,17 +541,27 @@ local is_at_cliff = function(self)
 	local pos = self.object:get_pos()
 	local ypos = pos.y + self.collisionbox[2] -- just above floor
 
-	if minetest.line_of_sight(
+	local tt, ttt = minetest.line_of_sight(
 		{x = pos.x + dir_x, y = ypos, z = pos.z + dir_z},
-		{x = pos.x + dir_x, y = ypos - self.fear_height, z = pos.z + dir_z}
-	, 1) then
+		{x = pos.x + dir_x, y = ypos - self.fear_height, z = pos.z + dir_z},
+		1
+	)
 
+	if tt then
 		return true
+	end
+
+	local nn = minetest.get_node(ttt)
+	if nn and nn.name then
+		local nndef = minetest.registered_nodes[nn.name]
+		if nndef and nndef.drawtype and
+				nndef.drawtype:match("liquid") then
+			return true
+		end
 	end
 
 	return false
 end
-
 
 -- get node but use fallback for nil or unknown
 local node_ok = function(pos, fallback)
