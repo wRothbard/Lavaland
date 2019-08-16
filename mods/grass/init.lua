@@ -13,6 +13,7 @@ minetest.register_node("grass:grass_1", {
 	walkable = false,
 	buildable_to = true,
 	groups = {snappy = 3, flora = 1, attached_node = 1, grass = 1, flammable = 1},
+	floodable = true,
 	sounds = music.sounds.nodes.leaves,
 	selection_box = {
 		type = "fixed",
@@ -25,6 +26,13 @@ minetest.register_node("grass:grass_1", {
 		local ret = minetest.item_place(stack, placer, pointed_thing)
 		return ItemStack("grass:grass_1 " ..
 				itemstack:get_count() - (1 - ret:get_count()))
+	end,
+	on_flood = function(pos, oldnode, newnode)
+		local name = oldnode.name
+		local drops = minetest.get_node_drops(name)
+		for i = 1, #drops do
+			minetest.add_item(pos, drops[i])
+		end
 	end,
 })
 
@@ -43,11 +51,19 @@ for i = 2, 5 do
 		drop = "grass:grass_1",
 		groups = {snappy = 3, flora = 1, attached_node = 1,
 			not_in_creative_inventory = 1, grass = 1, flammable = 1},
+		floodable = true,
 		sounds = music.sounds.nodes.leaves,
 		selection_box = {
 			type = "fixed",
 			fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -3 / 16, 6 / 16},
 		},
+		on_flood = function(pos, oldnode, newnode)
+			local name = oldnode.name
+			local drops = minetest.get_node_drops(name)
+			for i = 1, #drops do
+				minetest.add_item(pos, drops[i])
+			end
+		end,
 	})
 end
 
@@ -69,6 +85,13 @@ minetest.register_node("grass:jungle", {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},
 	},
+	on_flood = function(pos, oldnode, newnode)
+		local name = oldnode.name
+		local drops = minetest.get_node_drops(name)
+		for i = 1, #drops do
+			minetest.add_item(pos, drops[i])
+		end
+	end,
 })
 
 local sn = {
