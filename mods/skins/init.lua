@@ -47,7 +47,6 @@ minetest.register_on_joinplayer(function(player)
 
 			multiskin.set_player_skin(player, "player_" .. gender .. ".png")
 			multiskin.update_player_visuals(player)
-
 			player:get_inventory():set_stack("skin", 1, "")
 		end,
 	}
@@ -55,5 +54,36 @@ minetest.register_on_joinplayer(function(player)
 	players[name]:set_size("skin", 1)
 	players[name]:set_stack("skin", 1, inv:get_stack("skin", 1))
 end)
+
+minetest.register_chatcommand("gender", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Must be player!"
+		end
+
+		local meta = player:get_meta()
+
+		local gender = meta:get_string("gender")
+		if gender == "" then
+			gender = "male"
+		else
+			gender = nil
+		end
+
+		if param ~= "female" and param ~= "male" then
+			return true, "You're gender is " .. gender .. "."
+		end
+		
+		if not gender then
+			gender = param
+		end
+
+		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+		multiskin.update_player_visuals(player)
+
+		meta:set_string("gender", param)
+	end,
+})
 
 print("loaded skins")

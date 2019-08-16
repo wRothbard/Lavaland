@@ -39,11 +39,11 @@ local function get_player_skin(player)
 	local name = player:get_player_name()
 	if name then
 		local skin = nil
-			if skin then
-			return skin..".png"
+		if skin then
+			return skin .. ".png"
 		end
 		for _, fn in pairs(dir_list) do
-			if fn == "player_"..name..".png" then
+			if fn == "player_" .. name .. ".png" then
 				return fn
 			end
 		end
@@ -148,12 +148,12 @@ player_api.register_model("multiskin.b3d", {
 minetest.register_on_joinplayer(function(player)
 	minetest.after(0, function(player)
 		local name = player:get_player_name()
-		local skin = player:get_attribute("multiskin_skin") or
-			get_player_skin(player)
+		local skin = player:get_meta():get("multiskin_skin") or
+				get_player_skin(player)
 		local anim = player_api.get_animation(player) or {}
 		player_textures[name] = anim.textures or {}
-		player_skins[name] = {skin=skin}
-		player_format[name] = player:get_attribute("multiskin_format")
+		player_skins[name] = {skin = skin}
+		player_format[name] = player:get_meta():get("multiskin_format")
 		multiskin.set_player_skin(player, skin)
 		multiskin.update_player_visuals(player)
 	end, player)
@@ -223,4 +223,4 @@ minetest.register_chatcommand("multiskin", {
 	end,
 })
 
-print("multiskin loaded")
+print("loaded multiskin")

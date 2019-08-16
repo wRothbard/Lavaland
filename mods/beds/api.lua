@@ -107,10 +107,7 @@ function beds.register_bed(name, def)
 			local meta = minetest.get_meta(pos)
 			meta:set_string("owner", player_name)
 			meta:set_string("infotext", player_name .. "'s Bed")
-			if not (creative and creative.is_enabled_for
-					and creative.is_enabled_for(player_name)) then
-				itemstack:take_item()
-			end
+			itemstack:take_item()
 			return itemstack
 		end,
 		on_destruct = function(pos)

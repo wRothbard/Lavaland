@@ -1,5 +1,4 @@
 for k, v in ipairs(dye.dyes) do
-	minetest.register_alias("beds:bed_" .. v[1], "beds:bed_" .. v[1] .. "_bottom")
 	beds.register_bed("beds:bed_" .. v[1], {
 		description = v[2] .. " Bed",
 		inventory_image = "beds_bed.png^(wool_" .. v[1] .. ".png^[mask:beds_blanket.png)",

@@ -228,13 +228,19 @@ minetest.register_on_dieplayer(function(player, reason)
 	local p_inv = player:get_inventory()
 	local items = {}
 	for k, list in pairs(p_inv:get_lists()) do
-		for i, n in pairs(list) do
-			if not n:is_empty() then
-				items[#items + 1] = n
+		if k ~= "bed" then
+			for i, n in pairs(list) do
+				if not n:is_empty() then
+					items[#items + 1] = n
+				end
 			end
+			p_inv:set_list(k, {})
 		end
-		p_inv:set_list(k, {})
 	end
+	minetest.get_inventory({type = "detached", name = name .. "_skin"}):set_list("skin", {})
+	local gender = player:get_meta():get("gender")
+	multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+	multiskin.update_player_visuals(player)
 
 	local pos = player:get_pos()
 	local old_node = minetest.get_node(pos)
@@ -268,6 +274,7 @@ end)
 
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
+
 	sprinting[name] = false
 	cooldown[name] = false
 	players[name] = 0
@@ -299,8 +306,13 @@ minetest.register_on_joinplayer(function(player)
 
 	local gender = player:get_meta():get_string("gender")
 	if gender ~= "" then
-		player_api.set_textures(player, {"player_" .. gender .. ".png"})
+		--player_api.set_textures(player, {"player_" .. gender .. ".png"})
+		--multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+		multiskin.update_player_visuals(player)
+	else
+		player:get_meta():set_string("gender", "male")
 	end
+
 
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
@@ -325,36 +337,5 @@ minetest.register_on_leaveplayer(function(player)
 	accelerating[name] = nil
 	dead[name] = nil
 end)
-
-minetest.register_chatcommand("gender", {
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return false, "Must be player!"
-		end
-
-		local meta = player:get_meta()
-
-		local gender = meta:get_string("gender")
-		if gender == "" then
-			gender = "male"
-		else
-			gender = nil
-		end
-
-		if param ~= "female" and param ~= "male" then
-			return true, "You're gender is " .. gender .. "."
-		end
-		
-		if not gender then
-			gender = param
-		end
-
-		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
-		multiskin.update_player_visuals(player)
-
-		meta:set_string("gender", param)
-	end,
-})
 
 print("loaded player")

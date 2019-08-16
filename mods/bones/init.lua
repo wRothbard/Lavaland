@@ -57,4 +57,10 @@ minetest.register_craftitem("bones:skull", {
 	inventory_image = "bones_skull.png",
 })
 
+minetest.register_craft({
+	type = "shapeless",
+	output = "bones:bones",
+	recipe = {"bones:bone", "bones:skull"},
+})
+
 print("loaded bones")
