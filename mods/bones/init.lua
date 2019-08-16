@@ -13,11 +13,20 @@ minetest.register_node("bones:bones", {
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand = 2, cracky = 3, crumbly = 1},
 	drop = {
-		max_items = 2,
+		max_items = 1,
 		items = {
-			{rarity = 2, items = {"bones:bone"}},
-			{rarity = 3, items = {"bones:skull"}},
-			{rarity = 1, items = {"bones:bones"}},
+			{
+				rarity = 3,
+				items = {"bones:bone", "bones:skull"}
+			},
+			{
+				rarity = 2,
+				items = {"bones:skull"}
+			},
+			{
+				rarity = 1,
+				items = {"bones:bone"}
+			},
 		},
 	},
 	sounds = music.sounds.nodes.bones,

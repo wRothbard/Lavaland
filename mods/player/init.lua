@@ -225,6 +225,12 @@ minetest.register_on_dieplayer(function(player, reason)
 		return
 	end
 
+	if reason.type == "punch" and reason.object and
+			reason.object:is_player() then
+		minetest.chat_send_all(reason.object:get_player_name() ..
+				" punched out " .. name .. ".")
+	end
+
 	local p_inv = player:get_inventory()
 	local items = {}
 	for k, list in pairs(p_inv:get_lists()) do
@@ -270,6 +276,8 @@ minetest.register_on_respawnplayer(function(player)
 		player:set_pos(spawn.pos)
 		return true
 	end
+
+	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 end)
 
 minetest.register_on_joinplayer(function(player)
