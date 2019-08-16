@@ -3,6 +3,11 @@ local function auto_pickup(player)
 		return
 	end
 
+	local pos = player:get_pos()
+	if not pos then
+		return
+	end
+
 	local o = minetest.get_objects_inside_radius(player:get_pos(), 1)
 	for i = 1, #o do
 		local obj = o[i]
