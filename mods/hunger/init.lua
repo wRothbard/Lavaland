@@ -14,8 +14,8 @@ local function cons(player)
 		if not sat then
 			return
 		end
-		if sat <= 1 then
-			sat = 1
+		if sat <= 0 then
+			sat = 0
 			player:set_hp(player:get_hp() - 4)
 		else
 			sat = sat - 0.05
@@ -26,6 +26,9 @@ local function cons(player)
 		if sat > 16 and hp < player:get_properties().hp_max then
 			player:set_hp(hp + 1)
 		end
+	else
+		players[name] = 0
+		hud.update(player, "hunger", "number", 0)
 	end
 	minetest.after(3, function()
 		cons(player)
