@@ -1,3 +1,31 @@
+local function auto_pickup(player)
+	if not player then
+		return
+	end
+
+	local o = minetest.get_objects_inside_radius(player:get_pos(), 1)
+	for i = 1, #o do
+		local obj = o[i]
+		local p = obj:is_player()
+		if not p then
+			local ent = obj:get_luaentity()
+			if ent.age and ent.age > 0.5 then
+				obj:remove()
+				local inv = player:get_inventory()
+				local add = inv:add_item("main", ent.itemstring)
+				if add then
+					minetest.add_item(player:get_pos(), add)
+				end
+				minetest.sound_play("items_plop", {pos = obj:get_pos()})
+			end
+		end
+	end
+
+	minetest.after(0, function()
+		auto_pickup(player)
+	end)
+end
+
 minetest.registered_entities["__builtin:item"].set_item = function(self, item)
 	local stack = ItemStack(item or self.itemstring)
 	self.itemstring = stack:to_string()
@@ -35,4 +63,22 @@ minetest.registered_entities["__builtin:item"].set_item = function(self, item)
 	})
 end
 
-print("items loaded")
+minetest.registered_entities["__builtin:item"].on_punch = function(self, hitter)
+	local inv = hitter:get_inventory()
+	if inv and self.itemstring ~= "" then
+		local left = inv:add_item("main", self.itemstring)
+		if left and not left:is_empty() then
+			self:set_item(left)
+			return
+		end
+		minetest.sound_play("items_plop", {pos = self.object:get_pos()})
+	end
+	self.itemstring = ""
+	self.object:remove()
+end
+
+minetest.register_on_joinplayer(function(player)
+	auto_pickup(player)
+end)
+
+print("loaded items")
