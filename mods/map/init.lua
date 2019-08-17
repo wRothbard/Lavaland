@@ -16,4 +16,4 @@ function map.dig_up(pos, node, digger)
 	end
 end
 
-print("map loaded")
+print("loaded map")

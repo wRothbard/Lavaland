@@ -79,4 +79,4 @@ forms.message = function(player, message, dialog, formname, title, no_chat_msg)
 	end
 end
 
-print("forms loaded")
+print("loaded forms")

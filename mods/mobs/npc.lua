@@ -94,9 +94,8 @@ npc_drops = {
 	{name = "tools:sword_mese", chance = 0.9},
 	{name = "tools:axe_mese", chance = 0.9},
 	{name = "tools:shovel_mese", chance = 0.9},
-	--{name = "fireflies:bug_net", chance = 0.7},
+	{name = "fireflies:bug_net", chance = 0.7},
 	{name = "mobs:shears", chance = 0.5},
-
 	--{name = "default:coral_skeleton", chance = 0.8, count = {1, 3}},
 	{name = "farming:bread", chance = 0.8, count = {1, 2}},
 	{name = "gravel:gravel", chance = 0.8, count = {15, 25}},

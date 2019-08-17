@@ -23,4 +23,4 @@ minetest.register_craft({
 	recipe = {"stone:cobble"},
 })
 
-print("gravel loaded")
+print("loaded gravel")

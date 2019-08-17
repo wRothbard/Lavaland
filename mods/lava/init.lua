@@ -109,4 +109,4 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
 	end
 end)
 
-print("lava loaded")
+print("loaded lava")
