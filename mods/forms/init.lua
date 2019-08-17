@@ -27,7 +27,7 @@ forms.help_button = function(x, y)
 	if not y then
 		y = 0
 	end
-	return "button_exit[" .. 6.94 + x .. "," ..
+	return "button[" .. 6.94 + x .. "," ..
 			-0.034 + y .. ";0.7,0.667;help;?]"
 end
 

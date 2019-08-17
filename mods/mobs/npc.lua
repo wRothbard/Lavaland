@@ -16,12 +16,14 @@ minetest.register_on_joinplayer(function(player)
 		local_price_guide[player:get_player_name()] = {}
 	end, player)
 end)
+
 minetest.register_on_leaveplayer(function(player)
 	if not player then
 		return
 	end
 	local_price_guide[player:get_player_name()] = nil
 end)
+
 local price_guide = {
 	["All Items"] = {},
 	--[[
@@ -31,6 +33,7 @@ local price_guide = {
 	["Tools"] = {},
 	--]]
 }
+
 for name, def in pairs(minetest.registered_items) do
 	if name:match(":") then
 		name = def.description
@@ -63,7 +66,9 @@ for name, def in pairs(minetest.registered_items) do
 		end
 	end
 end
+
 local pg_s = "#FFF,0,"
+
 for cat, items in pairs(price_guide) do
 	pg_s = pg_s .. cat .. ",,#FFF,1,"
 	for name, cost in pairs(items) do
@@ -76,12 +81,12 @@ for cat, items in pairs(price_guide) do
 	pg_s = pg_s:sub(1, -3)
 	pg_s = pg_s .. "0,"
 end
+
 local pg_fs = function(pg_st)
 	return "size[8.92,8.2]" ..
 		"label[0,0;Type /clear to erase searches.]" ..
 		forms.exit_button(0.82, -0.155) ..
 		"tablecolumns[color;tree;text;text,padding=1.0]" ..
-		--"tableoptions[]" ..
 		"table[0,0.5;8.745,7.05;pg;" .. pg_st .. ";1]" ..
 		"field[0.3,7.9;7,1;search;;]" ..
 		"field_close_on_enter;search;false]" ..
