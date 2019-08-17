@@ -9,6 +9,8 @@ else
 	ss = {x = 0, y = 5, z = 0}
 end
 
+mapgen.spawn = ss
+
 minetest.register_chatcommand("sethome", {
 	func = function(name)
 		local player = minetest.get_player_by_name(name)

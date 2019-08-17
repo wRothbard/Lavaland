@@ -12,7 +12,8 @@ local function show_formspec(player, input)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == "stats:status" and
+	if (formname == "stats:status" or
+			formname == "stats:more") and
 			fields.help then
 		show_formspec(player)
 	end

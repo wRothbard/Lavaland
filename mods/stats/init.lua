@@ -111,6 +111,22 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		show_status(player)
 	elseif formname == "stats:status" and fields.more then
 		show_more(player)
+	elseif (formname == "stats:status" or
+				formname == "help:help" or
+				formname == "stats:more") and fields.spawn then
+		player:set_pos(mapgen.spawn)
+		minetest.sound_play("mapgen_item", {pos = mapgen.spawn, gain = 0.3})
+	elseif (formname == "stats:status" or
+				formname == "help:help" or
+				formname == "stats:more") and fields.home then
+		local name = player:get_player_name()
+		local pos = mapgen.homes[name]
+		if pos then
+			player:set_pos(pos)
+		else
+			minetest.chat_send_player(name, "No home set!")
+		end
+
 	end
 end)
 
