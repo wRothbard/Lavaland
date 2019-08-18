@@ -83,10 +83,10 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		end
 	end
 	vm:set_data(data)
-	vm:calc_lighting(
-		{x = minp.x - 16, y = minp.y, z = minp.z - 16},
+	vm:calc_lighting()
+		--[[{x = minp.x - 16, y = minp.y, z = minp.z - 16},
 		{x = maxp.x + 16, y = maxp.y, z = maxp.z + 16}
-	)
+	)]]
 	vm:write_to_map(data)
 end)
 
