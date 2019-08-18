@@ -105,9 +105,9 @@ minetest.register_alias("claim_stick", "simple_protection:claim")
 minetest.register_craft({
 	output = "simple_protection:claim",
 	recipe = {
-		{"copper:ingot", "steel:ingot", "copper:ingot"},
-		{"steel:ingot", "stone:brick", "steel:ingot"},
-		{"copper:ingot", "steel:ingot", "copper:ingot"},
+		{"bronze:ingot", "mese:crystal", "bronze:ingot"},
+		{"mese:crystal", "stone:block", "mese:crystal"},
+		{"bronze:ingot", "mese:crystal", "bronze:ingot"},
 	}
 })
 

@@ -52,3 +52,5 @@ dofile(s_protect.mod_path.."/protection.lua")
 dofile(s_protect.mod_path.."/hud.lua")
 dofile(s_protect.mod_path.."/radar.lua")
 dofile(s_protect.mod_path.."/chest.lua")
+
+print("loaded simple_protection")
