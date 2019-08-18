@@ -2422,13 +2422,15 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 
 		if check_for_death(self, {type = "punch",
 				puncher = hitter, hot = hot}) then
-			local dd = self.damage or 1
-			local xp_inc = dd * 3 / 2
-			if self.type == "monster" then
-				xp_inc = xp_inc * 3
+			if hitter:is_player() then
+				local dd = self.damage or 1
+				local xp_inc = dd * 3 / 2
+				if self.type == "monster" then
+					xp_inc = xp_inc * 3
+				end
+				xp_inc = math.ceil(xp_inc) + 1
+				stats.add_xp(hitter, xp_inc)
 			end
-			xp_inc = math.ceil(xp_inc) + 1
-			stats.add_xp(hitter, xp_inc)
 			return
 		end
 
