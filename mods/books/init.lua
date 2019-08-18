@@ -6,11 +6,13 @@ local function on_place(itemstack, placer, pointed_thing)
 		return itemstack
 	end
 
-	local meta = itemstack:get_metadata()
-	local data = minetest.deserialize(meta)
+	local meta = itemstack:get_meta()
+	local data = meta:to_table()
+	data = data.fields or nil
 	local stack = ItemStack({name = "books:book_closed"})
+	print(dump(data))
 	if data and data.owner then
-		stack:set_metadata(meta)
+		stack:get_meta():from_table(data)
 	end
 
 	local _, placed = minetest.item_place(stack, placer, pointed_thing)
@@ -21,8 +23,11 @@ local function on_place(itemstack, placer, pointed_thing)
 end
 
 local function after_place_node(pos, placer, itemstack, pointed_thing)
-	local data = minetest.deserialize(itemstack:get_metadata())
-	if data then
+	--local data = minetest.deserialize(itemstack:get_metadata())
+	local data = itemstack:get_meta():to_table()
+	data = data.fields
+	print(dump(data))
+	if data and data.owner then
 		local meta = minetest.get_meta(pos)
 		meta:set_string("title", data.title)
 		meta:set_string("text", data.text)
@@ -131,7 +136,6 @@ local function on_dig(pos, node, digger)
 	local stack
 	if data.owner ~= "" then
 		stack = ItemStack({name = "books:book_written"})
-		--stack:set_metadata(minetest.serialize(data))
 		stack:get_meta():from_table(data)
 	else
 		stack = ItemStack({name = "books:book"})
@@ -139,7 +143,7 @@ local function on_dig(pos, node, digger)
 
 	local adder = digger:get_inventory():add_item("main", stack)
 	if adder then
-		minetest.item_drop(adder, digger, digger:getpos())
+		minetest.item_drop(adder, digger, digger:get_pos())
 	end
 	minetest.remove_node(pos)
 end
@@ -151,10 +155,12 @@ local function book_on_use(itemstack, user)
 	local page, page_max, lines, string = 1, 1, {}, ""
 
 	-- Backwards compatibility
+	--[[
 	local old_data = minetest.deserialize(itemstack:get_metadata())
 	if old_data then
 		meta:from_table({ fields = old_data })
 	end
+	--]]
 
 	local data = meta:to_table().fields
 
