@@ -11,7 +11,7 @@ minetest.register_node("clothing:loom", {
 	drawtype = "nodebox",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {choppy=2, oddly_breakable_by_hand=1},
+	groups = {flammable = 1, choppy=2, oddly_breakable_by_hand=1},
 	node_box = {
 		type = "fixed",
 		fixed = {
