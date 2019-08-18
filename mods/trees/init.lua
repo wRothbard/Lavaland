@@ -205,7 +205,7 @@ minetest.register_node("trees:sapling", {
 	},
 	groups = {snappy = 2, dig_immediate = 3, flammable = 2,
 		attached_node = 1, sapling = 1},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 
 	on_construct = function(pos)
 		minetest.get_node_timer(pos):start(random(300, 1500))
@@ -323,7 +323,7 @@ minetest.register_node("trees:leaves", {
 			}
 		}
 	},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 	after_place_node = after_place_leaves,
 })
 
@@ -363,6 +363,42 @@ register_leafdecay({
 	trunks = {"trees:tree"},
 	leaves = {"trees:apple", "trees:leaves"},
 	radius = 3,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:tree",
+	burntime = 30,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:wood",
+	burntime = 7,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:sapling",
+	burntime = 5,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "grass:junglegrass",
+	burntime = 3,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:leaves",
+	burntime = 4,
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "group:stick",
+	burntime = 1,
 })
 
 print("loaded trees")
