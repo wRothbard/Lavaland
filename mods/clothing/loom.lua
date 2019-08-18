@@ -40,22 +40,26 @@ minetest.register_node("clothing:loom", {
 	},
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", "size[10,11;]"..
-			"background[-0.15,-0.25;10.40,11.75;clothing_loom_background.png]"..
-			"list[current_name;input;7,2;1,1;]"..
-			"list[current_name;output;7,4;1,1;]"..
-			"label[7,1.5;Input Wool:]"..
-			"label[7,3.5;Output:]"..
-			"label[0,0;Clothing Loom:]"..
-			"label[1.5,1.5;Hat]"..
-			"item_image_button[1.5,2;1,1;clothing:hat_grey;hat; ]"..
-			"label[4,1.5;Shirt]"..
-			"item_image_button[4,2;1,1;clothing:shirt_grey;shirt; ]"..
-			"label[1.5,3;Pants]"..
-			"item_image_button[1.5,3.5;1,1;clothing:pants_grey;pants; ]"..
-			"label[4,3;Cape]"..
-			"item_image_button[4,3.5;1,1;clothing:cape_grey;cape; ]"..
-			"list[current_player;main;1,7;8,4;]")
+		meta:set_string("formspec",
+			"size[8,8;]" ..
+			forms.exit_button() ..
+			"label[1,0.35;Input Wool]" ..
+			"list[current_name;input;1,1;1,1;]" ..
+			"item_image_button[2,1;1,1;clothing:hat_grey;hat; ]" ..
+			"item_image_button[3,1;1,1;clothing:shirt_grey;shirt; ]" ..
+			"item_image_button[4,1;1,1;clothing:pants_grey;pants; ]" ..
+			"item_image_button[5,1;1,1;clothing:cape_grey;cape; ]" ..
+			"label[6,2;Output]" ..
+			"list[current_name;output;6,1;1,1;]" ..
+			"list[current_player;main;0,4;8,1;]" ..
+			forms.get_hotbar_bg(0, 4) ..
+			"list[current_player;main;0,5.2;8,3;8]" ..
+			"listring[current_player;main]" ..
+			"listring[current_name;input]" ..
+			"listring[current_player;main]" ..
+			"listring[current_name;output]" ..
+			"listring[current_player;main]" ..
+		"")
 		meta:set_string("infotext", "Loom")
 		local inv = meta:get_inventory()
 		inv:set_size("input", 1)
