@@ -67,12 +67,12 @@ minetest.register_node("simple_protection:chest", {
 
 minetest.register_craft({
 	type = "shapeless",
-	output = "simple_protection:shared_chest",
+	output = "simple_protection:chest",
 	recipe = { "simple_protection:claim", "chests:chest_locked" }
 })
 
 minetest.register_craft({
 	type = "shapeless",
-	output = "simple_protection:shared_chest",
+	output = "simple_protection:chest",
 	recipe = { "simple_protection:claim", "chests:chest" }
 })

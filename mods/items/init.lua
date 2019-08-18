@@ -8,20 +8,24 @@ local function auto_pickup(player)
 		return
 	end
 
-	local o = minetest.get_objects_inside_radius(player:get_pos(), 0.334)
-	for i = 1, #o do
-		local obj = o[i]
-		local p = obj:is_player()
-		if not p then
-			local ent = obj:get_luaentity()
-			if ent.age and ent.age > 0.5 then
-				obj:remove()
-				local inv = player:get_inventory()
-				local add = inv:add_item("main", ent.itemstring)
-				if add then
-					minetest.add_item(player:get_pos(), add)
+	local alive = player:get_hp() > 0
+
+	if alive then
+		local o = minetest.get_objects_inside_radius(player:get_pos(), 0.334)
+		for i = 1, #o do
+			local obj = o[i]
+			local p = obj:is_player()
+			if not p then
+				local ent = obj:get_luaentity()
+				if ent.age and ent.age > 0.5 then
+					obj:remove()
+					local inv = player:get_inventory()
+					local add = inv:add_item("main", ent.itemstring)
+					if add then
+						minetest.add_item(player:get_pos(), add)
+					end
+					minetest.sound_play("items_plop", {pos = obj:get_pos()})
 				end
-				minetest.sound_play("items_plop", {pos = obj:get_pos()})
 			end
 		end
 	end
