@@ -45,6 +45,34 @@ stats.update_stats = function(player, status_table)
 	return res
 end
 
+stats.add_xp = function(player, amount)
+	local name = player:get_player_name()
+	local x = stats.update_stats(player, {
+		xp = "",
+		level = "",
+		hp = "",
+		hp_max = "",
+	})
+	local ttl = x.xp + amount
+	if ttl >= 100 * x.level then
+		-- Level up
+		local max = x.hp_max
+		if max < 100 then
+			max = max + 5
+			stats.update_stats(player, {hp_max = max})
+			x.hp_max = nil
+		end
+		x.hp = max
+		x.xp = (x.xp + amount) % (100 * x.level)
+		x.level = x.level + 1
+		minetest.chat_send_player(name, "Level up!  New level is " ..
+				x.level .. ".")
+	else
+		x.xp = x.xp + amount
+	end
+	stats.update_stats(player, x)
+end
+
 local function show_status(player)
 	local name = player:get_player_name()
 	local formspec = "size[8,7.25]" ..
@@ -143,12 +171,15 @@ minetest.register_on_joinplayer(function(player)
 	local p_stats = meta:get("stats")
 	if p_stats then
 		p_stats = minetest.deserialize(p_stats)
-	else
+	end
+
+	if not p_stats then
 		p_stats = base_stats
 		meta:set_string("stats", minetest.serialize(p_stats))
 	end
 
 	players[name] = p_stats
+	stats.update_stats(player, p_stats)
 end)
 
 minetest.register_on_dieplayer(function(player)

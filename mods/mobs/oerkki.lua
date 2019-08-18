@@ -31,8 +31,8 @@ mobs:register_mob("mobs:oerkki", {
 	--view_range = 10,
 	--jump = true,
 	drops = {
-		{name = "default:mese_crystal", chance = 2, min = 1, max = 2},
-		{name = "default:obsidian", chance = 2, min = 0, max = 1},
+		{name = "obsidian:mese_crystal", chance = 2, min = 1, max = 2},
+		{name = "obsidian:obsidian", chance = 2, min = 0, max = 1},
 	},
 	water_damage = 7,
 	lava_damage = 4,
@@ -51,4 +51,4 @@ mobs:register_mob("mobs:oerkki", {
 	},
 })
 
-mobs:register_egg("mobs:oerkki", S("Oerkki"), "default_obsidian.png", 1)
+mobs:register_egg("mobs:oerkki", S("Oerkki"), "obsidian_obsidian.png", 1)
