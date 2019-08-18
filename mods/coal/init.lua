@@ -12,6 +12,18 @@ minetest.register_node("coal:block", {
 	is_ground_content = false,
 	groups = {cracky = 3},
 	sounds = music.sounds.nodes.stone,
+	after_destruct = function(pos, oldnode)
+		pos.y = pos.y + 1
+		if minetest.get_node(pos).name == "fire:permanent_flame" then
+			minetest.remove_node(pos)
+		end
+	end,
+	on_ignite = function(pos, igniter)
+		local flame_pos = {x = pos.x, y = pos.y + 1, z = pos.z}
+		if minetest.get_node(flame_pos).name == "air" then
+			minetest.set_node(flame_pos, {name = "fire:permanent_flame"})
+		end
+	end,
 })
 
 minetest.register_craft({
