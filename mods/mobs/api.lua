@@ -2422,6 +2422,28 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 
 		if check_for_death(self, {type = "punch",
 				puncher = hitter, hot = hot}) then
+			local x = stats.update_stats(hitter, {
+				xp = "",
+				level = "",
+				hp = "",
+				hp_max = "",
+			})
+			local ttl = x.xp + 2
+			if ttl >= 100 * x.level then
+				-- Level up
+				local max = x.hp_max
+				if max < 100 then
+					max = max + 5
+					stats.update_stats(hitter, {hp_max = max})
+					x.hp_max = nil
+				end
+				x.hp = max
+				x.xp = (x.xp + 2) % (100 * x.level)
+				x.level = x.level + 1
+			else
+				x.xp = x.xp + 2
+			end
+			stats.update_stats(hitter, x)
 			return
 		end
 
