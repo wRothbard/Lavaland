@@ -268,6 +268,11 @@ minetest.register_on_dieplayer(function(player, reason)
 				"list[current_player;main;0,5;8,4]" ..
 				"listring[]")
 		inv:set_list("main", items)
+		meta:set_string("infotext", "" .. name .. "'s bones.")
+		meta:set_string("owner", name)
+		minetest.after(1, function()
+			minetest.get_node_timer(pos):start(1.0)
+		end)
 	end
 
 	dead[name] = true

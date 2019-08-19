@@ -11,15 +11,6 @@ minetest.register_node("bones:bones", {
 	paramtype2 = "facedir",
 	groups = {bones = 1, dig_immediate = 3},
 	sounds = music.sounds.nodes.bones,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
-		local meta = minetest.get_meta(pos)
-		local inv = meta:get_inventory()
-		inv:set_size("main", 8 * 4)
-		meta:set_string("formspec", "size[8,9]" ..
-				"list[context;main;0,0;8,4]" ..
-				"list[current_player;main;0,5;8,4]" ..
-				"listring[]")
-	end,
 	on_dig = function(pos, node, digger)
 		local t = {"bones:bone", "bones:bone", "bones:skull"}
 		local inv = minetest.get_meta(pos):get_inventory()
@@ -31,6 +22,28 @@ minetest.register_node("bones:bones", {
 		end
 		inventory.throw_inventory(pos, t)
 		minetest.set_node(pos, {name = "air"})
+	end,
+	on_timer = function(pos, elapsed)
+		local timer = minetest.get_node_timer(pos)
+		timer:set(elapsed, elapsed + 0.1)
+		if timer:get_elapsed() > 666 then
+			minetest.dig_node(pos)
+		else
+			return 
+		end
+	end,
+})
+
+minetest.register_abm({
+	nodenames = {"bones:bones"},
+	interval = 60,
+	chance = 100,
+	catch_up = false,
+	action = function(pos, node)
+		local timer = minetest.get_node_timer(pos)
+		if timer and not timer:is_started() then
+			timer:start(1.0)
+		end
 	end,
 })
 

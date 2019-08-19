@@ -11,7 +11,7 @@ local function auto_pickup(player)
 	local alive = player:get_hp() > 0
 
 	if alive then
-		local o = minetest.get_objects_inside_radius(player:get_pos(), 0.334)
+		local o = minetest.get_objects_inside_radius(player:get_pos(), 0.667)
 		for i = 1, #o do
 			local obj = o[i]
 			local p = obj:is_player()
