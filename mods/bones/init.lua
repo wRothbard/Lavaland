@@ -14,13 +14,15 @@ minetest.register_node("bones:bones", {
 	on_dig = function(pos, node, digger)
 		local t = {"bones:bone", "bones:bone", "bones:skull"}
 		local inv = minetest.get_meta(pos):get_inventory()
-		for k, v in pairs(inv:get_list("main")) do
-			local n = v:get_name()
-			if n ~= "" then
-				t[#t + 1] = n
+		if inv then
+			for k, v in pairs(inv:get_list("main")) do
+				local n = v:get_name()
+				if n ~= "" then
+					t[#t + 1] = n
+				end
 			end
+			inventory.throw_inventory(pos, t)
 		end
-		inventory.throw_inventory(pos, t)
 		minetest.set_node(pos, {name = "air"})
 	end,
 	on_timer = function(pos, elapsed)
