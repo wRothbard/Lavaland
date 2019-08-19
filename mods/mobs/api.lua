@@ -2422,28 +2422,30 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 
 		if check_for_death(self, {type = "punch",
 				puncher = hitter, hot = hot}) then
-			local x = stats.update_stats(hitter, {
-				xp = "",
-				level = "",
-				hp = "",
-				hp_max = "",
-			})
-			local ttl = x.xp + 2
-			if ttl >= 100 * x.level then
-				-- Level up
-				local max = x.hp_max
-				if max < 100 then
-					max = max + 5
-					stats.update_stats(hitter, {hp_max = max})
-					x.hp_max = nil
+			if hitter:is_player() then
+				local x = stats.update_stats(hitter, {
+					xp = "",
+					level = "",
+					hp = "",
+					hp_max = "",
+				})
+				local ttl = x.xp + 2
+				if ttl >= 100 * x.level then
+					-- Level up
+					local max = x.hp_max
+					if max < 100 then
+						max = max + 5
+						stats.update_stats(hitter, {hp_max = max})
+						x.hp_max = nil
+					end
+					x.hp = max
+					x.xp = (x.xp + 2) % (100 * x.level)
+					x.level = x.level + 1
+				else
+					x.xp = x.xp + 2
 				end
-				x.hp = max
-				x.xp = (x.xp + 2) % (100 * x.level)
-				x.level = x.level + 1
-			else
-				x.xp = x.xp + 2
+				stats.update_stats(hitter, x)
 			end
-			stats.update_stats(hitter, x)
 			return
 		end
 
@@ -3581,6 +3583,7 @@ function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
 
 		elseif tool:get_name() == "fireflies:bug_net" then
 			--]]
+			local chance = 0
 			chance = chance_lasso
 
 			tool:add_wear(650) -- 100 uses

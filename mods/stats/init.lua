@@ -12,6 +12,9 @@ local base_stats = {
 }
 
 stats.update_stats = function(player, status_table)
+	if not player then
+		return
+	end
 	local res = {}
 	for s, v in pairs(status_table) do
 		local name = player:get_player_name()
