@@ -67,6 +67,9 @@ local pg_s = "#FFF,0,"
 for cat, items in pairs(price_guide) do
 	pg_s = pg_s .. cat .. ",,#FFF,1,"
 	for name, cost in pairs(items) do
+		if name:len() >= 20 then
+			name = name:sub(1, 20) .. "..."
+		end
 		pg_s = pg_s .. name .. "," ..
 				cost .. ",#FFF,1,"
 	end
@@ -77,7 +80,7 @@ local pg_fs = function(pg_st)
 	return "size[8.92,8.2]" ..
 		"label[0,0;Type /clear to erase searches.]" ..
 		forms.exit_button(0.82, -0.155) ..
-		"tablecolumns[color;tree;text,width=8;text,padding=1.0]" ..
+		"tablecolumns[color;tree;text;text,padding=1.0]" ..
 		--"tableoptions[]" ..
 		"table[0,0.5;8.745,7.05;pg;" .. pg_st .. ";1]" ..
 		"field[0.3,7.9;7,1;search;;]" ..
