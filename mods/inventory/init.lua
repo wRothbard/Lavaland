@@ -1,5 +1,7 @@
 inventory = {}
 
+local rand = math.random
+
 function inventory.get_inventory_drops(pos, inventory, drops)
 	local inv = minetest.get_meta(pos):get_inventory()
 	local n = #drops
@@ -12,7 +14,7 @@ function inventory.get_inventory_drops(pos, inventory, drops)
 	end
 end
 
-function inventory.throw_inventory(list, intensity)
+function inventory.throw_inventory(pos, list, intensity)
 	for _, item in pairs(list) do
 		local o = minetest.add_item(pos, item)
 		if o then
