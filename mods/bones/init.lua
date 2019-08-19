@@ -14,8 +14,9 @@ minetest.register_node("bones:bones", {
 	on_dig = function(pos, node, digger)
 		local t = {"bones:bone", "bones:bone", "bones:skull"}
 		local inv = minetest.get_meta(pos):get_inventory()
-		if inv then
-			for k, v in pairs(inv:get_list("main")) do
+		local list = inv:get_list("main")
+		if list then
+			for _, v in pairs(list) do
 				local n = v:get_name()
 				if n ~= "" then
 					t[#t + 1] = n
