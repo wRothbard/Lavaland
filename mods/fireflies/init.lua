@@ -83,7 +83,7 @@ minetest.register_node("fireflies:hidden_firefly", {
 
 minetest.register_abm({
 	nodenames = {"trees:tree"},
-	neighbors = {"dirt:grass"},
+	neighbors = {"dirt:grass", "group:flora"},
 	interval = 60,
 	chance = 100,
 	action = function(pos, node)
