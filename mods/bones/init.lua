@@ -22,8 +22,8 @@ minetest.register_node("bones:bones", {
 					t[#t + 1] = n
 				end
 			end
-			inventory.throw_inventory(pos, t)
 		end
+		inventory.throw_inventory(pos, t)
 		minetest.set_node(pos, {name = "air"})
 	end,
 	on_timer = function(pos, elapsed)
