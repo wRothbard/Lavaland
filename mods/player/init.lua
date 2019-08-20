@@ -216,6 +216,10 @@ minetest.register_on_newplayer(function(player)
 		"tools:pick_mese_bone",
 		"tools:sword_mese_bone",
 		"craftguide:book",
+		"gold:block",
+		"wool:red",
+		"wool:green",
+		"wool:blue",
 	}
 	for i = 1, #s_items do
 		local s = s_items[i]
