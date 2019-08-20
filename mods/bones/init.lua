@@ -8,6 +8,7 @@ minetest.register_node("bones:bones", {
 		"bones_rear.png",
 		"bones_front.png"
 	},
+	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {bones = 1, dig_immediate = 3},
 	sounds = music.sounds.nodes.bones,
