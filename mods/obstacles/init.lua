@@ -39,6 +39,7 @@ minetest.register_node("obstacles:cobweb", {
 	description = "Cobweb",
 	drawtype = "plantlike",
 	tiles = {"xdecor_cobweb.png"},
+	paramtype = "light",
 	inventory_image = "xdecor_cobweb.png",
 	liquid_viscosity = 8,
 	liquidtype = "source",
