@@ -1,5 +1,10 @@
 minetest.register_alias("default:stone", "stone:stone")
 
+local xp_add = function(pos, oldnode, oldmetadata, digger)
+	local lvl = stats.update_stats(digger, {level = ""})
+	stats.add_xp(digger, 10 * lvl.level)
+end
+
 minetest.register_node("stone:stone", {
 	description = "Stone",
 	tiles = {"stone_stone.png"},
@@ -30,6 +35,7 @@ minetest.register_node("stone:stone_with_coal", {
 		}
 	},
 	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
 })
 
 minetest.register_node("stone:stone_with_copper", {
@@ -53,6 +59,7 @@ minetest.register_node("stone:stone_with_copper", {
 		}
 	},
 	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
 })
 
 minetest.register_node("stone:stone_with_gold", {
@@ -76,6 +83,7 @@ minetest.register_node("stone:stone_with_gold", {
 		}
 	},
 	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
 })
 
 minetest.register_node("stone:stone_with_diamond", {
@@ -99,6 +107,7 @@ minetest.register_node("stone:stone_with_diamond", {
 		}
 	},
 	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
 })
 
 minetest.register_node("stone:stone_with_iron", {
@@ -122,6 +131,7 @@ minetest.register_node("stone:stone_with_iron", {
 		}
 	},
 	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
 })
 
 minetest.register_node("stone:cobble", {
