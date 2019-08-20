@@ -1,3 +1,61 @@
+minetest.register_craft({
+	type = "toolrepair",
+	additional_wear = -0.02,
+})
+
+minetest.register_tool("tools:crystalline_bell", {
+	description = "Crystalline Bell",
+	inventory_image = "tools_crystalline_bell.png",
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.type ~= "node" then
+			return
+		end
+		local pos = pointed_thing.under
+		if minetest.is_protected(pos, user:get_player_name()) then
+			return
+		end
+		local node = minetest.get_node(pos)
+		local growth_stage = 0
+		if node.name == "mese:crystal_ore4" then
+			growth_stage = 4
+		elseif node.name == "mese:crystal_ore3" then
+			growth_stage = 3
+		elseif node.name == "mese:crystal_ore2" then
+			growth_stage = 2
+		elseif node.name == "mese:crystal_ore1" then
+			growth_stage = 1
+		end
+		if growth_stage == 4 then
+			node.name = "mese:crystal_ore3"
+			minetest.swap_node(pos, node)
+		elseif growth_stage == 3 then
+			node.name = "mese:crystal_ore2"
+			minetest.swap_node(pos, node)
+		elseif growth_stage == 2 then
+			node.name = "mese:crystal_ore1"
+			minetest.swap_node(pos, node)
+		end -- TODO Take last stage.
+		if growth_stage > 1 then
+			itemstack:add_wear(65535 / 100)
+			local player_inv = user:get_inventory()
+			local stack = ItemStack("mese:crystal")
+			if player_inv:room_for_item("main", stack) then
+				player_inv:add_item("main", stack)
+			end
+			return itemstack
+		end
+	end,
+})
+
+minetest.register_craft({
+	output = "tools:crystalline_bell",
+	recipe = {
+		{"diamond:diamond"},
+		{"glass:glass"},
+		{"group:stick"},
+	}
+})
+
 minetest.register_tool("tools:pick_mese_bone", {
 	description = "Mese Bone Pickaxe",
 	inventory_image = "tools_mese_pick_bone.png",
