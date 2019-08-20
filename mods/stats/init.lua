@@ -21,11 +21,12 @@ stats.update_stats = function(player, status_table)
 		if s == "hp_max" then
 			if v ~= "" then
 				player:set_properties({hp_max = v})
+				players[name].hp_max = v
 			end
 			res.hp_max = player:get_properties().hp_max
 		elseif s == "hp" then
 			if v ~= "" then
-				player:set_hp(v)
+				--player:set_hp(v)
 			end
 			res.hp = player:get_hp()
 		elseif s == "breath" then
@@ -71,6 +72,16 @@ stats.add_xp = function(player, amount)
 		x.xp = x.xp + amount
 	end
 	stats.update_stats(player, x)
+end
+
+stats.save = function(player)
+	local meta = player:get_meta()
+	local name = player:get_player_name()
+	if not name then
+		return
+	end
+
+	meta:set_string("stats", minetest.serialize(players[name]))
 end
 
 local function activity_xp_boost(player)
@@ -213,9 +224,7 @@ minetest.register_on_dieplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	local meta = player:get_meta()
-	local name = player:get_player_name()
-	meta:set_string("stats", minetest.serialize(players[name]))
+	stats.save(player)
 	players[name] = nil
 end)
 
@@ -237,5 +246,38 @@ minetest.register_chatcommand("stats", {
 		return true, str
 	end,
 })
+
+minetest.register_chatcommand("save", {
+	func = function(name)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "No player."
+		end
+
+		stats.save(player)
+		return true, "Saved."
+	end,
+})
+
+local function autosave()
+	local c_players = minetest.get_connected_players()
+	for i = 1, #c_players do
+		local player = c_players[i]
+		if not player then
+			break
+		end
+
+		stats.save(player)
+	end
+	minetest.after(55, function()
+		autosave()
+	end)
+end
+
+minetest.register_on_shutdown(function()
+	autosave()
+end)
+
+autosave()
 
 print("loaded stats")
