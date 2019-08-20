@@ -83,9 +83,9 @@ minetest.register_node("fireflies:hidden_firefly", {
 
 minetest.register_abm({
 	nodenames = {"trees:tree"},
-	neighbors = {"dirt:grass", "group:flora"},
-	interval = 60,
-	chance = 100,
+	neighbors = {"group:flora"},
+	interval = 300,
+	chance = 250,
 	action = function(pos, node)
 		local b = minetest.find_node_near(pos, 3,
 				{"fireflies:hidden_firefly", "fireflies:firefly"})
