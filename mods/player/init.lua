@@ -281,12 +281,17 @@ end)
 minetest.register_on_respawnplayer(function(player)
 	local name = player:get_player_name()
 	dead[name] = false
+	stats.update_stats(player, {
+		hp_max = 20,
+		hp = 20,
+		xp = 0,
+		level = 1,
+	})
+	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 	if not beds.spawn[name] then
 		player:set_pos(spawn.pos)
 		return true
 	end
-
-	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 end)
 
 minetest.register_on_joinplayer(function(player)
