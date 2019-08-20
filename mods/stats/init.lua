@@ -26,7 +26,7 @@ stats.update_stats = function(player, status_table)
 			res.hp_max = player:get_properties().hp_max
 		elseif s == "hp" then
 			if v ~= "" then
-				--player:set_hp(v)
+				player:set_hp(v)
 			end
 			res.hp = player:get_hp()
 		elseif s == "breath" then
@@ -208,6 +208,7 @@ minetest.register_on_joinplayer(function(player)
 	end
 
 	players[name] = p_stats
+	p_stats.hp = nil
 	stats.update_stats(player, p_stats)
 
 	minetest.after(1, function()
