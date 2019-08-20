@@ -3730,6 +3730,8 @@ function mobs:feed_tame(self, clicker, feed_count, breed, tame)
 
 				if not self.owner or self.owner == "" then
 					self.owner = clicker:get_player_name()
+					local lvl = stats.update_stats(clicker, {level = ""})
+					stats.add_xp(clicker, 50 * lvl.level)
 				end
 			end
 
