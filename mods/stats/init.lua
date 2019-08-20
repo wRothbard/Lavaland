@@ -73,6 +73,24 @@ stats.add_xp = function(player, amount)
 	stats.update_stats(player, x)
 end
 
+local function activity_xp_boost(player)
+	if player:get_hp() > 0 then
+		local vel = player:get_player_velocity()
+		local x = vel.x ~= 0
+		local y = vel.y ~= 0
+		local z = vel.z ~= 0
+		local moving = x or y or z
+		local amt = 3
+		if moving then
+			amt = 6 
+		end
+		stats.add_xp(player, amt)
+	end
+	minetest.after(12, function()
+		activity_xp_boost(player)
+	end)
+end
+
 local function show_status(player)
 	local name = player:get_player_name()
 	local formspec = "size[8,7.25]" ..
@@ -131,7 +149,6 @@ local function show_more(player)
 	minetest.show_formspec(name, "stats:more", formspec)
 end
 
-
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if (formname == "" and fields.status) or
 			(formname == "help:help" and fields.status) or
@@ -180,6 +197,10 @@ minetest.register_on_joinplayer(function(player)
 
 	players[name] = p_stats
 	stats.update_stats(player, p_stats)
+
+	minetest.after(1, function()
+		activity_xp_boost(player)
+	end)
 end)
 
 minetest.register_on_dieplayer(function(player)
