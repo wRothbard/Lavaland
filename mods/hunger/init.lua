@@ -14,11 +14,18 @@ local function cons(player)
 		if not sat then
 			return
 		end
+
+		local vel = player:get_player_velocity()
+		local x = vel.x ~= 0
+		local y = vel.y ~= 0
+		local z = vel.z ~= 0
 		if sat <= 0 then
 			sat = 0
 			player:set_hp(player:get_hp() - 4)
-		else
+		elseif x or y or z then
 			sat = sat - 0.05
+		else
+			sat = sat - 0.01
 		end
 		players[name] = sat
 		hud.update(player, "hunger", "number", sat, {name = "hunger"})
