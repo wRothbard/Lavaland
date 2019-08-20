@@ -74,7 +74,8 @@ stats.add_xp = function(player, amount)
 end
 
 local function activity_xp_boost(player)
-	if player:get_hp() > 0 then
+	if minetest.get_player_by_name(player:get_player_name()) and
+			player:get_hp() > 0 then
 		local vel = player:get_player_velocity()
 		local x = vel.x ~= 0
 		local y = vel.y ~= 0
