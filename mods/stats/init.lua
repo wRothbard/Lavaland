@@ -15,9 +15,12 @@ stats.update_stats = function(player, status_table)
 	if not player then
 		return
 	end
+	local name = player:get_player_name()
+	if not players[name] then
+		return
+	end
 	local res = {}
 	for s, v in pairs(status_table) do
-		local name = player:get_player_name()
 		if s == "hp_max" then
 			if v ~= "" then
 				player:set_properties({hp_max = v})
@@ -47,6 +50,9 @@ stats.update_stats = function(player, status_table)
 end
 
 stats.add_xp = function(player, amount)
+	if not player then
+		return
+	end
 	local name = player:get_player_name()
 	local x = stats.update_stats(player, {
 		xp = "",
