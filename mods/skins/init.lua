@@ -20,6 +20,16 @@ for i = 1, #skins.list do
 end
 
 minetest.register_on_joinplayer(function(player)
+	local meta = player:get_meta()
+	local gender = meta:get("gender")
+	if not gender then
+		gender = "male"
+		if math.random() > 0.5 then
+			gender = "female"
+		end
+		meta:set_string("gender", gender)
+	end
+
 	local inv = player:get_inventory()
 	inv:set_size("skin", 1)
 
@@ -53,36 +63,50 @@ minetest.register_on_joinplayer(function(player)
 	players[name] = minetest.create_detached_inventory(name .. "_skin", d_inv)
 	players[name]:set_size("skin", 1)
 	players[name]:set_stack("skin", 1, inv:get_stack("skin", 1))
+
+	minetest.after(1, function()
+		if meta:get_string("multiskin_skin") ~= meta:get_string("gender") then
+			multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+			multiskin.update_player_visuals(player)
+		end
+	end)
 end)
 
 minetest.register_chatcommand("gender", {
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not player then
-			return false, "Must be player!"
+			return false, "Muse be in-game."
 		end
 
 		local meta = player:get_meta()
+		local gender = meta:get("gender")
 
-		local gender = meta:get_string("gender")
-		if gender == "" then
-			gender = "male"
-		else
-			gender = nil
-		end
-
-		if param ~= "female" or param ~= "male" then
+		if param ~= "female" and param ~= "male" then
 			return true, "You're gender is " .. gender .. "."
 		end
-		
-		if not gender then
-			gender = param
+
+		if param == gender then
+			return false, "You're already " .. gender .. "."
 		end
+		
+		gender = param
 
 		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
 		multiskin.update_player_visuals(player)
 
-		meta:set_string("gender", param)
+		meta:set_string("gender", gender)
+
+		local inv = player:get_inventory()
+		local skin_item = inv:get_stack("skin", 1):get_name()
+		if skin_item ~= "" then
+			inventory.throw_inventory(player:get_pos(),
+					{skin_item})
+		end
+		inv:set_list("skin", {})
+		local d_inv = minetest.get_inventory({type = "detached",
+				name = name .. "_skin"})
+		d_inv:set_list("skin", {})
 	end,
 })
 

@@ -330,16 +330,6 @@ minetest.register_on_joinplayer(function(player)
 		30
 	)
 
-	local gender = player:get_meta():get_string("gender")
-	if gender ~= "" then
-		--player_api.set_textures(player, {"player_" .. gender .. ".png"})
-		--multiskin.set_player_skin(player, "player_" .. gender .. ".png")
-		multiskin.update_player_visuals(player)
-	else
-		player:get_meta():set_string("gender", "male")
-	end
-
-
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
 
