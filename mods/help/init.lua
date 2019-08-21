@@ -102,7 +102,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local page = tonumber(formname:sub(11, -1))
 
 		if fields.save then
-			pages[page].text = fields.text
+			pages[page].text = minetest.formspec_escape(fields.text)
 			store:set_string("pages", minetest.serialize(pages))
 		end
 
@@ -157,7 +157,7 @@ minetest.register_chatcommand("new_page", {
 			return false, "No name supplied."
 		end
 
-		param = param:gsub("%W", "")
+		param = minetest.formspec_escape(param:gsub("%W", ""))
 		if param == "" then
 			return false, "Error."
 		end
