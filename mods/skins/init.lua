@@ -71,7 +71,7 @@ minetest.register_chatcommand("gender", {
 			gender = nil
 		end
 
-		if param ~= "female" and param ~= "male" then
+		if param ~= "female" or param ~= "male" then
 			return true, "You're gender is " .. gender .. "."
 		end
 		
