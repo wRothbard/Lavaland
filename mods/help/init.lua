@@ -9,15 +9,16 @@ if saved then
 	end
 end
 
+if not pages[1] then
+	pages[1] = {title = "Help",
+			text = "This is the help system." ..
+			"\nType /new_page to create a new help page."}
+end
+
 minetest.register_privilege("help", "Can edit help documentation.")
 
 local function show_formspec(player, page_num)
 	page_num = page_num or 1
-	if not pages[page_num] then
-		pages[page_num] = {title = "Help",
-				text = "This is the help system." ..
-				"\nType /new_page to create a new help page."}
-	end
 	local name = player:get_player_name()
 	local editor = minetest.check_player_privs(name, {help = true})
 	local page_str = ""
@@ -110,9 +111,32 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+minetest.register_chatcommand("rename_page", {
+	privs = "help",
+	func = function(name, param)
+		param = param:split(" ")
+		if #param ~= 2 then
+			return false, "Invalid usage!"
+		end
+		for k, v in pairs(pages) do
+			if v and v.title == param[1] then
+				pages[k] = pages[#pages]
+				pages[#pages].title = param[2]:gsub("%W", "")
+			end
+		end
+
+		store:set_string("pages", minetest.serialize(pages))
+
+		return true, "Renamed."
+	end,
+})
+
 minetest.register_chatcommand("delete_page", {
 	privs = "help",
 	func = function(name, param)
+		if not minetest.check_player_privs(name, {kick = true}) then
+			return false, "Not high enough privs."
+		end
 		for k, v in pairs(pages) do
 			if v and v.title == param then
 				pages[k] = pages[#pages]
@@ -121,6 +145,8 @@ minetest.register_chatcommand("delete_page", {
 		end
 
 		store:set_string("pages", minetest.serialize(pages))
+
+		return true, "Deleted."
 	end,
 })
 
