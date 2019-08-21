@@ -210,16 +210,16 @@ minetest.register_on_newplayer(function(player)
 	local inv = player:get_inventory()
 	local s_items = {
 		"torch:torch 25",
-		"stone:cobble 50",
-		"bucket:bucket_water",
-		"mese:crystal_fragment 10",
 		"tools:pick_mese_bone",
 		"tools:sword_mese_bone",
 		"craftguide:book",
-		"gold:block",
 		"wool:red",
 		"wool:green",
 		"wool:blue",
+		"gold:block",
+		"stone:cobble 50",
+		"bucket:bucket_water",
+		"mese:crystal_fragment 10",
 	}
 	for i = 1, #s_items do
 		local s = s_items[i]
