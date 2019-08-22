@@ -54,6 +54,9 @@ stats.add_xp = function(player, amount)
 		return
 	end
 	local name = player:get_player_name()
+	if not players[name] then
+		return
+	end
 	local x = stats.update_stats(player, {
 		xp = "",
 		level = "",
