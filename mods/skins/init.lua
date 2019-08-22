@@ -65,7 +65,8 @@ minetest.register_on_joinplayer(function(player)
 	players[name]:set_stack("skin", 1, inv:get_stack("skin", 1))
 
 	minetest.after(1, function()
-		if meta:get_string("multiskin_skin") ~= meta:get_string("gender") then
+		local m_skin = meta:get_string("multiskin_skin")
+		if m_skin == "player_male.png" or m_skin == "player_female.png" then
 			multiskin.set_player_skin(player, "player_" .. gender .. ".png")
 			multiskin.update_player_visuals(player)
 		end
