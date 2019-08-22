@@ -3650,7 +3650,7 @@ function mobs:protect(self, clicker)
 	self.protected = true
 	local pos = self.object:get_pos()
 	pos.y = pos.y + self.collisionbox[2] + 0.5
-	effect(self.object:get_pos(), 25, "default_mese_crystal_fragment.png", 0.5, 4, 2, 15)
+	effect(self.object:get_pos(), 25, "mese_crystal_fragment.png", 0.5, 4, 2, 15)
 	mob_sound(self, "mobs_spell")
 	return true
 end
