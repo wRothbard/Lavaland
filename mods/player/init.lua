@@ -154,6 +154,7 @@ local formspec_default = "size[8,7.25]" ..
 		"list[current_player;craft;3,0;3,3;]" ..
 		"list[current_player;craftpreview;7,1;1,1;]" ..
 		"image[6,1;1,1;player_arrow.png^[transformR270]" ..
+		"list[current_player;backpack;7,2;1,1;]" ..
 		"list[current_player;main;0,3.25;8,1;]" ..
 		"list[current_player;main;0,4.5;8,3;8]" ..
 		"listring[current_player;main]" ..
@@ -242,7 +243,7 @@ minetest.register_on_dieplayer(function(player, reason)
 	local p_inv = player:get_inventory()
 	local items = {}
 	for k, list in pairs(p_inv:get_lists()) do
-		if k ~= "bed" then
+		if k ~= "bed" and k ~= "backpack" then
 			for i, n in pairs(list) do
 				if not n:is_empty() then
 					items[#items + 1] = n

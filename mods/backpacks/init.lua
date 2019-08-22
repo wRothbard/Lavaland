@@ -2,6 +2,15 @@
 -- Copyright 2018 James Stevenson
 -- GNU GPL version 3 and above
 
+minetest.register_on_joinplayer(function(player)
+	if not player then
+		return
+	end
+
+	local inv = player:get_inventory()
+	inv:set_size("backpack", 1)
+end)
+
 local backpacks = {}
 
 backpacks.form = "size[8,7.8]" ..
