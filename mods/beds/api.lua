@@ -41,7 +41,7 @@ function beds.register_bed(name, def)
 			fall_damage_add_percent = -80,
 			bouncy = 101
 		},
-		sounds = {footstep = {name = "xdecor_bouncy", gain = 0.8}},
+		sounds = {footstep = {name = "beds_bouncy", gain = 0.8}},
 		node_box = {
 			type = "fixed",
 			fixed = def.nodebox.bottom,
@@ -199,7 +199,7 @@ function beds.register_bed(name, def)
 			fall_damage_add_percent = -80,
 			bouncy = 101
 		},
-		sounds = {footstep = {name = "xdecor_bouncy", gain = 0.8}},
+		sounds = {footstep = {name = "beds_bouncy", gain = 0.8}},
 		drop = name .. "_bottom",
 		node_box = {
 			type = "fixed",
