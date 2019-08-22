@@ -19,7 +19,7 @@ minetest.register_node("farming:soil", {
 	tiles = {"dirt_dirt.png^farming_soil.png", "dirt_dirt.png"},
 	drop = "dirt:dirt",
 	groups = {crumbly=3, not_in_creative_inventory=1, soil=2, grassland = 1, field = 1},
-	--sounds = default.node_sound_dirt_defaults(),
+	sounds = music.sounds.nodes.dirt,
 	soil = {
 		base = "dirt:dirt",
 		dry = "farming:soil",
@@ -32,7 +32,7 @@ minetest.register_node("farming:soil_wet", {
 	tiles = {"dirt_dirt.png^farming_soil_wet.png", "dirt_dirt.png^farming_soil_wet_side.png"},
 	drop = "dirt:dirt",
 	groups = {crumbly=3, not_in_creative_inventory=1, soil=3, wet = 1, grassland = 1, field = 1},
-	--sounds = default.node_sound_dirt_defaults(),
+	sounds = music.sounds.nodes.dirt,
 	soil = {
 		base = "dirt:dirt",
 		dry = "farming:soil",

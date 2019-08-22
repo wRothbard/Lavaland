@@ -288,13 +288,7 @@ farming.register_plant = function(name, def)
 			fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
 		},
 		fertility = def.fertility,
-		--[[
-		sounds = default.node_sound_dirt_defaults({
-			dig = {name = "", gain = 0},
-			dug = {name = "default_grass_footstep", gain = 0.2},
-			place = {name = "default_place_node", gain = 0.25},
-		}),
-		--]]
+		sounds = music.sounds.nodes.plants,
 
 		on_place = function(itemstack, placer, pointed_thing)
 			local under = pointed_thing.under
@@ -361,7 +355,7 @@ farming.register_plant = function(name, def)
 				fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
 			},
 			groups = nodegroups,
-			--sounds = default.node_sound_leaves_defaults(),
+			sounds = music.sounds.nodes.leaves,
 			next_plant = next_plant,
 			on_timer = farming.grow_plant,
 			minlight = def.minlight,
