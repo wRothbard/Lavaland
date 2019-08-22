@@ -78,7 +78,7 @@ music.sounds = {
 				gain = 1.0,
 			},
 			place = {
-				name = "default_place_node",
+				name = "nodes_place",
 				gain = 1.0,
 			},
 		},
@@ -142,11 +142,11 @@ music.sounds = {
 		},
 		plants = {
 			place = {
-				name = "default_place_node",
+				name = "nodes_place",
 				gain = 0.25,
 			},
 			dug = {
-				name = "default_dirt_footstep",
+				name = "dirt_footstep",
 				gain = 0.2,
 			},
 			dig = {
@@ -154,7 +154,7 @@ music.sounds = {
 				gain = 0,
 			},
 			footstep = {
-				name = "default_dirt_footstep",
+				name = "dirt_footstep",
 				gain = 0.4,
 			},
 		},
