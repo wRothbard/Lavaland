@@ -82,7 +82,7 @@ local function copy_pointed_thing(pointed_thing)
 	}
 end
 
-local function on_place(itemstack, placer, pointed_thing)
+local function on_place(itemstack, placer, pointed_thing, param2)
 	local def = itemstack:get_definition()
 	if def.type ~= "node" or pointed_thing.type ~= "node" then
 		return itemstack, false
