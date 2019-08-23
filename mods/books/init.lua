@@ -6,15 +6,8 @@ local function on_place(itemstack, placer, pointed_thing)
 		return itemstack
 	end
 
-	local meta = itemstack:get_meta()
-	local data = meta:to_table()
-	data = data.fields or nil
 	local stack = ItemStack({name = "books:book_closed"})
-	print(dump(data))
-	if data and data.owner then
-		stack:get_meta():from_table(data)
-	end
-
+	stack:get_meta():from_table(itemstack:get_meta():to_table())
 	local _, placed = minetest.item_place(stack, placer, pointed_thing)
 	if placed then
 		itemstack:take_item()
@@ -23,10 +16,8 @@ local function on_place(itemstack, placer, pointed_thing)
 end
 
 local function after_place_node(pos, placer, itemstack, pointed_thing)
-	--local data = minetest.deserialize(itemstack:get_metadata())
 	local data = itemstack:get_meta():to_table()
-	data = data.fields
-	print(dump(data))
+	data = data.fields or nil
 	if data and data.owner then
 		local meta = minetest.get_meta(pos)
 		meta:set_string("title", data.title)
@@ -40,12 +31,14 @@ local function after_place_node(pos, placer, itemstack, pointed_thing)
 	end
 end
 
-local function formspec_display(meta, player_name, pos)
+local function formspec_display(player_name, pos)
 	-- Courtesy of minetest_game/mods/default/craftitems.lua
 	local title, text, owner = "", "", player_name
 	local page, page_max, lines, string = 1, 1, {}, ""
 
-	if meta:to_table().fields.owner then
+	local meta = minetest.get_meta(pos)
+	local tbl = meta:to_table()
+	if tbl.fields.owner then
 		title = meta:get_string("title")
 		text = meta:get_string("text")
 		owner = meta:get_string("owner")
@@ -54,9 +47,9 @@ local function formspec_display(meta, player_name, pos)
 			lines[#lines+1] = str
 		end
 
-		if meta:to_table().fields.page then
-			page = meta:to_table().fields.page
-			page_max = meta:to_table().fields.page_max
+		if tbl.fields.page then
+			page = tbl.fields.page
+			page_max = tbl.fields.page_max
 
 			for i = ((lpp * page) - lpp) + 1, lpp * page do
 				if not lines[i] then break end
@@ -99,8 +92,7 @@ local function on_rightclick(pos, node, clicker, itemstack, pointed_thing)
 				meta:get_string("text"))
 	elseif node.name == "books:book_open" then
 		local player_name = clicker:get_player_name()
-		local meta = minetest.get_meta(pos)
-		formspec_display(meta, player_name, pos)
+		formspec_display(player_name, pos)
 	end
 end
 
@@ -132,11 +124,10 @@ local function on_dig(pos, node, digger)
 		page = meta:get_int("page"),
 		page_max = meta:get_int("page_max"),
 	}
-
 	local stack
 	if data.owner ~= "" then
 		stack = ItemStack({name = "books:book_written"})
-		stack:get_meta():from_table(data)
+		stack:get_meta():from_table({fields = data})
 	else
 		stack = ItemStack({name = "books:book"})
 	end
@@ -289,9 +280,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 		-- Update stack
 		player:set_wielded_item(stack)
-	elseif formname:sub(1, 13) == "books:book_" then
+	elseif formname:sub(1, 11) == "books:book_" then
 		if fields.save and fields.title ~= "" and fields.text ~= "" then
-			local pos = minetest.string_to_pos(formname:sub(14))
+			local pos = minetest.string_to_pos(formname:sub(12))
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
 
@@ -319,7 +310,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				end
 			end
 
-			formspec_display(meta, player:get_player_name(), pos)
+			formspec_display(player:get_player_name(), pos)
 		end
 	end
 end)
@@ -346,9 +337,10 @@ minetest.register_node("books:book_open", {
 			{-0.4375, -0.5, -0.3125, 0.4375, -0.47, 0.3125},
 		}
 	},
-	--groups = {attached_node = 1}, -- FIXME
+	--groups = {attached_node = 1},
 	on_punch = on_punch,
 	on_rightclick = on_rightclick,
+	--preserve_metadata = preserve_metadata,
 })
 
 minetest.register_node("books:book_closed", {
@@ -372,10 +364,11 @@ minetest.register_node("books:book_closed", {
 			{-0.25, -0.5, -0.3125, 0.25, -0.35, 0.3125},
 		}
 	},
-	groups = {oddly_breakable_by_hand = 3, dig_immediate = 2}, --, attached_node = 1}, -- FIXME
+	groups = {dig_immediate = 2},--, attached_node = 1},
 	on_dig = on_dig,
 	on_rightclick = on_rightclick,
 	after_place_node = after_place_node,
+	--preserve_metadata = preserve_metadata,
 })
 
 minetest.register_craftitem("books:book", {
@@ -383,7 +376,7 @@ minetest.register_craftitem("books:book", {
 	inventory_image = "default_book.png",
 	groups = {book = 1, flammable = 3},
 	on_use = book_on_use,
-	--on_place = on_place,
+	on_place = on_place,
 })
 
 minetest.register_craftitem("books:book_written", {
@@ -392,7 +385,7 @@ minetest.register_craftitem("books:book_written", {
 	groups = {book = 1, not_in_creative_inventory = 1, flammable = 3},
 	stack_max = 1,
 	on_use = book_on_use,
-	--on_place = on_place,
+	on_place = on_place,
 })
 
 minetest.register_craft({
