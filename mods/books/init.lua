@@ -294,7 +294,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			meta:set_int("page", 1)
 			meta:set_int("page_max", math.ceil((fields.text:gsub("[^\n]", ""):len() + 1) / lpp))
 		elseif fields.book_next or fields.book_prev then
-			local pos = minetest.string_to_pos(formname:sub(14))
+			local pos = minetest.string_to_pos(formname:sub(12))
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
 
