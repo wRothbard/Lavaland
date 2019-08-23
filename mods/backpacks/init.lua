@@ -95,7 +95,7 @@ local function on_place(itemstack, placer, pointed_thing)
 	if oldnode_above.name ~= "air" then
 		return itemstack, false
 	end
-	local playername = user and user:get_player_name() or ""
+	local playername = placer and placer:get_player_name() or ""
 	local log = playername ~= "" and minetest.log or function() end
 
 	if not oldnode_under or not oldnode_above then
@@ -123,7 +123,9 @@ local function on_place(itemstack, placer, pointed_thing)
 	if olddef_under.buildable_to then
 		log("info", "node under is buildable to")
 		place_to = {x = under.x, y = under.y, z = under.z}
-		return itemstack, false
+		if minetest.is_protected(place_to, playername) then
+			return itemstack, false
+		end
 	end
 
 	log("action", playername .. " places node "
@@ -481,7 +483,7 @@ for k, v in ipairs(dye.dyes) do
 		preserve_metadata = backpacks.preserve_metadata,
 		on_receive_fields = backpacks.on_receive_fields,
 		on_use = backpacks.on_use,
-		on_bast = backpacks.on_blast,
+		on_blast = backpacks.on_blast,
 	})
 	minetest.register_craft({
 		output = "backpacks:backpack_wool_" .. v[1],
@@ -536,7 +538,7 @@ minetest.register_node("backpacks:backpack_leather", {
 	preserve_metadata = backpacks.preserve_metadata,
 	on_receive_fields = backpacks.on_receive_fields,
 	on_use = backpacks.on_use,
-	on_bast = backpacks.on_blast,
+	on_blast = backpacks.on_blast,
 })
 
 minetest.register_craft({
