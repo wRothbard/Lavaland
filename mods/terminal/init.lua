@@ -63,9 +63,11 @@ terminal.display = function(source, user, pos, input)
 		output = ""
 		feedback = ""
 	elseif command == "f" and source == "node" then
-		local nnn = minetest.get_node_or_nil(pos)
-		if nnn and nnn.name == "walkie:intercomm" then
-			meta:set_string("_on_function", minetest.serialize(args))
+		if not minetest.is_protected(pos, name) then
+			local nnn = minetest.get_node_or_nil(pos)
+			if nnn and nnn.name == "walkie:intercomm" then
+				meta:set_string("_on_function", minetest.serialize(args))
+			end
 		end
 	elseif command == "+" then
 		local new_args = {}
