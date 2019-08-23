@@ -32,6 +32,7 @@ backpacks.on_construct = function(pos)
 	inv:set_size("main", 8 * 3)
 end
 
+--[[
 backpacks.after_place_node = function(pos, placer, itemstack, pointed_thing)
 	local n_meta = minetest.get_meta(pos)
 	local i_meta = itemstack:get_meta()
@@ -48,6 +49,7 @@ backpacks.after_place_node = function(pos, placer, itemstack, pointed_thing)
 	end
 	itemstack:take_item()
 end
+--]]
 
 local function check_attached_node(p, n)
 	local def = minetest.registered_nodes[n.name]
@@ -90,6 +92,9 @@ local function on_place(itemstack, placer, pointed_thing)
 	local oldnode_under = minetest.get_node_or_nil(under)
 	local above = pointed_thing.above
 	local oldnode_above = minetest.get_node_or_nil(above)
+	if oldnode_above.name ~= "air" then
+		return itemstack, false
+	end
 	local playername = user and user:get_player_name() or ""
 	local log = playername ~= "" and minetest.log or function() end
 
@@ -118,6 +123,7 @@ local function on_place(itemstack, placer, pointed_thing)
 	if olddef_under.buildable_to then
 		log("info", "node under is buildable to")
 		place_to = {x = under.x, y = under.y, z = under.z}
+		return itemstack, false
 	end
 
 	log("action", playername .. " places node "
@@ -182,8 +188,8 @@ local function on_place(itemstack, placer, pointed_thing)
 	-- Add node and update
 	minetest.add_node(place_to, newnode)
 
-	local take_item = true
-
+	--local take_item = true
+	--[[
 	-- Run callback
 	if def.after_place_node and not prevent_after_place then
 		-- Deepcopy place_to and pointed_thing because callback can modify it
@@ -206,10 +212,24 @@ local function on_place(itemstack, placer, pointed_thing)
 			take_item = false
 		end
 	end
-
-	if take_item then
-		itemstack:take_item()
+	--]]
+	local n_meta = minetest.get_meta(place_to)
+	local i_meta = itemstack:get_meta()
+	local description = i_meta:get_string("description")
+	local infotext = description
+	if infotext == "" then
+		infotext = itemstack:get_definition().description
 	end
+	n_meta:set_string("description", description)
+	n_meta:set_string("infotext", infotext)
+	local inv = n_meta:get_inventory()
+	if i_meta:get_string("inventory") ~= "" then
+		inv:set_list("main", minetest.deserialize(i_meta:get_string("inventory")))
+	end
+
+	--if take_item then
+		itemstack:take_item()
+	--end
 	return itemstack, true
 end
 
@@ -454,7 +474,7 @@ for k, v in ipairs(dye.dyes) do
 		groups = {dig_immediate = 3, oddly_diggable_by_hand = 3, attached_node = 1},
 		stack_max = 1,
 		on_construct = backpacks.on_construct,
-		after_place_node = backpacks.after_place_node,
+		--after_place_node = backpacks.after_place_node,
 		on_place = on_place,
 		on_dig = backpacks.on_dig,
 		allow_metadata_inventory_put = backpacks.allow_metadata_inventory_put,
@@ -509,7 +529,7 @@ minetest.register_node("backpacks:backpack_leather", {
 	groups = {dig_immediate = 3, oddly_diggable_by_hand = 3, attached_node = 1},
 	stack_max = 1,
 	on_construct = backpacks.on_construct,
-	after_place_node = backpacks.after_place_node,
+	--after_place_node = backpacks.after_place_node,
 	on_place = on_place,
 	on_dig = backpacks.on_dig,
 	allow_metadata_inventory_put = backpacks.allow_metadata_inventory_put,
