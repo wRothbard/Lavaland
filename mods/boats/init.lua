@@ -475,8 +475,8 @@ minetest.register_craft({
 	output = "boats:boat_mese",
 	recipe = {
 		{"", "", ""},
-		{"mese:mese", "", "mese:mese"},
-		{"mese:mese", "mese:mese", "mese:mese"},
+		{"mese:crystal", "", "mese:crystal"},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
 	},
 })
 

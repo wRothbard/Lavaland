@@ -125,7 +125,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name()
 	if formname == "warpstones:diamond" then
 		local w = fields.warp
-		if w then
+		if w and w ~= "" then
 			local b = beds.beds[name]
 			if b[w] then
 				local n = minetest.get_meta(selected[name])
@@ -196,7 +196,6 @@ for label, color in pairs(warps) do
 		on_rightclick = on_rightclick,
 		on_blast = on_blast,
 		after_place_node = after_place_node,
-		can_dig = can_dig,
 		after_dig_node = after_dig_node,
 		on_punch = on_punch,
 	})
