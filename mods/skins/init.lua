@@ -1,11 +1,13 @@
 skins = {}
+skins.list = {}
 
-skins.list = {
-	"alien_by_jmf",
-	"thewillyrex_by_edwar_masterchieft",
-	"worker_by_krock",
-	"calinou_by_calinou",
-}
+local ls = minetest.get_dir_list(minetest.get_modpath("skins") .. "/textures")
+for i = 1, #ls do
+	local l = ls[i]
+	if l ~= "skins_skin_bg.png" and not l:match("_inv.png") then
+		skins.list[#skins.list + 1] = l:sub(7, -5)
+	end
+end
 
 local players = {}
 
