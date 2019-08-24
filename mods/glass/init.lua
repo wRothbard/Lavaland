@@ -6,8 +6,8 @@ minetest.register_node("glass:glass", {
 	paramtype2 = "glasslikeliquidlevel",
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {cracky = 3, oddly_breakable_by_hand = 3},
-	--sounds = default.node_sound_glass_defaults(),
+	groups = {cracky = 3, oddly_breakable_by_hand = 3, glass = 1},
+	sounds = music.sounds.nodes.glass,
 })
 
 minetest.register_craft({

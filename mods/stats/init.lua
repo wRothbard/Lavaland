@@ -112,7 +112,7 @@ local function activity_xp_boost(player)
 	end)
 end
 
-local function show_status(player)
+function stats.show_status(player)
 	local name = player:get_player_name()
 	local formspec = "size[8,7.25]" ..
 		"real_coordinates[]" ..
@@ -142,7 +142,7 @@ local function show_status(player)
 	minetest.show_formspec(name, "stats:status", formspec)
 end
 
-local function show_more(player)
+function stats.show_more(player)
 	local name = player:get_player_name()
 	local x = stats.update_stats(player, {
 		hp = "",
@@ -174,9 +174,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if (formname == "" and fields.status) or
 			(formname == "help:help" and fields.status) or
 			(formname == "stats:more" and fields.status) then
-		show_status(player)
+		stats.show_status(player)
 	elseif formname == "stats:status" and fields.more then
-		show_more(player)
+		stats.show_more(player)
 	elseif (formname == "stats:status" or
 				formname == "help:help" or
 				formname == "stats:more") and fields.spawn then
