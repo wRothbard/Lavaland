@@ -59,7 +59,7 @@ local boat_mese = {
 		collisionbox = {-0.5, -0.35, -0.5, 0.5, 0.3, 0.5},
 		visual = "mesh",
 		mesh = "boats_boat.obj",
-		textures = {"mese_mese.png"},
+		textures = {"mese_crystal_texture.png"},
 	},
 	driver = nil,
 	v = 0,
@@ -103,14 +103,53 @@ function boat.on_rightclick(self, clicker)
 		clicker:set_look_horizontal(self.object:get_yaw())
 	end
 end
-boat_mese.on_right = boat.on_rightclick
+
+function boat_mese.on_rightclick(self, clicker)
+	if not clicker or not clicker:is_player() then
+		return
+	end
+	local name = clicker:get_player_name()
+	if self.driver and name == self.driver then
+		self.driver = nil
+		self.auto = false
+		clicker:set_detach()
+		player_api.player_attached[name] = false
+		player_api.set_animation(clicker, "stand" , 30)
+		local pos = clicker:get_pos()
+		pos = {x = pos.x, y = pos.y + 0.2, z = pos.z}
+		minetest.after(0.1, function()
+			clicker:set_pos(pos)
+		end)
+	elseif not self.driver then
+		local attach = clicker:get_attach()
+		if attach and attach:get_luaentity() then
+			local luaentity = attach:get_luaentity()
+			if luaentity.driver then
+				luaentity.driver = nil
+			end
+			clicker:set_detach()
+		end
+		self.driver = name
+		clicker:set_attach(self.object, "",
+			{x = 0.5, y = 1, z = -3}, {x = 0, y = 0, z = 0})
+		player_api.player_attached[name] = true
+		minetest.after(0.2, function()
+			player_api.set_animation(clicker, "sit" , 30)
+		end)
+		clicker:set_look_horizontal(self.object:get_yaw())
+	end
+end
 
 -- If driver leaves server while driving boat
 function boat.on_detach_child(self, child)
 	self.driver = nil
 	self.auto = false
 end
-boat_mese.on_detach_child = boat.on_detach_child
+
+function boat_mese.on_detach_child(self, child)
+	self.driver = nil
+	self.auto = false
+end
 
 function boat.on_activate(self, staticdata, dtime_s)
 	self.object:set_armor_groups({immortal = 1})
@@ -119,12 +158,22 @@ function boat.on_activate(self, staticdata, dtime_s)
 	end
 	self.last_v = self.v
 end
-boat_mese.on_activate = boat.on_activate
+
+function boat_mese.on_activate(self, staticdata, dtime_s)
+	self.object:set_armor_groups({immortal = 1})
+	if staticdata then
+		self.v = tonumber(staticdata)
+	end
+	self.last_v = self.v
+end
 
 function boat.get_staticdata(self)
 	return tostring(self.v)
 end
-boat_mese.get_staticdata = boat.get_staticdata
+
+function boat_mese.get_staticdata(self)
+	return tostring(self.v)
+end
 
 function boat.on_punch(self, puncher)
 	if not puncher or not puncher:is_player() or self.removed then
@@ -155,6 +204,7 @@ function boat.on_punch(self, puncher)
 		end)
 	end
 end
+
 function boat_mese.on_punch(self, puncher)
 	if not puncher or not puncher:is_player() or self.removed then
 		return
