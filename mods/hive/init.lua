@@ -25,11 +25,6 @@ function hive.construct(pos)
 end
 
 function hive.timer(pos)
-	local time = (minetest.get_timeofday() or 0) * 24000
-	if time < 5500 or time > 18500 then
-		return true
-	end
-
 	local inv = minetest.get_meta(pos):get_inventory()
 	local honeystack = inv:get_stack("honey", 1)
 	local honey = honeystack:get_count()
@@ -39,6 +34,9 @@ function hive.timer(pos)
 	local maxp = vector.add(pos, radius)
 	local flowers = minetest.find_nodes_in_area_under_air(minp, maxp, "group:flower")
 
+	if minetest.get_node_light(flowers[math.random(#flowers)]) < 9 then
+		return true
+	end
 	if #flowers > 2 and honey < honey_max then
 		inv:add_item("honey", "hive:honey")
 	elseif honey == honey_max then
