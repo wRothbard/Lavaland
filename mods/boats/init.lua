@@ -59,7 +59,7 @@ local boat_mese = {
 		collisionbox = {-0.5, -0.35, -0.5, 0.5, 0.3, 0.5},
 		visual = "mesh",
 		mesh = "boats_boat.obj",
-		textures = {"mese_crystal_texture.png"},
+		textures = {"mese_mese.png"},
 	},
 	driver = nil,
 	v = 0,
@@ -486,8 +486,8 @@ minetest.register_craft({
 minetest.register_entity("boats:boat_mese", boat_mese)
 minetest.register_craftitem("boats:boat_mese", {
 	description = "Mese Boat",
-	inventory_image = "boats_inventory.png^[colorize:yellow:80",
-	wield_image = "boats_wield.png^[colorize:yellow:80",
+	inventory_image = "boats_inventory.png^[colorize:yellow:95",
+	wield_image = "boats_wield.png^[colorize:yellow:95",
 	wield_scale = {x = 2, y = 2, z = 1},
 	liquids_pointable = true,
 
