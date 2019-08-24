@@ -125,9 +125,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name()
 	if formname == "warpstones:diamond" then
 		local w = fields.warp
-		if w and w ~= "" then
+		if w then
 			local b = beds.beds[name]
-			if b[w] then
+			if b and b[w] then
 				local n = minetest.get_meta(selected[name])
 				selected[name] = nil
 				if n then
@@ -139,7 +139,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				end
 				return
 			end
-			for name, warps in pairs(beds.beds_public) do
+			for _, warps in pairs(beds.beds_public) do
 				for warp, pos in pairs(warps) do
 					if w == warp then
 						local n = minetest.get_meta(selected[name])
