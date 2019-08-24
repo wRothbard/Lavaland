@@ -30,7 +30,8 @@ local function cons(player)
 		players[name] = sat
 		hud.update(player, "hunger", "number", sat, {name = "hunger"})
 
-		if sat > 16 and hp < player:get_properties().hp_max then
+		if sat > 16 and hp < player:get_properties().hp_max and
+				player:get_breath() > 0 then
 			player:set_hp(hp + 1)
 		end
 	else

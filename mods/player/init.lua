@@ -233,11 +233,20 @@ minetest.register_on_dieplayer(function(player, reason)
 	if dead[name] then
 		return
 	end
-
 	if reason.type == "punch" and reason.object and
 			reason.object:is_player() then
 		minetest.chat_send_all(reason.object:get_player_name() ..
 				" punched out " .. name .. ".")
+	elseif reason.type == "drown" then
+		minetest.chat_send_all(player:get_player_name() ..
+				" drowned!")
+	elseif reason.type == "node_damage" and reason.node == "lava:source" or
+			reason.node == "lava:flowing" then
+		minetest.chat_send_all(player:get_player_name() ..
+				" melted in lava!")
+	elseif reason.type == "fall" then
+		minetest.chat_send_all(player:get_player_name() ..
+				" fell to their death!")
 	end
 
 	local p_inv = player:get_inventory()
