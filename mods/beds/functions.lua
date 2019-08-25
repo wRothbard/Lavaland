@@ -249,18 +249,21 @@ local function beds_list_fs(player, index, tab)
 			"tablecolumns[color;tree;text]" ..
 		""
 		for player_name, destination in pairs(beds.beds_public) do
-			if #destination >= 1 then
-				beds_list_string = beds_list_string .. "," ..
-					"#FFF,0," .. player_name .. "," ..
-				""
-				beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name}
-				for dest_name, _ in pairs(destination) do
-					beds_list_string = beds_list_string ..
-						"#FFF,1," .. dest_name .. "," ..
+			for ck, _ in pairs(destination) do
+				if ck then
+					beds_list_string = beds_list_string .. "," ..
+						"#FFF,0," .. player_name .. "," ..
 					""
-					beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name, dest = dest_name}
+					beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name}
+					for dest_name, _ in pairs(destination) do
+						beds_list_string = beds_list_string ..
+							"#FFF,1," .. dest_name .. "," ..
+						""
+						beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name, dest = dest_name}
+					end
+					beds_list_string = beds_list_string:sub(1, -2)
+					break
 				end
-				beds_list_string = beds_list_string:sub(1, -2)
 			end
 		end
 	end
