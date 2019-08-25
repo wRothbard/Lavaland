@@ -478,7 +478,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local pos
 			if owner_name then
 				pos = beds.beds_public[owner_name][warp_name]
-			else
+			elseif beds.beds[name] and beds.beds[name][warp_name] then
 				pos = beds.beds[name][warp_name]
 			end
 			if pos then
