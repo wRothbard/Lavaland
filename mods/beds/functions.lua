@@ -137,7 +137,7 @@ function beds.skip_night(f)
 	if f then
 		return
 	end
-	if beds.night_toggle = "enabled" then
+	if beds.night_toggle == "enabled" then
 		minetest.set_timeofday((beds.time.hour * 60 + beds.time.min) / 1440)
 		beds.night_toggle = "disabled"
 	else
