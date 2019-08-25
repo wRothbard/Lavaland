@@ -137,12 +137,12 @@ function beds.skip_night(f)
 	if f then
 		return
 	end
-	if beds.night_toggle then
+	if beds.night_toggle = "enabled" then
 		minetest.set_timeofday((beds.time.hour * 60 + beds.time.min) / 1440)
-		beds.night_toggle = false
+		beds.night_toggle = "disabled"
 	else
 		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)
-		beds.night_toggle = true
+		beds.night_toggle = "enabled"
 	end
 end
 
@@ -270,20 +270,13 @@ end
 
 minetest.register_chatcommand("night_toggle", {
 	func = function(name, param)
-		if param then
+		if param == "enabled" or param == "disabled" then
 			if minetest.check_player_privs(name, {server = true}) then
-				return false, "No enough privs!"
+				return false, "Not enough privs!"
 			end
-
-			if param == "true" then
-				param = true
-			elseif param == "false" then
-				param = false
-			end
-
 			beds.night_toggle = param
 		end
-		return true, tostring(beds.night_toggle) .. " : " .. type(beds.night_toggle)
+		return true, beds.night_toggle
 	end,
 })
 

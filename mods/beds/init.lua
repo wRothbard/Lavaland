@@ -15,7 +15,7 @@ beds.formspec = "size[8,15;false]" ..
 ""
 beds.time = os.date("*t")
 minetest.after(1, minetest.set_timeofday, (beds.time.hour * 60 + beds.time.min) / 1440)
-beds.night_toggle = false
+beds.night_toggle = "disabled" 
 beds.selected = {}
 beds.beds = {}
 beds.beds_public = {}
@@ -36,7 +36,7 @@ minetest.register_globalstep(function(dtime)
 	end
 	--minetest.log("action", "Setting time.")
 	beds.time = os.date("*t")
-	if beds.night_toggle then
+	if beds.night_toggle == "enabled" then
 		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)
 	else
 		minetest.set_timeofday((beds.time.hour * 60 + beds.time.min) / 1440)
