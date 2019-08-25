@@ -268,6 +268,25 @@ local function beds_list_fs(player, index, tab)
 	return formspec
 end
 
+minetest.register_chatcommand("night_toggle", {
+	func = function(name, param)
+		if param then
+			if minetest.check_player_privs(name, {server = true}) then
+				return false, "No enough privs!"
+			end
+
+			if param == "true" then
+				param = true
+			elseif param == "false" then
+				param = false
+			end
+
+			beds.night_toggle = param
+		end
+		return true, tostring(beds.night_toggle) .. " : " .. type(beds.night_toggle)
+	end,
+})
+
 minetest.register_chatcommand("setspawn", {
 	description = "Set your respawn location",
 	params = "none",
