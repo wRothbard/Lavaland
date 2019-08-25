@@ -495,8 +495,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local warp_name = beds.gdi[name][index]
 		if warp_name then
 			forms.message(name, "Deleted " .. warp_name .. ".")
-			beds.beds[name][warp_name] = nil
-			beds.beds_public[name][warp_name] = nil
+			if beds.beds[name] and beds.beds[name][warp_name] then
+				beds.beds[name][warp_name] = nil
+			end
+			if beds.beds_public[name] and beds.beds_public[name][warp_name] then
+				beds.beds_public[name][warp_name] = nil
+			end
 		end
 		return minetest.after(0.1, minetest.show_formspec,
 				name, "beds:list", beds_list_fs(player, index))
