@@ -589,7 +589,7 @@ shapes.register_shapes(
 
 shapes.register_shapes(
 	"sandstone_block",
-	"default:sandstone_block",
+	"sand:sandstone_block",
 	{cracky = 2},
 	{"default_sandstone_block.png"},
 	"Sandstone Block Stair",
