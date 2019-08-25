@@ -63,8 +63,10 @@ stats.add_xp = function(player, amount)
 		hp = "",
 		hp_max = "",
 	})
-	local ttl = x.xp + amount
-	if ttl >= 100 * x.level then
+	local lvl = tonumber(x.level)
+	local xp = tonumber(x.xp)
+	local ttl = xp + amount
+	if ttl >= 100 * lvl then
 		-- Level up
 		local max = x.hp_max
 		if max < 100 then
@@ -73,12 +75,12 @@ stats.add_xp = function(player, amount)
 			x.hp_max = nil
 		end
 		x.hp = max
-		x.xp = (x.xp + amount) % (100 * x.level)
-		x.level = x.level + 1
+		x.xp = (xp + amount) % (100 * lvl)
+		x.level = lvl + 1
 		minetest.chat_send_player(name, "Level up!  New level is " ..
 				x.level .. ".")
 	else
-		x.xp = x.xp + amount
+		x.xp = xp + amount
 	end
 	stats.update_stats(player, x)
 end

@@ -189,9 +189,7 @@ function boat.on_punch(self, puncher)
 	if not self.driver then
 		self.removed = true
 		local inv = puncher:get_inventory()
-		if not (creative and creative.is_enabled_for
-				and creative.is_enabled_for(name))
-				or not inv:contains_item("main", "boats:boat_wood") then
+		if not inv:contains_item("main", "boats:boat_wood") then
 			local leftover = inv:add_item("main", "boats:boat_wood")
 			-- if no room in inventory add a replacement boat to the world
 			if not leftover:is_empty() then
@@ -219,9 +217,7 @@ function boat_mese.on_punch(self, puncher)
 	if not self.driver then
 		self.removed = true
 		local inv = puncher:get_inventory()
-		if not (creative and creative.is_enabled_for
-				and creative.is_enabled_for(name))
-				or not inv:contains_item("main", "boats:boat_mese") then
+		if not inv:contains_item("main", "boats:boat_mese") then
 			local leftover = inv:add_item("main", "boats:boat_mese")
 			-- if no room in inventory add a replacement boat to the world
 			if not leftover:is_empty() then
