@@ -77,9 +77,9 @@ local on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		return
 	elseif node.name == "warpstones:mese" then
 		if name ~= owner then
-			stats.show_status(clicker)
+			stats.show_more(clicker)
 		else
-			stats.show_status(clicker, true)
+			stats.show_more(clicker, true)
 		end
 		return
 	end
@@ -92,7 +92,8 @@ local after_dig_node = function(pos, oldnode, oldmetadata, digger)
 	if oldnode.name == "warpstones:mese" then
 		local name = digger:get_player_name()
 		selected[name] = oldmetadata
-		forms.message(digger, "Would you like to apply the stored class and level?", true, "warpstones:stats_apply")
+		forms.message(digger, "Would you like to apply the stored class and level?",
+				true, "warpstones:stats_apply")
 	end
 end
 
@@ -103,18 +104,11 @@ local after_place_node = function(pos, placer, itemstack, pointed_thing)
 		return
 	end
 	meta:set_string("owner", name)
+	local spos = minetest.pos_to_string(pos)
 	if itemstack:get_name() == "warpstones:mese" then
-		local s = stats.update_stats(placer, {level = "", xp = "", hp = "", hp_max = ""})
-		local level = s.level
-		meta:set_string("infotext",
-				"Mese Warpstone\nOwned by " .. name ..
-				"\nLevel: " .. tostring(level))
-		meta:set_string("codex", minetest.serialize(s))
-		local hp = s.hp
-		if hp > 20 then
-			hp = 20
-		end
-		stats.update_stats(placer, {hp_max = 20, hp = hp, xp = 0, level = 1})
+		forms.message(placer, "Would you like to save your current stats to this warpstone?  " ..
+				"Doing so will reset your character's stats and place them in the crystal.",
+				true, "warpstones:stats_save_" .. spos)
 	elseif itemstack:get_name() == "warpstones:diamond" then
 		meta:set_string("infotext", "Uninitialized warpstone\n" ..
 				"Right-click to set destination.")
@@ -158,10 +152,24 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	if formname == "warpstones:stats_apply" and fields.ok then
-		local name = player:get_player_name()
 		local codex = minetest.deserialize(selected[name].fields.codex)
 		selected[name] = nil
 		stats.update_stats(player, codex)
+	elseif formname:sub(1, 22) == "warpstones:stats_save_" and fields.ok then
+		local s = stats.update_stats(player,
+				{level = "", xp = "", hp = "", hp_max = ""})
+		local level = s.level
+		local mpos = minetest.string_to_pos(formname:sub(24, -2))
+		local meta = minetest.get_meta(mpos)
+		meta:set_string("infotext",
+				"Mese Warpstone\nOwned by " .. name ..
+				"\nLevel: " .. tostring(level))
+		meta:set_string("codex", minetest.serialize(s))
+		local hp = s.hp
+		if hp > 20 then
+			hp = 20
+		end
+		stats.update_stats(player, {hp_max = 20, hp = hp, xp = 0, level = 1})
 	end
 end)
 
