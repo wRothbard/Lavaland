@@ -107,6 +107,10 @@ local function update_formspecs(finished)
 			" of " .. tostring(ges) .. " players are in bed]"
 		if is_majority then
 			form_n = form_n .. "button_exit[2,8;4,0.75;force;Force night/day skip]"
+		else
+			form_n = form_n .. "field[0.2,6;7,1;bed_chat;;]" ..
+				"field_close_on_enter[bed_chat;false]" ..
+				"button_exit[6.867,5.76;1,1;bed_chat_send;OK]"
 		end
 	end
 
@@ -497,6 +501,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		return minetest.after(0.1, minetest.show_formspec,
 				name, "beds:list", beds_list_fs(player, index))
+	elseif formname == "beds_form" and fields.bed_chat and
+		fields.bed_chat ~= "" and (fields.bed_chat_send == "OK" or
+				fields.key_enter == "true") then
+		local name = player:get_player_name()
+		minetest.chat_send_all("<" .. name .. "> " .. fields.bed_chat)
+		update_formspecs(false)
 	elseif formname == "beds_form" then
 		-- Because "Force night skip" button is a button_exit,
 		-- it will set fields.quit and lay_down call will change
