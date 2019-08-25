@@ -101,7 +101,7 @@ npc_drops = {
 	{name = "tools:shovel_mese", chance = 0.9},
 	{name = "fireflies:bug_net", chance = 0.7},
 	{name = "mobs:shears", chance = 0.5},
-	--{name = "default:coral_skeleton", chance = 0.8, count = {1, 3}},
+	{name = "tools:crystalline_bell", chance = 0.2},
 	{name = "farming:bread", chance = 0.8, count = {1, 2}},
 	{name = "gravel:gravel", chance = 0.8, count = {15, 25}},
 	{name = "dirt:dirt", chance = 0.67, count = {11, 33}},
@@ -117,13 +117,13 @@ npc_drops = {
 	--{name = "default:dry_shrub", chance = 0.8},
 	--{name = "default:fern_3", chance = 0.8},
 	--{name = "default:blueberry_bush_sapling", chance = 0.8},
-	--{name = "default:coral_green", chance = 0.8},
+	{name = "water:ice 4", chance = 0.8},
 	{name = "dye:red", chance = 0.8},
 	{name = "trees:wood", chance = 0.8},
 	{name = "wool:white", chance = 0.8},
 	{name = "wool:red", chance = 0.8},
 	{name = "wool:green", chance = 0.8},
-	{name = "copper:ingot", chance = 0.8},
+	{name = "copper:ingot", chance = 0.8, count = {1, 3}},
 }
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)

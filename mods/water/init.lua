@@ -1,5 +1,21 @@
 local rand = math.random
 
+minetest.register_node("water:ice", {
+	description = "Ice",
+	tiles = {"default_ice.png"},
+	is_ground_content = false,
+	paramtype = "light",
+	groups = {cracky = 3, cools_lava = 1, slippery = 3},
+	sounds = music.sounds.nodes.glass,
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "water:ice 2",
+	recipe = {"bucket:bucket_water", "water:ice"},
+	replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}},
+})
+
 minetest.register_node("water:source", {
 	description = "Water Source",
 	drawtype = "liquid",
