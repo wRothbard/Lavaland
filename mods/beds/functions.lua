@@ -249,17 +249,19 @@ local function beds_list_fs(player, index, tab)
 			"tablecolumns[color;tree;text]" ..
 		""
 		for player_name, destination in pairs(beds.beds_public) do
-			beds_list_string = beds_list_string .. "," ..
-				"#FFF,0," .. player_name .. "," ..
-			""
-			beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name}
-			for dest_name, _ in pairs(destination) do
-				beds_list_string = beds_list_string ..
-					"#FFF,1," .. dest_name .. "," ..
+			if #destination >= 1 then
+				beds_list_string = beds_list_string .. "," ..
+					"#FFF,0," .. player_name .. "," ..
 				""
-				beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name, dest = dest_name}
+				beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name}
+				for dest_name, _ in pairs(destination) do
+					beds_list_string = beds_list_string ..
+						"#FFF,1," .. dest_name .. "," ..
+					""
+					beds.gdi[name][#beds.gdi[name] + 1] = {name = player_name, dest = dest_name}
+				end
+				beds_list_string = beds_list_string:sub(1, -2)
 			end
-			beds_list_string = beds_list_string:sub(1, -2)
 		end
 	end
 	formspec = formspec .. "table[-0.1,-0.1;6,4.34;beds_list_item;" ..
@@ -414,10 +416,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			end
 			local old_home_name = meta:get_string("home_name")
 			if old_home_name ~= "" then
-				if beds.beds[name][old_home_name] then
+				if beds.beds[name] and
+						beds.beds[name][old_home_name] then
 					beds.beds[name][old_home_name] = nil
 				end
-				if beds.beds_public[name][old_home_name] then
+				if beds.beds_public[name] and
+						beds.beds_public[old_home_name] then
 					beds.beds_public[name][old_home_name] = nil
 				end
 			end
