@@ -34,7 +34,8 @@ function hive.timer(pos)
 	local maxp = vector.add(pos, radius)
 	local flowers = minetest.find_nodes_in_area_under_air(minp, maxp, "group:flower")
 
-	if minetest.get_node_light(flowers[math.random(#flowers)]) < 9 then
+	local check = flowers[math.random(#flowers)]
+	if check and minetest.get_node_light(check) < 9 then
 		return true
 	end
 	if #flowers > 2 and honey < honey_max then
