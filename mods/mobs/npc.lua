@@ -117,7 +117,7 @@ npc_drops = {
 	--{name = "default:dry_shrub", chance = 0.8},
 	--{name = "default:fern_3", chance = 0.8},
 	--{name = "default:blueberry_bush_sapling", chance = 0.8},
-	{name = "water:ice 4", chance = 0.8},
+	{name = "water:ice", chance = 0.8, count = {2, 8}},
 	{name = "dye:red", chance = 0.8},
 	{name = "trees:wood", chance = 0.8},
 	{name = "wool:white", chance = 0.8},
