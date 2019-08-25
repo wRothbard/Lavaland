@@ -29,16 +29,14 @@ function hive.timer(pos)
 	local honeystack = inv:get_stack("honey", 1)
 	local honey = honeystack:get_count()
 
-	local radius = 4
-	local minp = vector.add(pos, -radius)
-	local maxp = vector.add(pos, radius)
-	local flowers = minetest.find_nodes_in_area_under_air(minp, maxp, "group:flower")
-
-	local check = flowers[math.random(#flowers)]
-	if check and minetest.get_node_light(check) < 9 then
-		return true
+	local p1 = {x = pos.x + 4, y = pos.y + 4, z = pos.z + 4}
+	local p2 = {x = pos.x - 4, y = pos.y - 4, z = pos.z - 4}
+	local flowers = minetest.find_nodes_in_area(p1, p2, {"group:flower"})
+	local light = 0
+	for _, n in pairs(flowers) do
+		light = light + minetest.get_node_light(n)
 	end
-	if #flowers > 2 and honey < honey_max then
+	if light >= 8 and #flowers >= 2 and honey < honey_max then
 		inv:add_item("honey", "hive:honey")
 	elseif honey == honey_max then
 		local timer = minetest.get_node_timer(pos)
