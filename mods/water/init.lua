@@ -9,6 +9,22 @@ minetest.register_node("water:ice", {
 	sounds = music.sounds.nodes.glass,
 })
 
+minetest.register_abm({
+	nodenames = "water:ice",
+	neighbors = "group:water",
+	interval = 60,
+	chance = 3,
+	catch_up = false,
+	action = function(pos, node)
+		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
+		local water = minetest.find_nodes_in_area(p1, p2, {"group:water"})
+		if #water > 4 then
+			minetest.set_node(water[rand(#water)], {name = "water:ice"})
+		end
+	end,
+})
+
 minetest.register_craft({
 	type = "shapeless",
 	output = "water:ice 2",
