@@ -41,11 +41,13 @@ local on_punch = function(pos, node, puncher, pointed_thing)
 						player:set_pos(warp)
 						warp.y = warp.y + 2
 						forms.message(player, "Warped to "
-								.. meta:get_string("destination") .. ".")
+								.. meta:get_string("destination")
+								.. ".")
 						return minetest.sound_play("items_plop",
 								{pos = warp, max_hear_distance = 64})
 					end
-					minetest.after(0.334, timer, p, player, time + 0.334, meta, sid, warp)
+					minetest.after(0.334, timer, p,
+							player, time + 0.334, meta, sid, warp)
 				else
 					forms.message(puncher,
 							"Stand still for 5 seconds after punching to warp.")
@@ -106,6 +108,7 @@ local after_place_node = function(pos, placer, itemstack, pointed_thing)
 	meta:set_string("owner", name)
 	local spos = minetest.pos_to_string(pos)
 	if itemstack:get_name() == "warpstones:mese" then
+		--print(dump(itemstack:get_meta():to_table()))
 		forms.message(placer, "Would you like to save your current stats to this warpstone?  " ..
 				"Doing so will reset your character's stats and place them in the crystal.",
 				true, "warpstones:stats_save_" .. spos)
@@ -155,17 +158,24 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local codex = minetest.deserialize(selected[name].fields.codex)
 		selected[name] = nil
 		stats.update_stats(player, codex)
+	elseif formname == "warpstones:stats_apply" and fields.quit then
+		--print("try save stats in crystal")
+		--local codex = minetest.deserialize(selected[name].fields.codex)
+		--local inv = player:get_inventory()
+		--show formspec with slot for warpstone, save stats to it on place.
 	elseif formname:sub(1, 22) == "warpstones:stats_save_" and fields.ok then
 		local s = stats.update_stats(player,
 				{level = "", xp = "", hp = "", hp_max = ""})
-		local level = s.level
+		local hp = s.hp
 		local mpos = minetest.string_to_pos(formname:sub(24, -2))
 		local meta = minetest.get_meta(mpos)
 		meta:set_string("infotext",
 				"Mese Warpstone\nOwned by " .. name ..
-				"\nLevel: " .. tostring(level))
+				"\nLevel: " .. tostring(s.level) .. ", " ..
+				"XP: " .. tostring(s.xp) ..
+				"\nHP: " .. tostring(hp) .. "/" ..
+				tostring(s.hp_max))
 		meta:set_string("codex", minetest.serialize(s))
-		local hp = s.hp
 		if hp > 20 then
 			hp = 20
 		end
