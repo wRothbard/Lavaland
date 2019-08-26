@@ -34,7 +34,6 @@ minetest.register_globalstep(function(dtime)
 		step = step + dtime
 		return
 	end
-	--minetest.log("action", "Setting time.")
 	beds.time = os.date("*t")
 	if beds.night_toggle == "enabled" then
 		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)

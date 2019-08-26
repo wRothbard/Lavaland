@@ -220,7 +220,6 @@ local function beds_list_fs(player, index, tab)
 		return forms.message(name, "You do not have any beds saved.")
 	end
 	local formspec = "size[6,4.75]" ..
-		--"box[-0.9,-1.1;6.67,0.5;black]" ..
 		"tabheader[0,0;tab;Private,Public;" .. tostring(tab) ..
 				";false;true]" ..
 		"button_exit[4,4.25;2,1;warp;Warp]" ..
@@ -289,55 +288,9 @@ minetest.register_chatcommand("setspawn", {
 		return true, "Your respawn position has been saved."
 	end,
 })
---[[
-minetest.register_chatcommand("sethome", {
-	description = "Set your home location",
-	params = "none",
-	privs = "interact",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return false, "You need to be in game for this command to work."
-		end
-		local wielded = player:get_wielded_item()
-		if wielded:get_name() ~= "walkie:talkie" then
-			return false, "You need to wield a walkie in your hand " ..
-					"for this command to work."
-		end
-		local pos = player:get_pos()
-		walkie.players[name].waypoints.saved = pos
-		walkie.players[name].waypoints.pos = pos
-		player:hud_change(walkie.meters[name].waypoint,
-				"world_pos", pos)
-		player:get_meta():set_string("waypoints",
-				minetest.serialize(walkie.players[name].waypoints))
-		return true, "Your home has been set to your current location."
-	end,
-})
-minetest.register_chatcommand("home", {
-	description = "Teleport to your home position",
-	params = "none",
-	privs = "interact",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return
-		end
-		local wielded = player:get_wielded_item()
-		if wielded:get_name() ~= "walkie:talkie" then
-			return false, "You need to wield a walkie in your hand."
-		end
-		local pos = walkie.players[name].waypoints.saved
-		if pos then
-			player:set_pos(pos)
-			return true, "You have warped to your home position."
-		else
-			return false, "You have yet to save a home location!"
-		end
-	end,
-})
---]]
+
 local beds_list_index = {}
+
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "beds:inventory" then
 		if not player then
@@ -494,9 +447,27 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			forms.message(name, "Deleted " .. warp_name .. ".")
 			if beds.beds[name] and beds.beds[name][warp_name] then
 				beds.beds[name][warp_name] = nil
+				local nn = 0
+				for iw, iwn in pairs(beds.beds[name]) do
+					if iwn then
+						nn = nn + 1
+					end
+				end
+				if nn == 0 then
+					beds.beds[name] = nil
+				end
 			end
 			if beds.beds_public[name] and beds.beds_public[name][warp_name] then
 				beds.beds_public[name][warp_name] = nil
+				local nn = 0
+				for iw, iwn in pairs(beds.beds_public[name]) do
+					if iwn then
+						nn = nn + 1
+					end
+				end
+				if nn == 0 then
+					beds.beds_public[name] = nil
+				end
 			end
 		end
 		return minetest.after(0.1, minetest.show_formspec,
