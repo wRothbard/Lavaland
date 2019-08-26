@@ -434,6 +434,9 @@ minetest.register_on_leaveplayer(function(player)
 	players[name] = nil
 	accelerating[name] = nil
 	dead[name] = nil
+	if cozy.players[name] then
+		cozy.reset(player)
+	end
 end)
 
 minetest.register_chatcommand("sit", {
