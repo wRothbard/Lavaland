@@ -105,6 +105,9 @@ local timer = function(player)
 	local name = player:get_player_name()
 	messages[name][5] = messages[name][5] + 1
 	minetest.after(9, function()
+		if not minetest.get_player_by_name(name) then
+			return
+		end
 		for i = 4, 1, -1 do
 			if messages[name][i] ~= "" then
 				messages[name][i] = ""
