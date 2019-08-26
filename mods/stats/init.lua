@@ -182,7 +182,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	elseif formname == "stats:status" and fields.more then
 		stats.show_more(player)
 	elseif (formname == "stats:status" or
-				formname == "help:help" or
+				formname:match("help:") or
 				formname == "stats:more") then
 		if fields.spawn then
 			player:set_pos(mapgen.spawn)
