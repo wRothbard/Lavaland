@@ -99,10 +99,10 @@ end
 
 cozy.sit = function(player, pos, state)
 	local name = player:get_player_name()
-	if cozy.players[name] then
+	if cozy.players[name] and cozy.players[name] == "sit" then
 		cozy.reset(player)
 	else
-		cozy.players[name] = true
+		cozy.players[name] = "sit"
 		physics(player, nil, true)
 		player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
 		player_api.player_attached[name] = true
@@ -113,10 +113,10 @@ end
 
 cozy.lay = function(player, pos, state)
 	local name = player:get_player_name()
-	if cozy.players[name] then
+	if cozy.players[name] and cozy.players[name] == "lay" then
 		cozy.reset(player)
 	else
-		cozy.players[name] = true
+		cozy.players[name] = "lay"
 		physics(player, nil, true)
 		player:set_eye_offset({x = 0, y = -13, z = 0}, {x = 0, y = 0, z = 0})
 		player_api.player_attached[name] = true
