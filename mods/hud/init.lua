@@ -1,6 +1,7 @@
 hud = {}
 
 local players = {}
+local messages = {}
 
 minetest.hud_replace_builtin("breath", {
 	hud_elem_type = "statbar",
@@ -12,7 +13,7 @@ minetest.hud_replace_builtin("breath", {
 	offset = {x = -48, y = 32},
 })
 
-sb_stamina = {
+local sb_stamina = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
 	text = "hud_sb_stamina_green.png",
@@ -22,7 +23,7 @@ sb_stamina = {
 	offset = {x = 25, y = -(48 + 24 + 16)},
 }
 
-sb_armor = {
+local sb_armor = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
 	text = "hud_sb_armor.png",
@@ -32,7 +33,7 @@ sb_armor = {
 	offset = {x = 25, y = -(48 + 48 + 16)},
 }
 
-sb_hunger = {
+local sb_hunger = {
 	hud_elem_type = "statbar",
 	position = {x = 0.5, y = 1},
 	text = "hud_sb_hunger.png",
@@ -40,6 +41,16 @@ sb_hunger = {
 	direction = 0,
 	size = {x = 24, y = 24},
 	offset = {x = (-10 * 24) - 25, y = -(48 + 48 + 16)},
+}
+
+local hmsg = {
+	hud_elem_type = "text",
+	name = "hmsg",
+	number = 0xFFFFFF,
+	position = {x = 0.02, y = 0.7},
+	text = "",
+	scale = {x = 100, y = 25},
+	alignment = {x = 1, y = -1},
 }
 
 hud.update = function(player, elem, stat, value, modifier)
@@ -81,6 +92,60 @@ hud.update = function(player, elem, stat, value, modifier)
 	end
 end
 
+local gen_string = function(name)
+	local output = ""
+	for i = 4, 1, -1 do
+		local mm = messages[name][i]
+		output = output .. "\n" .. mm
+	end
+	return output
+end
+
+local timer = function(player)
+	local name = player:get_player_name()
+	messages[name][5] = messages[name][5] + 1
+	minetest.after(9, function()
+		for i = 4, 1, -1 do
+			if messages[name][i] ~= "" then
+				messages[name][i] = ""
+				player:hud_change(players[name].messages, "text", gen_string(name))
+				messages[name][5] = messages[name][5] - 1
+				break
+			end
+		end
+	end)
+end
+
+function hud.message(player, message)
+	local name
+	if type(player) ~= "string" then
+		name = player:get_player_name()
+	else
+		name = player
+		player = minetest.get_player_by_name(name)
+	end
+	local m = messages[name]
+	for i = 4, 2, -1 do
+		local mm = m[i]
+		m[i] = m[i - 1]
+	end
+	m[1] = message
+	player:hud_change(players[name].messages, "text", gen_string(name))
+	if messages[name][5] <= 4 then
+		timer(player)
+	end
+end
+
+minetest.register_chatcommand("hmsg", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Not in-game!"
+		end
+		hud.message(player, param)
+	end,
+})
+
 minetest.register_on_player_hpchange(function(player, hp_change)
 	if hp_change < 0 then
 		hud.update(player, "armor", "number", nil, {name = "armor"})
@@ -93,11 +158,15 @@ minetest.register_on_joinplayer(function(player)
 		stamina = player:hud_add(sb_stamina),
 		armor = player:hud_add(sb_armor),
 		hunger = player:hud_add(sb_hunger),
+		messages = player:hud_add(hmsg),
 	}
+	messages[name] = {[1] = "", [2] = "", [3] = "", [4] = "", [5] = 1}
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	players[player:get_player_name()] = nil
+	local name = player:get_player_name()
+	players[name] = nil
+	messages[name] = nil
 end)
 
 print("loaded hud")

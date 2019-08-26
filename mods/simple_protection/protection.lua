@@ -16,7 +16,8 @@ local function notify_player(pos, player_name)
 		-- Access restricted by another protection mod. Not my job.
 		return
 	else
-		minetest.chat_send_player(player_name, S("Area owned by: @1", data.owner))
+		--minetest.chat_send_player(player_name, S("Area owned by: @1", data.owner))
+		hud.message(player_name, S("Area owned by: @1", data.owner))
 	end
 end
 

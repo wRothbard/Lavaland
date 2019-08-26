@@ -2,7 +2,7 @@ minetest.register_alias("default:stone", "stone:stone")
 
 local xp_add = function(pos, oldnode, oldmetadata, digger)
 	local lvl = stats.update_stats(digger, {level = ""})
-	stats.add_xp(digger, (10 * ((0.1 * lvl.level) + 1)))
+	stats.add_xp(digger, (10 * ((0.1 * lvl.level) + 1)), true)
 end
 
 minetest.register_node("stone:stone", {

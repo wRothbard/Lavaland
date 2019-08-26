@@ -49,7 +49,7 @@ stats.update_stats = function(player, status_table)
 	return res
 end
 
-stats.add_xp = function(player, amount)
+stats.add_xp = function(player, amount, notify)
 	if not player then
 		return
 	end
@@ -65,6 +65,9 @@ stats.add_xp = function(player, amount)
 	})
 	local lvl = tonumber(x.level)
 	local xp = tonumber(x.xp)
+	if notify then
+		hud.message(player, "+" .. amount .. " XP")
+	end
 	local ttl = xp + amount
 	if ttl >= 100 * lvl then
 		-- Level up
@@ -77,7 +80,9 @@ stats.add_xp = function(player, amount)
 		x.hp = max
 		x.xp = (xp + amount) % (100 * lvl)
 		x.level = lvl + 1
-		minetest.chat_send_player(name, "Level up!  New level is " ..
+		--[[minetest.chat_send_player(name, "Level up!  New level is " ..
+				x.level .. ".")]]
+		hud.message(player, "Level up!  New level is " ..
 				x.level .. ".")
 	else
 		x.xp = xp + amount

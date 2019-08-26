@@ -58,7 +58,7 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 		if xp_inc < 1 then
 			xp_inc = 1
 		end
-		stats.add_xp(user, xp_inc)
+		stats.add_xp(user, xp_inc, true)
 	elseif hp_change < 0 then
 		players[name] = sat / 2
 		itemstack:take_item()

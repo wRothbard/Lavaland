@@ -2429,7 +2429,7 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 					xp_inc = xp_inc * 3
 				end
 				xp_inc = math.ceil(xp_inc) + 1
-				stats.add_xp(hitter, xp_inc)
+				stats.add_xp(hitter, xp_inc, true)
 			end
 			return
 		end
@@ -3731,7 +3731,7 @@ function mobs:feed_tame(self, clicker, feed_count, breed, tame)
 				if not self.owner or self.owner == "" then
 					self.owner = clicker:get_player_name()
 					local lvl = stats.update_stats(clicker, {level = ""})
-					stats.add_xp(clicker, (50 * ((0.1 * lvl.level) + 1)))
+					stats.add_xp(clicker, (50 * ((0.1 * lvl.level) + 1)), true)
 				end
 			end
 
