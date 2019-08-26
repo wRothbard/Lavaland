@@ -2306,9 +2306,9 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 	end
 
 	-- is mob protected?
-	if self.protected and hitter:is_player()
-	and minetest.is_protected(self.object:get_pos(), hitter:get_player_name()) then
-		minetest.chat_send_player(hitter:get_player_name(), S("Mob has been protected!"))
+	if self.protected and hitter:is_player() and
+			minetest.is_protected(self.object:get_pos(), hitter:get_player_name()) then
+		hud.message(hitter, "Mob has been protected!")
 		return
 	end
 
@@ -3545,7 +3545,8 @@ function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
 	if self.owner ~= name
 	and force_take == false then
 
-		minetest.chat_send_player(name, S("@1 is owner!", self.owner))
+		--minetest.chat_send_player(name, S("@1 is owner!", self.owner))
+		hud.message(name, S("@1 is owner!", self.owner))
 
 		return true -- false
 	end
@@ -3636,11 +3637,13 @@ function mobs:protect(self, clicker)
 		return false
 	end
 	if self.tamed == false then
-		minetest.chat_send_player(name, S("Not tamed!"))
+		--minetest.chat_send_player(name, S("Not tamed!"))
+		hud.message(name, "Not tamed!")
 		return true -- false
 	end
 	if self.protected == true then
-		minetest.chat_send_player(name, S("Already protected!"))
+		--minetest.chat_send_player(name, S("Already protected!"))
+		hud.message(name, "Already protected!")
 		return true -- false
 	end
 	if not mobs.is_creative(clicker:get_player_name()) then
@@ -3652,6 +3655,7 @@ function mobs:protect(self, clicker)
 	pos.y = pos.y + self.collisionbox[2] + 0.5
 	effect(self.object:get_pos(), 25, "mese_crystal_fragment.png", 0.5, 4, 2, 15)
 	mob_sound(self, "mobs_spell")
+	hud.message(name, "Protected!")
 	return true
 end
 
@@ -3721,9 +3725,10 @@ function mobs:feed_tame(self, clicker, feed_count, breed, tame)
 			if tame then
 
 				if self.tamed == false then
-					minetest.chat_send_player(clicker:get_player_name(),
-						S("@1 has been tamed!",
-						self.name:split(":")[2]))
+					--minetest.chat_send_player(clicker:get_player_name(),
+					hud.message(clicker:get_player_name(),
+							S("@1 has been tamed!",
+							self.name:split(":")[2]))
 				end
 
 				self.tamed = true
