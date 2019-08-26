@@ -1,3 +1,6 @@
+cozy = {}
+cozy.players = {}
+
 local sprinting = {}
 local players = {}
 local cooldown = {}
@@ -33,7 +36,7 @@ local function control(player, field)
 	end
 end
 
-local function physics(player, enabled)
+local function physics(player, enabled, cancel)
 	if enabled then
 		player:set_physics_override({
 			speed = 2,
@@ -41,6 +44,16 @@ local function physics(player, enabled)
 			gravity = 0.96,
 			new_move = false,
 			sneak_glitch = true,
+			sneak = true,
+		})
+	elseif cancel then
+		player:set_physics_override({
+			speed = 0,
+			jump = 0,
+			gravity = 0,
+			new_move = true,
+			sneak_glitch = false,
+			sneak = false,
 		})
 	else
 		player:set_physics_override({
@@ -49,7 +62,66 @@ local function physics(player, enabled)
 			gravity = 1,
 			new_move = true,
 			sneak_glitch = false,
+			sneak = true,
 		})
+	end
+end
+
+cozy.reset = function(player, pos, state)
+	local name = player:get_player_name()
+	if cozy.players[name] then
+		cozy.players[name] = nil
+	end
+	physics(player)
+	player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+	player_api.player_attached[name] = false
+	player_api.set_animation(player, "stand", 30)
+end
+
+local function reset(player)
+	if not player then
+		return
+	end
+	local name = player:get_player_name()
+	if not cozy.players[name] then
+		return
+	end
+	local c = player:get_player_control()
+	c = c.jump or c.up or c.down or c.left or c.right
+	if c then
+		cozy.reset(player)
+		return
+	end
+	minetest.after(0.09, function()
+		reset(player)
+	end)
+end
+
+cozy.sit = function(player, pos, state)
+	local name = player:get_player_name()
+	if cozy.players[name] then
+		cozy.reset(player)
+	else
+		cozy.players[name] = true
+		physics(player, nil, true)
+		player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
+		player_api.player_attached[name] = true
+		player_api.set_animation(player, "sit", 30)
+		reset(player)
+	end
+end
+
+cozy.lay = function(player, pos, state)
+	local name = player:get_player_name()
+	if cozy.players[name] then
+		cozy.reset(player)
+	else
+		cozy.players[name] = true
+		physics(player, nil, true)
+		player:set_eye_offset({x = 0, y = -13, z = 0}, {x = 0, y = 0, z = 0})
+		player_api.player_attached[name] = true
+		player_api.set_animation(player, "lay", 0)
+		reset(player)
 	end
 end
 
@@ -363,5 +435,25 @@ minetest.register_on_leaveplayer(function(player)
 	accelerating[name] = nil
 	dead[name] = nil
 end)
+
+minetest.register_chatcommand("sit", {
+	func = function(n)
+		local p = minetest.get_player_by_name(n)
+		if not p then
+			return false, "Must be in-game."
+		end
+		cozy.sit(p)
+	end,
+})
+
+minetest.register_chatcommand("lay", {
+	func = function(n)
+		local p = minetest.get_player_by_name(n)
+		if not p then
+			return false, "Must be in-game."
+		end
+		cozy.lay(p)
+	end,
+})
 
 print("loaded player")
