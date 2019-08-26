@@ -165,6 +165,8 @@ function stats.show_more(player)
 		"button[6,0;1,1;status;<]" ..
 		"button_exit[7,0;1,1;quit;X]" ..
 		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
+		"button_exit[0.5,3;2,1;sit;Sit]" ..
+		"button_exit[0.5,4;2,1;lay;Lay]" ..
 		"label[3,0.25;Status]" ..
 		"tablecolumns[text;text,padding=3]" ..
 		"table[3,1;4.75,6.2;stats;" .. str .. ";1]" ..
@@ -181,20 +183,23 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		stats.show_more(player)
 	elseif (formname == "stats:status" or
 				formname == "help:help" or
-				formname == "stats:more") and fields.spawn then
-		player:set_pos(mapgen.spawn)
-		minetest.sound_play("mapgen_item", {pos = mapgen.spawn, gain = 0.3})
-	elseif (formname == "stats:status" or
-				formname == "help:help" or
-				formname == "stats:more") and fields.home then
-		local name = player:get_player_name()
-		local pos = mapgen.homes[name]
-		if pos then
-			player:set_pos(pos)
-		else
-			minetest.chat_send_player(name, "No home set!")
+				formname == "stats:more") then
+		if fields.spawn then
+			player:set_pos(mapgen.spawn)
+			minetest.sound_play("mapgen_item", {pos = mapgen.spawn, gain = 0.3})
+		elseif fields.home then
+			local name = player:get_player_name()
+			local pos = mapgen.homes[name]
+			if pos then
+				player:set_pos(pos)
+			else
+				minetest.chat_send_player(name, "No home set!")
+			end
+		elseif fields.sit then
+			cozy.sit(player)
+		elseif fields.lay then
+			cozy.lay(player)
 		end
-
 	end
 end)
 
