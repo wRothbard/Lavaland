@@ -3,8 +3,8 @@ minetest.register_node("furniture:chair", {
 	tiles = {"xdecor_wood.png"},
 	sounds = music.sounds.nodes.wood,
 	groups = {choppy = 3, oddly_breakable_by_hand = 2, flammable = 2},
-	on_rotate = screwdriver.rotate_simple,
 	paramtype = "light",
+	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
@@ -39,6 +39,7 @@ minetest.register_node("furniture:table", {
 	groups = {choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
 	sounds = music.sounds.nodes.wood,
 	paramtype = "light",
+	paramtype2 = "facedir",
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
