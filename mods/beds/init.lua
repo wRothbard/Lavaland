@@ -1,6 +1,7 @@
 -- This version of the beds mod is part of Glitchtest
 -- Copyright 2018 James Stevenson
 -- GNU GPL 3
+
 minetest.settings:set("time_speed", 1)
 
 beds = {}
@@ -50,13 +51,6 @@ minetest.register_on_shutdown(function()
 	store:set_string("beds_public", minetest.serialize(beds.beds_public))
 
 end)
-minetest.register_on_joinplayer(function(player)
-	if not player then
-		return
-	end
-	player:get_inventory():set_size("bed", 8 * 3)
-end)
-
 dofile(modpath .. "/functions.lua")
 dofile(modpath .. "/api.lua")
 dofile(modpath .. "/beds.lua")

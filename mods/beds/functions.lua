@@ -1,3 +1,12 @@
+local chat = {}
+
+minetest.register_on_joinplayer(function(player)
+	if not player then
+		return
+	end
+	player:get_inventory():set_size("bed", 8 * 3)
+end)
+
 local pi = math.pi
 local player_in_bed = 0
 local is_sp = minetest.is_singleplayer()
@@ -109,8 +118,8 @@ local function update_formspecs(finished)
 			form_n = form_n .. "button_exit[2,8;4,0.75;force;Force night/day skip]"
 		else
 			form_n = form_n .. "field[0.2,6;7,1;bed_chat;;]" ..
-				"field_close_on_enter[bed_chat;false]" ..
-				"button_exit[6.867,5.76;1,1;bed_chat_send;OK]"
+				"field_close_on_enter[bed_chat;true]" ..
+				"button_exit[6.867,5.7;1,1;bed_chat_send;OK]"
 		end
 	end
 
@@ -118,9 +127,6 @@ local function update_formspecs(finished)
 		minetest.show_formspec(name, "beds_form", form_n)
 	end
 end
-
-
--- Public functions
 
 function beds.kick_players()
 	for name, _ in pairs(beds.player) do
@@ -139,6 +145,30 @@ function beds.skip_night(f)
 	else
 		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)
 		beds.night_toggle = "enabled"
+	end
+end
+
+local function awaken(player)
+	local name = player:get_player_name()
+	if not name then
+		return
+	end
+	if beds.player[name] then
+		local c = player:get_player_control()
+		-- TODO Learn math. (Eg. get_player_control_bits)
+		c = c.jump or c.up or c.down or c.left or c.right
+		local v = player:get_player_velocity()
+		v = v.x ~= 0 or v.y ~= 0 or v.z ~= 0
+		local h = player:get_hp() == 0
+		if c or v or h then
+			lay_down(player, nil, nil, false)
+			update_formspecs(false)
+			minetest.close_formspec(name, "beds_form")
+		else
+			minetest.after(0.2, function()
+				awaken(player)
+			end)
+		end
 	end
 end
 
@@ -167,6 +197,8 @@ function beds.on_rightclick(pos, player)
 			beds.kick_players()
 		end)
 	end
+
+	awaken(player)
 end
 
 function beds.can_dig(bed_pos)
@@ -197,6 +229,7 @@ minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	lay_down(player, nil, nil, false, true)
 	beds.player[name] = nil
+	chat[name] = nil
 	if check_in_beds() then
 		minetest.after(2, function()
 			update_formspecs(true)
@@ -207,6 +240,7 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 beds.gdi = {}
+
 local function beds_list_fs(player, index, tab)
 	if not player then
 		return
@@ -476,8 +510,18 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		fields.bed_chat ~= "" and (fields.bed_chat_send == "OK" or
 				fields.key_enter == "true") then
 		local name = player:get_player_name()
-		minetest.chat_send_all("<" .. name .. "> " .. fields.bed_chat)
+		local t = chat[name] or 0
+		if minetest.get_us_time() - t < 1000000 then
+			minetest.chat_send_player(name, "<" .. name .. "> " .. fields.bed_chat ..
+					"\nChat message not sent!  Error!")
+			update_formspecs(false)
+		else
+			minetest.chat_send_all("<" .. name .. "> " .. fields.bed_chat)
+			update_formspecs(false)
+		end
+		chat[name] = minetest.get_us_time()
 		update_formspecs(false)
+		minetest.after(0.09, update_formspecs, false)
 	elseif formname == "beds_form" then
 		-- Because "Force night skip" button is a button_exit,
 		-- it will set fields.quit and lay_down call will change
