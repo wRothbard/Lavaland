@@ -299,7 +299,7 @@ end
 minetest.register_chatcommand("night_toggle", {
 	func = function(name, param)
 		if param == "enabled" or param == "disabled" then
-			if minetest.check_player_privs(name, {server = true}) then
+			if not minetest.check_player_privs(name, {server = true}) then
 				return false, "Not enough privs!"
 			end
 			beds.night_toggle = param
