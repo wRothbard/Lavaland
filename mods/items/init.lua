@@ -16,8 +16,9 @@ local function auto_pickup(player)
 			local obj = o[i]
 			local p = obj:is_player()
 			if not p then
+				local name = player:get_player_name()
 				local ent = obj:get_luaentity()
-				if ent.age and ent.age > 0.5 then
+				if ent and ent.age and ent.age > 0.5 then
 					obj:remove()
 					local inv = player:get_inventory()
 					local add = inv:add_item("main", ent.itemstring)
