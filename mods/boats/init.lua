@@ -48,7 +48,8 @@ local boat = {
 	v = 0,
 	last_v = 0,
 	removed = false,
-	--auto = false
+	--auto = false,
+	delay = 0,
 }
 
 local boat_mese = {
@@ -65,7 +66,8 @@ local boat_mese = {
 	v = 0,
 	last_v = 0,
 	removed = false,
-	--auto = false
+	--auto = false,
+	delay = 0,
 }
 
 function boat.on_rightclick(self, clicker)
@@ -238,6 +240,11 @@ function boat_mese.on_punch(self, puncher)
 end
 
 function boat.on_step(self, dtime)
+	self.delay = self.delay + dtime
+	if self.delay > dtime then
+		self.delay = 0
+		return
+	end
 	self.v = get_v(self.object:get_velocity()) * get_sign(self.v)
 	if self.driver then
 		local driver_objref = minetest.get_player_by_name(self.driver)
@@ -335,6 +342,11 @@ function boat.on_step(self, dtime)
 end
 
 function boat_mese.on_step(self, dtime)
+	self.delay = self.delay + dtime
+	if self.delay > dtime then
+		self.delay = 0
+		return
+	end
 	self.v = get_v(self.object:get_velocity()) * get_sign(self.v)
 	if self.driver then
 		local driver_objref = minetest.get_player_by_name(self.driver)
