@@ -7,6 +7,10 @@ local base_stats = {
 	hp_max = 20,
 	breath = 11,
 	breath_max = 11,
+	stam = 20,
+	stam_max = 20,
+	sat = 20,
+	sat_max = 20,
 	xp = 0,
 	level = 1,
 }
@@ -32,8 +36,32 @@ stats.update_stats = function(player, status_table)
 				player:set_hp(v)
 			end
 			res.hp = player:get_hp()
-		elseif s == "breath" then
 		elseif s == "breath_max" then
+			res.breath_max = player:get_properties().breath_max
+		elseif s == "breath" then
+			res.breath = player:get_breath()
+		elseif s == "stam_max" then
+			res.stam_max = players[name].stam_max
+		elseif s == "stam" then
+			res.stam = stamina.get_stamina(player)
+		elseif s == "sat_max" then
+			if not players[name].sat_max then
+				players[name].sat_max = 20
+			end
+			if v ~= "" then
+				players[name].sat_max = v
+			end
+			res.sat_max = players[name].sat_max
+		elseif s == "sat" then
+			--[[
+			if not players[name].sat then
+				players[name].sat = hunger.status(player)
+			end
+			--]]
+			if v ~= "" then
+				hunger.status(player, v)
+			end
+			res.sat = hunger.status(player)
 		elseif s == "xp" then
 			if v ~= "" then
 				players[name].xp = v
@@ -68,6 +96,7 @@ stats.add_xp = function(player, amount, notify)
 		level = "",
 		hp = "",
 		hp_max = "",
+		sat_max = "",
 	})
 	local lvl = tonumber(x.level)
 	local xp = tonumber(x.xp)
@@ -83,6 +112,13 @@ stats.add_xp = function(player, amount, notify)
 			stats.update_stats(player, {hp_max = max})
 			x.hp_max = nil
 		end
+		local max_sat = x.sat_max
+		if max_sat < 100 then
+			max_sat = max_sat + 2
+			stats.update_stats(player, {sat_max = max_sat})
+			x.sat_max = nil
+		end
+		hunger.status(player, max_sat)
 		x.hp = max
 		x.xp = (xp + amount) % (100 * lvl)
 		x.level = lvl + 1
@@ -160,7 +196,12 @@ function stats.show_more(player)
 	local x = stats.update_stats(player, {
 		hp = "",
 		hp_max = "",
+		breath = "",
 		breath_max = "",
+		stam = "",
+		stam_max = "",
+		sat = "",
+		sat_max = "",
 		xp = "",
 		level = "",
 	})
@@ -258,20 +299,28 @@ end)
 
 minetest.register_chatcommand("stats", {
 	func = function(name, param)
-		local culm = {}
-		local split = param:split(" ")
-		for i = 1, #split do
-			local s = split[i]
-			culm[s] = ""
-		end
+		local player = minetest.get_player_by_name(name)
+		if param and param ~= "" then
+			local culm = {}
+			local split = param:split(" ")
+			for i = 1, #split do
+				local s = split[i]
+				culm[s] = ""
+			end
 
-		local res = stats.update_stats(minetest.get_player_by_name(name), culm)
-		local str = ""
-		for k, v in pairs(res) do
-			str = str .. k .. ": " .. v .. ", "
+			local res = stats.update_stats(player, culm)
+			local str = ""
+			for k, v in pairs(res) do
+				str = str .. k .. ": " .. v .. ", "
+			end
+			str = str:sub(1, -3)
+			return true, str
+		else
+			if not player then
+				return false, "Invalid usage."
+			end
+			stats.show_more(player)
 		end
-		str = str:sub(1, -3)
-		return true, str
 	end,
 })
 

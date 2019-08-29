@@ -2,8 +2,13 @@ hunger = {}
 
 local players = {}
 
-hunger.status = function(player)
-	return math.ceil(players[player:get_player_name()])
+hunger.status = function(player, set)
+	if set then
+		players[player:get_player_name()] = set
+		hud.update(player, "hunger", "number", set, {name = "hunger"})
+	else
+		return math.ceil(players[player:get_player_name()])
+	end
 end
 
 local function cons(player)
@@ -47,11 +52,12 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 		itemstack, user, pointed_thing)
 	local name = user:get_player_name()
 	local sat = players[name]
-	if sat < 20 and hp_change > 0 then
+	local sat_max = stats.update_stats(user, {sat_max = ""}).sat_max
+	if sat < sat_max and hp_change > 0 then
 		itemstack:take_item()
 		sat = sat + hp_change
-		if sat > 20 then
-			sat = 20
+		if sat > sat_max then
+			sat = sat_max
 		end
 		players[name] = sat
 		local xp_inc = math.ceil(hp_change / 2)
@@ -86,7 +92,7 @@ minetest.register_on_dieplayer(function(player)
 end)
 
 minetest.register_on_respawnplayer(function(player)
-	players[player:get_player_name()] = 20
+	players[player:get_player_name()] = stats.update_stats(player, {sat_max = ""}).sat_max
 end)
 
 minetest.register_on_leaveplayer(function(player)

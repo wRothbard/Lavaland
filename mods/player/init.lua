@@ -374,6 +374,7 @@ minetest.register_on_respawnplayer(function(player)
 		hp = 20,
 		xp = 0,
 		level = 1,
+		sat_max = 20,
 	})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 	if not beds.spawn[name] then
