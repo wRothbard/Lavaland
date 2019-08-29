@@ -1,5 +1,7 @@
 stats = {}
 
+local rand = math.random
+
 local players = {}
 
 local base_stats = {
@@ -41,6 +43,12 @@ stats.update_stats = function(player, status_table)
 		elseif s == "breath" then
 			res.breath = player:get_breath()
 		elseif s == "stam_max" then
+			if not players[name].stam_max then
+				players[name].stam_max = 20
+			end
+			if v ~= "" then
+				players[name].stam_max = v
+			end
 			res.stam_max = players[name].stam_max
 		elseif s == "stam" then
 			res.stam = stamina.get_stamina(player)
@@ -97,6 +105,7 @@ stats.add_xp = function(player, amount, notify)
 		hp = "",
 		hp_max = "",
 		sat_max = "",
+		stam_max = "",
 	})
 	local lvl = tonumber(x.level)
 	local xp = tonumber(x.xp)
@@ -108,22 +117,26 @@ stats.add_xp = function(player, amount, notify)
 		-- Level up
 		local max = x.hp_max
 		if max < 100 then
-			max = max + 5
+			max = max + rand(1, 3)
 			stats.update_stats(player, {hp_max = max})
 			x.hp_max = nil
 		end
 		local max_sat = x.sat_max
 		if max_sat < 100 then
-			max_sat = max_sat + 2
+			max_sat = max_sat + rand(1, 3)
 			stats.update_stats(player, {sat_max = max_sat})
 			x.sat_max = nil
 		end
 		hunger.status(player, max_sat)
+		local max_stam = x.stam_max
+		if max_stam < 100 then
+			max_stam = max_stam + rand(1, 3)
+			stats.update_stats(player, {stam_max = max_stam})
+			x.stam_max = nil
+		end
 		x.hp = max
 		x.xp = (xp + amount) % (100 * lvl)
 		x.level = lvl + 1
-		--[[minetest.chat_send_player(name, "Level up!  New level is " ..
-				x.level .. ".")]]
 		hud.message(player, "Level up!  New level is " ..
 				x.level .. ".")
 	else

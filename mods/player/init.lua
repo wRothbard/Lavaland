@@ -152,6 +152,7 @@ local function sprint(player)
 	local name = player:get_player_name()
 	local attached = player_api.player_attached[name]
 	if not attached then
+		local max_stam = stats.update_stats(player, {stam_max = ""}).stam_max
 		local pos = player:get_pos()
 		local c = control(player)
 		local s = sprinting[name]
@@ -181,7 +182,7 @@ local function sprint(player)
 				boost(player, pos)
 			end
 			stamina.add_stamina(player, -0.1)
-		elseif stam < 20 and not cooldown[name] then
+		elseif stam < max_stam and not cooldown[name] then
 			stamina.add_stamina(player, 0.25)
 		end
 
@@ -193,14 +194,14 @@ local function sprint(player)
 				name = "cooldown",
 				action = "red",
 			})
-		elseif stam >= 20 and cooldown[name] then
+		elseif stam >= max_stam and cooldown[name] then
 			cooldown[name] = false
 			hud.update(player, "stamina", nil, nil, {
 				name = "cooldown",
 				action = "green",
 			})
 		elseif cooldown[name] then
-			if stam >= 1 and stam < 20 then
+			if stam >= 1 and stam < max_stam then
 				stamina.add_stamina(player, 0.25)
 			end
 		end
@@ -208,7 +209,10 @@ local function sprint(player)
 		if player:get_hp() == 0 then
 			hud.update(player, "stamina", "number", 0)
 		else
-			hud.update(player, "stamina", "number", stamina.get_stamina(player))
+			local sss = stamina.get_stamina(player)
+			local ss = stats.update_stats(player, {stam_max = ""}).stam_max
+			local s = 20 / (ss / sss)
+			hud.update(player, "stamina", "number", s)
 		end
 	end
 	minetest.after(0, function()

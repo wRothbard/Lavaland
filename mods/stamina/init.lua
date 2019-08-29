@@ -8,12 +8,12 @@ stamina.add_stamina = function(player, amount)
 	if not s then
 		s = 0
 	end
-
+	local stam_max = stats.update_stats(player, {stam_max = ""}).stam_max
 	s = s + amount or 0
 	if s < 0 then
 		s = 0
-	elseif s > 20 then
-		s = 20
+	elseif s > stam_max then
+		s = stam_max
 	end
 	players[name] = s
 end
@@ -28,8 +28,8 @@ minetest.register_on_respawnplayer(function(player)
 end)
 
 minetest.register_on_joinplayer(function(player)
-	players[player:get_player_name()] = 20
-
+	local stam_max = stats.update_stats(player, {stam_max = ""}).stam_max
+	players[player:get_player_name()] = stam_max
 end)
 
 minetest.register_on_leaveplayer(function(player)

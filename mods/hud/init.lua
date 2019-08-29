@@ -62,6 +62,7 @@ hud.update = function(player, elem, stat, value, modifier)
 	local cooldown = modifier and modifier.name == "cooldown"
 	local armor = modifier and modifier.name == "armor"
 	local hungry = modifier and modifier.name == "hunger"
+	local stamina = modifier and modifier.name == "stamina"
 
 	if cooldown then
 		player:hud_change(players[name][elem],
@@ -88,6 +89,12 @@ hud.update = function(player, elem, stat, value, modifier)
 		local sat = hunger.status(player)
 		local sat_max = stats.update_stats(player, {sat_max = ""}).sat_max
 		local bar = 20 / (sat_max / sat)
+		player:hud_change(players[name][elem],
+				"number", bar)
+	elseif stamina then
+		local stam = stamina.get_stamina(player)
+		local stam_max = stats.update_stats(player, {stam_max = ""}).stam_max
+		local bar = 20 / (stam_max / stam)
 		player:hud_change(players[name][elem],
 				"number", bar)
 	else
