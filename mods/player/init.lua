@@ -149,66 +149,68 @@ local function sprint(player)
 		return
 	end
 
-	local pos = player:get_pos()
 	local name = player:get_player_name()
-	local c = control(player)
-	local s = sprinting[name]
-	local vel = player:get_player_velocity()
-	local y = vel.y < -10 
+	local attached = player_api.player_attached[name]
+	if not attached then
+		local pos = player:get_pos()
+		local c = control(player)
+		local s = sprinting[name]
+		local vel = player:get_player_velocity()
+		local y = vel.y < -10 
 
-	if vel.x > 5 or vel.z > 5 or
-			vel.x < -5 or vel.z < -5 then
-		accelerating[name] = true
-	else
-		accelerating[name] = false
-	end
-
-	if stam >= 1 and not s and c.aux1 and
-			not cooldown[name] and not y then
-		sprinting[name] = true
-		physics(player, true)
-	elseif s and (not c.aux1 or stam < 1 or y) then
-		sprinting[name] = false
-		physics(player, false)
-	end
-
-	if sprinting[name] and stam > 0 and
-			(c.up or c.down or c.left or
-			c.right or c.jump) then
-		if players[name] <= 1 then
-			boost(player, pos)
+		if vel.x > 5 or vel.z > 5 or
+				vel.x < -5 or vel.z < -5 then
+			accelerating[name] = true
+		else
+			accelerating[name] = false
 		end
-		stamina.add_stamina(player, -0.1)
-	elseif stam < 20 and not cooldown[name] then
-		stamina.add_stamina(player, 0.25)
-	end
 
-	if stam < 1 and not cooldown[name] then
-		cooldown[name] = true
-		stamina.add_stamina(player, -20)
-		minetest.after(2, stamina.add_stamina, player, 1)
-		hud.update(player, "stamina", nil, nil, {
-			name = "cooldown",
-			action = "red",
-		})
-	elseif stam >= 20 and cooldown[name] then
-		cooldown[name] = false
-		hud.update(player, "stamina", nil, nil, {
-			name = "cooldown",
-			action = "green",
-		})
-	elseif cooldown[name] then
-		if stam >= 1 and stam < 20 then
+		if stam >= 1 and not s and c.aux1 and
+				not cooldown[name] and not y then
+			sprinting[name] = true
+			physics(player, true)
+		elseif s and (not c.aux1 or stam < 1 or y) then
+			sprinting[name] = false
+			physics(player, false)
+		end
+
+		if sprinting[name] and stam > 0 and
+				(c.up or c.down or c.left or
+				c.right or c.jump) then
+			if players[name] <= 1 then
+				boost(player, pos)
+			end
+			stamina.add_stamina(player, -0.1)
+		elseif stam < 20 and not cooldown[name] then
 			stamina.add_stamina(player, 0.25)
 		end
-	end
 
-	if player:get_hp() == 0 then
-		hud.update(player, "stamina", "number", 0)
-	else
-		hud.update(player, "stamina", "number", stamina.get_stamina(player))
-	end
+		if stam < 1 and not cooldown[name] then
+			cooldown[name] = true
+			stamina.add_stamina(player, -20)
+			minetest.after(2, stamina.add_stamina, player, 1)
+			hud.update(player, "stamina", nil, nil, {
+				name = "cooldown",
+				action = "red",
+			})
+		elseif stam >= 20 and cooldown[name] then
+			cooldown[name] = false
+			hud.update(player, "stamina", nil, nil, {
+				name = "cooldown",
+				action = "green",
+			})
+		elseif cooldown[name] then
+			if stam >= 1 and stam < 20 then
+				stamina.add_stamina(player, 0.25)
+			end
+		end
 
+		if player:get_hp() == 0 then
+			hud.update(player, "stamina", "number", 0)
+		else
+			hud.update(player, "stamina", "number", stamina.get_stamina(player))
+		end
+	end
 	minetest.after(0, function()
 		sprint(player)
 	end)
