@@ -48,7 +48,7 @@ local boat = {
 	v = 0,
 	last_v = 0,
 	removed = false,
-	auto = false
+	--auto = false
 }
 
 local boat_mese = {
@@ -65,7 +65,7 @@ local boat_mese = {
 	v = 0,
 	last_v = 0,
 	removed = false,
-	auto = false
+	--auto = false
 }
 
 function boat.on_rightclick(self, clicker)
@@ -75,7 +75,7 @@ function boat.on_rightclick(self, clicker)
 	local name = clicker:get_player_name()
 	if self.driver and name == self.driver then
 		self.driver = nil
-		self.auto = false
+		--self.auto = false
 		clicker:set_detach()
 		player_api.player_attached[name] = false
 		player_api.set_animation(clicker, "stand" , 30)
@@ -111,7 +111,7 @@ function boat_mese.on_rightclick(self, clicker)
 	local name = clicker:get_player_name()
 	if self.driver and name == self.driver then
 		self.driver = nil
-		self.auto = false
+		--self.auto = false
 		clicker:set_detach()
 		player_api.player_attached[name] = false
 		player_api.set_animation(clicker, "stand" , 30)
@@ -143,12 +143,12 @@ end
 -- If driver leaves server while driving boat
 function boat.on_detach_child(self, child)
 	self.driver = nil
-	self.auto = false
+	--self.auto = false
 end
 
 function boat_mese.on_detach_child(self, child)
 	self.driver = nil
-	self.auto = false
+	--self.auto = false
 end
 
 function boat.on_activate(self, staticdata, dtime_s)
@@ -237,18 +237,18 @@ function boat.on_step(self, dtime)
 		local driver_objref = minetest.get_player_by_name(self.driver)
 		if driver_objref then
 			local ctrl = driver_objref:get_player_control()
-			if ctrl.up and ctrl.down then
+			--[[if ctrl.up and ctrl.down then
 				if not self.auto then
 					self.auto = true
 					minetest.chat_send_player(self.driver, "[boats] Cruise on")
 				end
-			elseif ctrl.down then
+			else]]if ctrl.down then
 				self.v = self.v - dtime * 1.8
-				if self.auto then
+				--[[if self.auto then
 					self.auto = false
 					minetest.chat_send_player(self.driver, "[boats] Cruise off")
-				end
-			elseif ctrl.up or self.auto then
+				end]]
+			elseif ctrl.up --[[or self.auto]] then
 				self.v = self.v + dtime * 1.8
 			end
 			if ctrl.left then
@@ -334,18 +334,18 @@ function boat_mese.on_step(self, dtime)
 		local driver_objref = minetest.get_player_by_name(self.driver)
 		if driver_objref then
 			local ctrl = driver_objref:get_player_control()
-			if ctrl.up and ctrl.down then
+			--[[if ctrl.up and ctrl.down then
 				if not self.auto then
 					self.auto = true
 					minetest.chat_send_player(self.driver, "[boats] Cruise on")
 				end
-			elseif ctrl.down then
+			else--]]if ctrl.down then
 				self.v = self.v - dtime * 1.8
-				if self.auto then
+				--[[if self.auto then
 					self.auto = false
 					minetest.chat_send_player(self.driver, "[boats] Cruise off")
-				end
-			elseif ctrl.up or self.auto then
+				end]]
+			elseif ctrl.up --[[or self.auto]] then
 				self.v = self.v + dtime * 1.8
 			end
 			if ctrl.left then
