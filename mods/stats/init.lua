@@ -57,6 +57,10 @@ stats.add_xp = function(player, amount, notify)
 	if not players[name] then
 		return
 	end
+	if player_api.player_attached[name] == true then
+		-- TODO FIXME Why do I detach from boats if I add XP?
+		return
+	end
 	local x = stats.update_stats(player, {
 		xp = "",
 		level = "",
