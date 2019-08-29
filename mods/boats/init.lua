@@ -249,6 +249,9 @@ function boat.on_step(self, dtime)
 	if self.driver then
 		local driver_objref = minetest.get_player_by_name(self.driver)
 		if driver_objref then
+			driver_objref:set_attach(self.object, "",
+					{x = 0.5, y = 1, z = -3},
+					{x = 0, y = 0, z = 0})
 			local ctrl = driver_objref:get_player_control()
 			--[[if ctrl.up and ctrl.down then
 				if not self.auto then
@@ -351,6 +354,9 @@ function boat_mese.on_step(self, dtime)
 	if self.driver then
 		local driver_objref = minetest.get_player_by_name(self.driver)
 		if driver_objref then
+			driver_objref:set_attach(self.object, "",
+					{x = 0.5, y = 1, z = -3},
+					{x = 0, y = 0, z = 0})
 			local ctrl = driver_objref:get_player_control()
 			--[[if ctrl.up and ctrl.down then
 				if not self.auto then
