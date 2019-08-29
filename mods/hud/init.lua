@@ -109,7 +109,8 @@ local timer = function(player)
 			return
 		end
 		for i = 4, 1, -1 do
-			if messages[name][i] ~= "" then
+			if messages[name] and messages[name][i] and
+					messages[name][i] ~= "" then
 				messages[name][i] = ""
 				player:hud_change(players[name].messages, "text", gen_string(name))
 				messages[name][5] = messages[name][5] - 1
