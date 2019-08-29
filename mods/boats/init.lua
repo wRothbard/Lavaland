@@ -94,13 +94,16 @@ function boat.on_rightclick(self, clicker)
 			clicker:set_detach()
 		end
 		self.driver = name
-		clicker:set_attach(self.object, "",
+		local wtfobj = self.object
+		--local wtf = clicker:set_attach(self.object, "",
+		local wtf = clicker:set_attach(wtfobj, "",
 			{x = 0.5, y = 1, z = -3}, {x = 0, y = 0, z = 0})
 		player_api.player_attached[name] = true
 		minetest.after(0.2, function()
 			player_api.set_animation(clicker, "sit" , 30)
 		end)
-		clicker:set_look_horizontal(self.object:get_yaw())
+		--clicker:set_look_horizontal(self.object:get_yaw())
+		clicker:set_look_horizontal(wtfobj:get_yaw())
 	end
 end
 
@@ -130,13 +133,16 @@ function boat_mese.on_rightclick(self, clicker)
 			clicker:set_detach()
 		end
 		self.driver = name
-		clicker:set_attach(self.object, "",
+		local wtfobj = self.object
+		--local wtf = clicker:set_attach(self.object, "",
+		local wtf = clicker:set_attach(wtfobj, "",
 			{x = 0.5, y = 1, z = -3}, {x = 0, y = 0, z = 0})
 		player_api.player_attached[name] = true
 		minetest.after(0.2, function()
 			player_api.set_animation(clicker, "sit" , 30)
 		end)
-		clicker:set_look_horizontal(self.object:get_yaw())
+		--clicker:set_look_horizontal(self.object:get_yaw())
+		clicker:set_look_horizontal(wtfobj:get_yaw())
 	end
 end
 
