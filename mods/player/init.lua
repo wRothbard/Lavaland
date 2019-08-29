@@ -400,7 +400,6 @@ minetest.register_on_joinplayer(function(player)
 		new_move = true,
 	})
 
-	sprint(player)
 
 	player_api.player_attached[name] = false
 	player_api.set_model(player, "character.b3d")
@@ -425,6 +424,8 @@ minetest.register_on_joinplayer(function(player)
 	player:set_properties({
 		zoom_fov = 34,
 	})
+
+	sprint(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
