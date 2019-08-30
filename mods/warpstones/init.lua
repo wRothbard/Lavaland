@@ -164,8 +164,18 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		--local inv = player:get_inventory()
 		--show formspec with slot for warpstone, save stats to it on place.
 	elseif formname:sub(1, 22) == "warpstones:stats_save_" and fields.ok then
-		local s = stats.update_stats(player,
-				{level = "", xp = "", hp = "", hp_max = ""})
+		local s = stats.update_stats(player, {
+			level = "",
+			xp = "",
+			hp = "",
+			hp_max = "",
+			breath_max = "",
+			stam_max = "",
+			sat_max = "",
+			sat = "",
+			--breath,
+			--stam,
+		})
 		local hp = s.hp
 		local mpos = minetest.string_to_pos(formname:sub(24, -2))
 		local meta = minetest.get_meta(mpos)
@@ -179,7 +189,24 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if hp > 20 then
 			hp = 20
 		end
-		stats.update_stats(player, {hp_max = 20, hp = hp, xp = 0, level = 1})
+		--[[
+		local breath = player:get_breath()
+		if breath > 20 then
+			breath = 20
+		end
+		--]]
+		stats.update_stats(player, {
+			hp_max = 20,
+			hp = hp,
+			xp = 0,
+			level = 1,
+			breath_max = 11,
+			--breath = breath,
+			stam_max = 20,
+			--stam = 20,
+			sat_max = 20,
+			sat = 20,
+		})
 	end
 end)
 
