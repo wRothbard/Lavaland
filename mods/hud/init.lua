@@ -9,7 +9,7 @@ minetest.hud_replace_builtin("breath", {
 	text = "bubble.png",
 	number = 10,
 	direction = 3,
-	size = {x = 24, y = 24},
+	size = {x = 24, y = 8},
 	offset = {x = -48, y = 32},
 })
 
