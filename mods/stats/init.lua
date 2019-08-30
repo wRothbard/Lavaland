@@ -39,6 +39,10 @@ stats.update_stats = function(player, status_table)
 			end
 			res.hp = player:get_hp()
 		elseif s == "breath_max" then
+			if v ~= "" then
+				player:set_properties({breath_max = v})
+				players[name].breath_max = v
+			end
 			res.breath_max = player:get_properties().breath_max
 		elseif s == "breath" then
 			res.breath = player:get_breath()
@@ -106,6 +110,7 @@ stats.add_xp = function(player, amount, notify)
 		hp_max = "",
 		sat_max = "",
 		stam_max = "",
+		breath_max = "",
 	})
 	local lvl = tonumber(x.level)
 	local xp = tonumber(x.xp)
@@ -133,6 +138,12 @@ stats.add_xp = function(player, amount, notify)
 			max_stam = max_stam + rand(1, 3)
 			stats.update_stats(player, {stam_max = max_stam})
 			x.stam_max = nil
+		end
+		local max_breath = x.breath_max
+		if max_breath < 100 then
+			max_breath = max_breath + rand(1, 3)
+			stats.update_stats(player, {breath_max = max_breath})
+			x.breath_max = nil
 		end
 		x.hp = max
 		x.xp = (xp + amount) % (100 * lvl)
