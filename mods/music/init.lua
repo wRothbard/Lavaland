@@ -1,10 +1,11 @@
 music = {}
-music.players = {}
+--music.players = {}
 
 dofile(minetest.get_modpath("music") .. "/sounds.lua")
 
-local rand = math.random
+--local rand = math.random
 
+--[[
 minetest.register_abm({
 	label = "Lava sounds",
 	nodenames = "lava:source",
@@ -46,5 +47,6 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	music.players[player:get_player_name()] = nil
 end)
+--]]
 
 print("loaded music")
