@@ -20,6 +20,10 @@ minetest.register_node("mobs:spawner", {
 	on_blast = function()
 	end,
 	on_timer = mobs.on_timer,
+	--[[
+		floor, 9 walkable
+		area, 18 air
+	--]]
 })
 
 minetest.register_abm({

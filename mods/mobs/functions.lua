@@ -164,14 +164,13 @@ mobs.on_timer = function(pos, elapsed)
 		"mobs:npc",
 	}
 	--local biome = minetest.get_biome_name(minetest.get_biome_data(pos).biome)
-	local bio = random()
 	local tod = (minetest.get_timeofday() or 0) * 24000
 	local night = tod > 19000 or tod < 06000
 	local protection = minetest.find_node_near(pos, 13,
 			{"protector:protect", "protector:protect2"}, true)
 	--if not protection and (biome == "underground" or night) and
-	if not protection and (bio > 0.9 or night) and
-				light < 3 then
+	if night or not protected then
+		print("!")
 		local mobs_to_insert = {
 			"mobs:dungeon_master",
 			"mobs:oerkki",

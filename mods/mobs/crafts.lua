@@ -14,14 +14,15 @@ minetest.register_craft({
 })
 
 local hairball_items = {
-	"trees:stick", "coal:lump", "default:dry_shrub", "flowers:rose",
+	"trees:stick", "coal:lump", --[["default:dry_shrub",]] "flowers:rose",
 	"mobs:rat", "grass:grass_1", "farming:seed_wheat", "dye:green",
 	"farming:seed_cotton", "gravel:flint", "trees:sapling", "dye:white",
-	"default:clay_lump", "papyrus:paper", "default:dry_grass_1", "dye:red",
-	"farming:string", "default:acacia_bush_sapling",
-	"default:bush_sapling", "copper:lump", "iron:lump",
-	"dye:black", "dye:brown", "obsidian:shard", "default:tin_lump"
+	--[["default:clay_lump",]] "papyrus:paper", --[["default:dry_grass_1",]] "dye:red",
+	"farming:string", --[["default:acacia_bush_sapling",]]
+	--[["default:bush_sapling",]] "copper:lump", "iron:lump",
+	"dye:black", "dye:brown", "obsidian:shard", --[["default:tin_lump"]]
 }
+
 minetest.register_craftitem("mobs:hairball", {
 	description = S("Lucky Hairball"),
 	inventory_image = "farming_string.png^(farming_string.png^[transformFYR90)",
