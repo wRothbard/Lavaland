@@ -306,7 +306,7 @@ minetest.register_abm({
 		local def = minetest.registered_nodes[flammable_node.name]
 		if def.on_burn then
 			def.on_burn(p)
-		else
+		elseif not minetest.is_protected(p, "") then
 			minetest.remove_node(p)
 			minetest.check_for_falling(p)
 		end
