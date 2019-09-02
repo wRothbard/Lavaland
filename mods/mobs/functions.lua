@@ -170,7 +170,6 @@ mobs.on_timer = function(pos, elapsed)
 			{"protector:protect", "protector:protect2"}, true)
 	--if not protection and (biome == "underground" or night) and
 	if night or not protected then
-		print("!")
 		local mobs_to_insert = {
 			"mobs:dungeon_master",
 			"mobs:oerkki",
