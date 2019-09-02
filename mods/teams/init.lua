@@ -1,7 +1,7 @@
 local players = {}
 
 minetest.register_on_leaveplayer(function(player)
-	players[player:get_player_by_name()] = nil
+	players[player:get_player_name()] = nil
 end)
 
 minetest.register_chatcommand("team", {
