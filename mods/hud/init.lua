@@ -139,6 +139,9 @@ function hud.message(player, message)
 		player = minetest.get_player_by_name(name)
 	end
 	local m = messages[name]
+	if not m then
+		return
+	end
 	for i = 4, 2, -1 do
 		local mm = m[i]
 		m[i] = m[i - 1]

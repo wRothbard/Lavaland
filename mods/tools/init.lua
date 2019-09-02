@@ -3,6 +3,21 @@ minetest.register_craft({
 	additional_wear = -0.02,
 })
 
+minetest.register_alias("mobs:shears", "tools:shears")
+minetest.register_tool("tools:shears", {
+	description = "Steel Shears",
+	inventory_image = "mobs_shears.png",
+	groups = {flammable = 2, tool = 1, trade_value = 3,},
+})
+
+minetest.register_craft({
+	output = "tools:shears",
+	recipe = {
+		{"", "steel:ingot", ""},
+		{"", "group:stick", "steel:ingot"},
+	}
+})
+
 minetest.register_tool("tools:crystalline_bell", {
 	description = "Crystalline Bell",
 	inventory_image = "tools_crystalline_bell.png",

@@ -183,7 +183,7 @@ mobs:register_mob("mobs:zombie4", {
 	drops = {
 		{name = "mobs:rotten_flesh",
 				chance = 1, min = 1, max = 2,},
-		{name = "shop:coin",
+		{name = "gold:coin",
 				chance = 1, min = 1, max = 2,},
 		{name = "gold:ingot",
 				chance = 2, min = 0, max = 1,},

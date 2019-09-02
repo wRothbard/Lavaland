@@ -38,6 +38,7 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_alias("shop:coin", "gold:coin")
 minetest.register_craftitem("gold:coin", {
 
 	description = "Gold Coin",
