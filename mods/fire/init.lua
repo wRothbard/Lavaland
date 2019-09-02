@@ -48,7 +48,7 @@ minetest.register_node("fire:basic_flame", {
 
 	on_timer = function(pos)
 		local f = minetest.find_node_near(pos, 1, {"group:flammable"})
-		if not f then
+		if not f or minetest.is_protected(pos, "") then
 			minetest.remove_node(pos)
 			return
 		end
