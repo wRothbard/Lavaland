@@ -83,7 +83,7 @@ local basic_flame_on_construct -- cached value
 local function destroy(drops, npos, cid, c_air, c_fire,
 		on_blast_queue, on_construct_queue,
 		ignore_protection, ignore_on_blast, owner)
-	if not ignore_protection and minetest.is_protected(npos, owner) then
+	if minetest.is_protected(npos, "") then
 		return cid
 	end
 
@@ -392,7 +392,7 @@ function tnt.boom(pos, def)
 		minetest.set_node(pos, {name = "tnt:boom"})
 	end
 	local sound = def.sound or "tnt_explode"
-	minetest.sound_play(sound, {pos = pos, gain = 1.5,
+	minetest.sound_play(sound, {pos = pos, gain = 1,
 			max_hear_distance = math.min(def.radius * 20, 128)})
 	local drops, radius = tnt_explode(pos, def.radius, def.ignore_protection,
 			def.ignore_on_blast, owner, def.explode_center)

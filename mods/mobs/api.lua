@@ -50,7 +50,7 @@ local mobs_spawn = minetest.settings:get_bool("mobs_spawn") ~= false
 local peaceful_only = minetest.settings:get_bool("only_peaceful_mobs")
 local disable_blood = minetest.settings:get_bool("mobs_disable_blood")
 local mobs_drop_items = minetest.settings:get_bool("mobs_drop_items") ~= false
-local mobs_griefing = minetest.settings:get_bool("mobs_griefing") ~= false
+local mobs_griefing = true --minetest.settings:get_bool("mobs_griefing") ~= false
 local creative = minetest.settings:get_bool("creative_mode")
 local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
 local remove_far = false --minetest.settings:get_bool("remove_far_mobs") ~= false
@@ -102,14 +102,11 @@ end
 
 -- attack player/mob
 local do_attack = function(self, player)
-
 	if self.state == "attack" then
 		return
 	end
-
 	self.attack = player
 	self.state = "attack"
-
 	if random(0, 100) < 90 then
 		mob_sound(self, self.sounds.war_cry)
 	end
@@ -1960,25 +1957,11 @@ local do_states = function(self, dtime)
 
 					self.object:remove()
 
-					if minetest.get_modpath("tnt") and tnt and tnt.boom
-					and not minetest.is_protected(pos, "") then
-
-						tnt.boom(pos, {
-							radius = node_break_radius,
-							damage_radius = entity_damage_radius,
-							sound = self.sounds.explode,
-						})
-					else
-
-						minetest.sound_play(self.sounds.explode, {
-							pos = pos,
-							gain = 0.9,
-							max_hear_distance = self.sounds.distance or 64
-						})
-
-						entity_physics(pos, entity_damage_radius)
-						effect(pos, 32, "tnt_smoke.png", nil, nil, node_break_radius, 1, 0)
-					end
+					tnt.boom(pos, {
+						radius = node_break_radius,
+						damage_radius = entity_damage_radius,
+						sound = self.sounds.explode,
+					})
 
 					return
 				end
@@ -3344,57 +3327,12 @@ function mobs:register_arrow(name, def)
 	})
 end
 
-
--- compatibility function
-function mobs:explosion(pos, radius)
-
-	local self = {sounds = {explode = "tnt_explode"}}
-
-	mobs:boom(self, pos, radius)
-end
-
-
--- no damage to nodes explosion
-function mobs:safe_boom(self, pos, radius)
-
-	minetest.sound_play(self.sounds and self.sounds.explode or "tnt_explode", {
-		pos = pos,
-		gain = 1.0,
-		max_hear_distance = 64, --self.sounds and self.sounds.distance or 32 --?! is it true?
-	})
-
-	entity_physics(pos, radius)
-
-	effect(pos, 32, "tnt_smoke.png", radius * 3, radius * 5, radius, 1, 0)
-end
-
-
--- make explosion with protection and tnt mod check
-function mobs:boom(self, pos, radius)
-
-	if mobs_griefing
-	and minetest.get_modpath("tnt") and tnt and tnt.boom
-	and not minetest.is_protected(pos, "") then
-
-		tnt.boom(pos, {
-			radius = radius,
-			damage_radius = radius,
-			sound = self.sounds and self.sounds.explode,
-			explode_center = true,
-		})
-	else
-		mobs:safe_boom(self, pos, radius)
-	end
-end
-
-
 -- Register spawn eggs
 
 -- Note: This also introduces the “spawn_egg” group:
 -- * spawn_egg=1: Spawn egg (generic mob, no metadata)
 -- * spawn_egg=2: Spawn egg (captured/tamed mob, metadata)
 function mobs:register_egg(mob, desc, background, addegg, no_creative)
-
 	local grp = {spawn_egg = 1}
 
 	-- do NOT add this egg to creative inventory (e.g. dungeon master)

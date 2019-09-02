@@ -12,10 +12,12 @@ s_protect.can_access = function(pos, player_name)
 		return false
 	end
 	-- Allow access for pipeworks and unidentified mods
+	--[[
 	if player_name == ":pipeworks"
 			or player_name == "" then
 		return true
 	end
+	--]]
 
 	-- Admin power, handle privileges
 	local privs = minetest.get_player_privs(player_name)

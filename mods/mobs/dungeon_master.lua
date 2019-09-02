@@ -1,9 +1,12 @@
 local S = mobs.intllib
-local boom = function(pos, radius)
-	radius = radius or 2
-	tnt.boom(pos, {radius = radius,
-			damage_radius = radius,})
+
+local boom = function(pos)
+	tnt.boom(pos, {
+		radius = 3,
+		explode_center = true
+	})
 end
+
 -- Dungeon Master by PilzAdam
 mobs:register_mob("mobs:dungeon_master", {
 	type = "monster",
