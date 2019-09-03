@@ -61,9 +61,7 @@ for _, col in ipairs(all_colours) do
 		drops = {
 			{name = "mobs:meat_raw", chance = 1, min = 1, max = 2},
 		},
-		water_damage = 1,
 		lava_damage = 5,
-		light_damage = 0,
 		glow = 1,
 		animation = {
 			speed_normal = 15,
@@ -79,7 +77,6 @@ for _, col in ipairs(all_colours) do
 		--replace_what = {"default:grass_3", "default:grass_4", "default:grass_5", "farming:wheat_8"},
 		--replace_with = "air",
 		--replace_offset = -1,
-		fear_height = 3,
 		on_rightclick = function(self, clicker)
 			-- Sound the alarm!
 			if not self.clicked then
@@ -150,11 +147,8 @@ for _, col in ipairs(all_colours) do
 							local ent = mob:get_luaentity()
 							ent.owner = name
 							ent.tamed = true
-							-- take item
-							if not mobs.is_creative(clicker:get_player_name()) then
-								item:take_item()
-								clicker:set_wielded_item(item)
-							end
+							item:take_item()
+							clicker:set_wielded_item(item)
 							break
 						end
 					end

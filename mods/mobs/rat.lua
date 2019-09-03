@@ -27,10 +27,7 @@ mobs:register_mob("mobs:rat", {
 	drops = {
 		{name = "mobs:meat_raw", chance = 1, min = 1, max = 1},
 	},
-	water_damage = 0,
 	lava_damage = 4,
-	light_damage = 0,
-	fear_height = 2,
 	on_rightclick = function(self, clicker)
 		mobs:capture_mob(self, clicker, 50, 90, 100, true, "mobs:rat")
 	end,

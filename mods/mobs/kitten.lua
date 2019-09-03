@@ -38,9 +38,7 @@ mobs:register_mob("mobs:kitten", {
 		{name = "mobs:meat_raw", chance = 1, min = 1, max = 2},
 		{name = "mobs:hairball", chance = 2, min = 0, max = 1},
 	},
-	water_damage = 1,
 	lava_damage = 5,
-	fear_height = 3,
 	animation = {
 		speed_normal = 42,
 		stand_start = 97,

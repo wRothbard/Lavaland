@@ -28,15 +28,11 @@ mobs:register_mob("mobs:oerkki", {
 	},
 	walk_velocity = 1,
 	run_velocity = 1,
-	--view_range = 10,
-	--jump = true,
 	drops = {
 		{name = "mese:crystal", chance = 2, min = 1, max = 2},
 		{name = "obsidian:obsidian", chance = 2, min = 0, max = 1},
 	},
-	water_damage = 7,
-	lava_damage = 4,
-	fear_height = 4,
+	lava_damage = 20,
 	animation = {
 		stand_start = 0,
 		stand_end = 23,

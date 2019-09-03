@@ -33,9 +33,7 @@ mobs:register_mob("mobs:zombie1", {
 		{name = "gold:ingot",
 				chance = 2, min = 0, max = 1,},
 	},
-	water_damage = 0,
-	lava_damage = 1,
-	light_damage = 0,
+	lava_damage = 20,
 	fall_damage = 2,
 	animation = {
 		speed_normal = 5,
@@ -86,8 +84,8 @@ mobs:register_mob("mobs:zombie2", {
 		{name = "gold:ingot",
 				chance = 2, min = 0, max = 1,},
 	},
-	lava_damage = 5,
-	light_damage = 0,
+	lava_damage = 20,
+	--light_damage = 0,
 	fall_damage = 2,
 	animation = {
 		speed_normal = 5,
@@ -137,8 +135,8 @@ mobs:register_mob("mobs:zombie3", {
 		{name = "gold:ingot",
 				chance = 2, min = 0, max = 1,},
 	},
-	lava_damage = 5,
-	light_damage = 0,
+	lava_damage = 20,
+	--light_damage = 0,
 	fall_damage = 2,
 	animation = {
 		speed_normal = 10,
@@ -188,8 +186,8 @@ mobs:register_mob("mobs:zombie4", {
 		{name = "gold:ingot",
 				chance = 2, min = 0, max = 1,},
 	},
-	lava_damage = 5,
-	light_damage = 0,
+	lava_damage = 20,
+	--light_damage = 0,
 	fall_damage = 2,
 	animation = {
 		speed_normal = 20,

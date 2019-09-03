@@ -47,10 +47,7 @@ mobs:register_mob("mobs:dungeon_master", {
 		{name = "mese:crystal", chance = 1, min = 1, max = 2},
 		{name = "diamond:diamond", chance = 2, min = 0, max = 1},
 	},
-	water_damage = 1,
-	lava_damage = 1,
-	light_damage = 0,
-	fear_height = 3,
+	lava_damage = 20,
 	animation = {
 		stand_start = 0,
 		stand_end = 19,
