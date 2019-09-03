@@ -1641,6 +1641,17 @@ local do_states = function(self, dtime)
 								full_punch_interval = 0.5,
 								damage_groups = {fleshy = self.damage}
 							}, nil)
+							if self.object:get_entity_name() == "mobs:npc" then
+								local boat = self.attack:get_entity_name()
+								if boat and boat:match("^boats:boat_") then
+									minetest.after(0.189, function()
+										if boat then
+											self.attack:remove()
+										end
+									end)
+									minetest.add_item(self.object:get_pos(), boat)
+								end
+							end
 						end
 					end
 				else	-- call custom attack every second
