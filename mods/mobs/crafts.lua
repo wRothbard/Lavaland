@@ -88,21 +88,6 @@ minetest.register_craft({
 	cooktime = 10,
 })
 
--- shears (right click to shear animal)
-minetest.register_tool("mobs:shears", {
-	description = S("Steel Shears"),
-	inventory_image = "mobs_shears.png",
-	groups = {flammable = 2, tool = 1, trade_value = 3,},
-})
-
-minetest.register_craft({
-	output = "mobs:shears",
-	recipe = {
-		{"", "steel:ingot", ""},
-		{"", "group:stick", "steel:ingot"},
-	}
-})
-
 -- items that can be used as fuel
 minetest.register_craft({
 	type = "fuel",
