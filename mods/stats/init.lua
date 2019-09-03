@@ -18,6 +18,9 @@ local base_stats = {
 }
 
 stats.update_stats = function(player, status_table)
+	if not status_table then
+		return
+	end
 	if not player then
 		return
 	end
