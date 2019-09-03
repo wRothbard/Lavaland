@@ -50,7 +50,7 @@ local function physics(player, enabled, cancel)
 		player:set_physics_override({
 			speed = 0,
 			jump = 0,
-			gravity = 0,
+			gravity = 2,
 			new_move = true,
 			sneak_glitch = false,
 			sneak = false,
@@ -78,9 +78,17 @@ cozy.reset = function(player, pos, state)
 	player_api.set_animation(player, "stand", 30)
 end
 
-local function reset(player)
+local function reset(player, old_pos)
 	if not player then
 		return
+	end
+	local pos = player:get_pos()
+	pos = vector.round(pos)
+	if not old_pos then
+		old_pos = pos
+	end
+	if not vector.equals(pos, old_pos) then
+		cozy.reset(player)
 	end
 	local name = player:get_player_name()
 	if not cozy.players[name] then
@@ -93,7 +101,7 @@ local function reset(player)
 		return
 	end
 	minetest.after(0.09, function()
-		reset(player)
+		reset(player, pos)
 	end)
 end
 

@@ -18,8 +18,8 @@ minetest.register_node("furniture:chair", {
 		}
 	},
 	on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-		cozy.sit(clicker)
 		clicker:move_to(pos)
+		minetest.after(0.089, cozy.sit, clicker)
 		return itemstack
 	end
 })
