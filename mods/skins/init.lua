@@ -66,7 +66,7 @@ minetest.register_on_joinplayer(function(player)
 	players[name]:set_size("skin", 1)
 	players[name]:set_stack("skin", 1, inv:get_stack("skin", 1))
 
-	minetest.after(1, function()
+	minetest.after(2, function()
 		if not minetest.get_player_by_name(name) then
 			return
 		end
