@@ -43,7 +43,7 @@ wieldview.get_item_texture = function(self, item)
 	return texture
 end
 
-wieldview.update_wielded_item = function(self, player)
+wieldview.update_wielded_item = function(self, player, fu)
 	if not player then
 		return
 	end
@@ -54,11 +54,16 @@ wieldview.update_wielded_item = function(self, player)
 		return
 	end
 	if self.wielded_item[name] then
-		if self.wielded_item[name] == item then
+		if self.wielded_item[name] == item and not fu then
 			return
 		end
-		armor.textures[name].wielditem = self:get_item_texture(item)
-		armor:update_player_visuals(player)
+		if rings[name] and rings[name] == "rings:invisibility" then
+			armor.textures[name].wielditem = self:get_item_texture("")
+			armor:update_player_visuals(player)
+		else
+			armor.textures[name].wielditem = self:get_item_texture(item)
+			armor:update_player_visuals(player)
+		end
 	end
 	self.wielded_item[name] = item
 end
@@ -75,7 +80,7 @@ minetest.register_globalstep(function(dtime)
 	time = time + dtime
 	if time > update_time then
 		for _,player in ipairs(minetest.get_connected_players()) do
-			wieldview:update_wielded_item(player)
+			wieldview:update_wielded_item(player, true)
 		end
 		time = 0
 	end

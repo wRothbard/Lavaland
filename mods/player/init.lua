@@ -347,10 +347,13 @@ minetest.register_on_dieplayer(function(player, reason)
 			p_inv:set_list(k, {})
 		end
 	end
+
 	minetest.get_inventory({type = "detached", name = name .. "_skin"}):set_list("skin", {})
-	local gender = player:get_meta():get("gender")
-	multiskin.set_player_skin(player, "player_" .. gender .. ".png")
-	multiskin.update_player_visuals(player)
+	if not (rings[name] and rings[name] == "rings:invisibility") then
+		local gender = player:get_meta():get("gender")
+		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
+		multiskin.update_player_visuals(player)
+	end
 
 	local pos = player:get_pos()
 	local old_node = minetest.get_node(pos)
@@ -387,6 +390,11 @@ minetest.register_on_respawnplayer(function(player)
 		xp = 0,
 		level = 1,
 		sat_max = 20,
+		sat = 20,
+		stam_max = 20,
+		stam = 20,
+		breath = 11,
+		breath_max = 11,
 	})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 	if not beds.spawn[name] then

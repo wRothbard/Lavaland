@@ -34,6 +34,7 @@ local function save_clothing_metadata(player, clothing_inv)
 				minetest.serialize(clothes))
 	end
 end
+clothing.save = save_clothing_metadata
 
 local function load_clothing_metadata(player, clothing_inv)
 	local player_inv = player:get_inventory()
@@ -99,7 +100,7 @@ minetest.register_on_joinplayer(function(player)
 	}, name)
 
 	load_clothing_metadata(player, clothing_inv)
-	minetest.after(1, function(name)
+	minetest.after(2, function(name)
 		-- Ensure the ObjectRef is valid after 1s
 		clothing:set_player_clothing(minetest.get_player_by_name(name))
 	end, name)
