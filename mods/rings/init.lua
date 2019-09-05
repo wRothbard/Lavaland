@@ -147,7 +147,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	local name = players:get_player_name()
+	local name = player:get_player_name()
 	players[name] = nil
 	rings[name] = nil
 end)
