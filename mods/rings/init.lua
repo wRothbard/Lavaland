@@ -143,7 +143,7 @@ minetest.register_craft({})
 
 minetest.register_on_joinplayer(function(player)
 	players[player:get_player_name()] = {ring = ""}
-	minetest.after(2, is_ring, player)
+	minetest.after(3, is_ring, player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
@@ -166,13 +166,16 @@ minetest.register_globalstep(function(dtime)
 end)
 
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
-	is_ring(player)
+	if inventory_info.to_list == "backpack" or inventory_info.from_list == "backpack" then
+		is_ring(player)
+	end
 end)
 
 armor:register_on_equip(function(player)
 	local name = player:get_player_name()
 	if rings[name] and rings[name] == "rings:invisibility" then
 		throw_armor(player)
+		is_ring(player)
 	end
 end)
 
@@ -180,6 +183,7 @@ clothing:register_on_equip(function(player)
 	local name = player:get_player_name()
 	if rings[name] and rings[name] == "rings:invisibility" then
 		throw_clothing(player)
+		is_ring(player)
 	end
 end)
 
