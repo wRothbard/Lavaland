@@ -41,21 +41,15 @@ local function throw_clothing(player)
 end
 
 local function governor(player)
-	minetest.after(0.1, function()
+	minetest.after(0.18, function()
 		local name = player:get_player_name()
 		if not minetest.get_player_by_name(name) then
 			return
 		end
 		local vel = player:get_player_velocity()
 		vel = vector.normalize(vel)
-		if vel.x > 10 then
-			vel.x = 0
-		end
-		if vel.y > 10 then
-			vel.y = 0
-		end
-		if vel.z > 10 then
-			vel.z = 0
+		if vel.x > 1 or vel.y > 1 or vel.z > 1 then
+			return
 		end
 		player:add_player_velocity({x = -vel.x, y = -vel.y, z = -vel.z})
 		breaking[name] = false
@@ -79,24 +73,27 @@ local function flight(player)
 		})
 	end
 	if not breaking[name] then
+		local hs = player:get_player_velocity()
 		local control = player:get_player_control()
 		local dir = player:get_look_dir()
 		local v = vector.new(dir)
 		v.y = 0
 		v = vector.normalize(v)
-		v = vector.multiply(v, 5)
-		if control.jump then
-			player:add_player_velocity({x = 0, y = 5, z = 0})
+		v = vector.multiply(v, 3)
+		local hss = hs.x < 6 and hs.x > -6 and
+				hs.z < 6 and hs.z > -6
+		if control.jump and hs.y < 6 then
+			player:add_player_velocity({x = 0, y = 3, z = 0})
 		end
-		if control.sneak then
-			player:add_player_velocity({x = 0, y = -5, z = 0})
+		if control.sneak and hs.y > -6 then
+			player:add_player_velocity({x = 0, y = -3, z = 0})
 		end
-		if control.up then
+		if control.up and hss then
 			player:add_player_velocity({x = v.x, y = 0, z = v.z})
-		elseif control.down then
+		elseif control.down and hss then
 			player:add_player_velocity({x = -v.x, y = 0, z = -v.z})
 		end
-		if control.left then
+		if control.left and hss then
 			local yaw = player:get_look_horizontal()
 			if yaw <= 0.75 or yaw >= 5.75 then
 				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
@@ -107,7 +104,7 @@ local function flight(player)
 			elseif yaw <= 2.5 and yaw >= 0.75 then
 				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
 			end
-		elseif control.right then
+		elseif control.right and hss then
 			local yaw = player:get_look_horizontal()
 			if yaw <= 0.75 or yaw >= 5.75 then
 				player:add_player_velocity({x = v.z, y = 0, z = v.x})
@@ -122,7 +119,7 @@ local function flight(player)
 		governor(player)
 		breaking[name] = true
 	end
-	minetest.after(0, function()
+	minetest.after(0.09, function()
 		flight(player)
 	end)
 end
