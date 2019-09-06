@@ -47,6 +47,16 @@ local function governor(player)
 			return
 		end
 		local vel = player:get_player_velocity()
+		vel = vector.normalize(vel)
+		if vel.x > 10 then
+			vel.x = 0
+		end
+		if vel.y > 10 then
+			vel.y = 0
+		end
+		if vel.z > 10 then
+			vel.z = 0
+		end
 		player:add_player_velocity({x = -vel.x, y = -vel.y, z = -vel.z})
 		breaking[name] = false
 	end)
@@ -68,37 +78,26 @@ local function flight(player)
 			jump = 0,
 		})
 	end
-	local control = player:get_player_control()
-	local dir = player:get_look_dir()
-	local v = vector.new(dir)
-	v.y = 0
-	v = vector.normalize(v)
-	v = vector.multiply(v, 5)
 	if not breaking[name] then
+		local control = player:get_player_control()
+		local dir = player:get_look_dir()
+		local v = vector.new(dir)
+		v.y = 0
+		v = vector.normalize(v)
+		v = vector.multiply(v, 5)
 		if control.jump then
 			player:add_player_velocity({x = 0, y = 5, z = 0})
-			--governor(player)
-			--breaking[name] = true
 		end
 		if control.sneak then
 			player:add_player_velocity({x = 0, y = -5, z = 0})
-			--governor(player)
-			--breaking[name] = true
 		end
 		if control.up then
 			player:add_player_velocity({x = v.x, y = 0, z = v.z})
-			--governor(player)
-			--breaking[name] = true
-		end
-		if control.down then
+		elseif control.down then
 			player:add_player_velocity({x = -v.x, y = 0, z = -v.z})
-			--governor(player)
-			--breaking[name] = true
 		end
 		if control.left then
-			local yaw = tostring(player:get_look_horizontal())
-			yaw = yaw:sub(1, 4)
-			yaw = tonumber(yaw)
+			local yaw = player:get_look_horizontal()
 			if yaw <= 0.75 or yaw >= 5.75 then
 				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
 			elseif yaw <= 5.75 and yaw >= 3.75 then
@@ -108,13 +107,8 @@ local function flight(player)
 			elseif yaw <= 2.5 and yaw >= 0.75 then
 				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
 			end
-			--governor(player)
-			--breaking[name] = true
-		end
-		if control.right then
-			local yaw = tostring(player:get_look_horizontal())
-			yaw = yaw:sub(1, 4)
-			yaw = tonumber(yaw)
+		elseif control.right then
+			local yaw = player:get_look_horizontal()
 			if yaw <= 0.75 or yaw >= 5.75 then
 				player:add_player_velocity({x = v.z, y = 0, z = v.x})
 			elseif yaw <= 5.75 and yaw >= 3.75 then
@@ -124,8 +118,6 @@ local function flight(player)
 			elseif yaw <= 2.5 and yaw >= 0.75 then
 				player:add_player_velocity({x = v.z, y = 0, z = -v.x})
 			end
-			--governor(player)
-			--breaking[name] = true
 		end
 		governor(player)
 		breaking[name] = true
