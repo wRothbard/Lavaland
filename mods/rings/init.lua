@@ -165,7 +165,7 @@ local function is_ring(player)
 		rings[name] = i
 		if players[name].ring ~= i then
 			players[name].ring = i
-			flight(player)
+			--flight(player)
 		end
 		s:add_wear(2500)
 		inv:set_stack("backpack", 1, s)
