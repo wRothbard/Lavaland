@@ -2,6 +2,8 @@ rings = {}
 
 local players = {}
 local timer = 1
+local flying = {}
+local breaking = {}
 
 local function throw_armor(player)
 	local name = player:get_player_name()
@@ -38,21 +40,110 @@ local function throw_clothing(player)
 	inventory.throw_inventory(player:get_pos(), itemss)
 end
 
+local function governor(player)
+	minetest.after(0.1, function()
+		local name = player:get_player_name()
+		if not minetest.get_player_by_name(name) then
+			return
+		end
+		local vel = player:get_player_velocity()
+		player:add_player_velocity({x = -vel.x, y = -vel.y, z = -vel.z})
+		breaking[name] = false
+	end)
+end
+
+local function flight(player)
+	local name = player:get_player_name()
+	if not minetest.get_player_by_name(name) then
+		return
+	end
+	if not (rings[name] and rings[name] == "rings:levitation") then
+		return
+	end
+	if not flying[name] then
+		flying[name] = true
+		player:set_physics_override({
+			speed = 0,
+			gravity = 0,
+			jump = 0,
+		})
+	end
+	local control = player:get_player_control()
+	local dir = player:get_look_dir()
+	local v = vector.new(dir)
+	v.y = 0
+	v = vector.normalize(v)
+	v = vector.multiply(v, 5)
+	if not breaking[name] then
+		if control.jump then
+			player:add_player_velocity({x = 0, y = 5, z = 0})
+			governor(player)
+			breaking[name] = true
+		elseif control.sneak then
+			player:add_player_velocity({x = 0, y = -5, z = 0})
+			governor(player)
+			breaking[name] = true
+		elseif control.up then
+			player:add_player_velocity({x = v.x, y = 0, z = v.z})
+			governor(player)
+			breaking[name] = true
+		elseif control.down then
+			player:add_player_velocity({x = -v.x, y = 0, z = -v.z})
+			governor(player)
+			breaking[name] = true
+		elseif control.left then
+			local yaw = tostring(player:get_look_horizontal())
+			yaw = yaw:sub(1, 4)
+			yaw = tonumber(yaw)
+			if yaw <= 0.75 or yaw >= 5.75 then
+				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
+			elseif yaw <= 5.75 and yaw >= 3.75 then
+				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
+			elseif yaw <= 3.75 and yaw >= 2.5 then
+				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
+			elseif yaw <= 2.5 and yaw >= 0.75 then
+				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
+			end
+			governor(player)
+			breaking[name] = true
+		elseif control.right then
+			local yaw = tostring(player:get_look_horizontal())
+			yaw = yaw:sub(1, 4)
+			yaw = tonumber(yaw)
+			if yaw <= 0.75 or yaw >= 5.75 then
+				player:add_player_velocity({x = v.z, y = 0, z = v.x})
+			elseif yaw <= 5.75 and yaw >= 3.75 then
+				player:add_player_velocity({x = v.z, y = 0, z = -v.x})
+			elseif yaw <= 3.75 and yaw >= 2.5 then
+				player:add_player_velocity({x = v.z, y = 0, z = v.x})
+			elseif yaw <= 2.5 and yaw >= 0.75 then
+				player:add_player_velocity({x = v.z, y = 0, z = -v.x})
+			end
+			governor(player)
+			breaking[name] = true
+		end
+	end
+	minetest.after(0, function()
+		flight(player)
+	end)
+end
+
 local function is_ring(player)
 	local inv = player:get_inventory()
 	local s = inv:get_stack("backpack", 1)
 	local i = s:get_name()
 	local name = player:get_player_name()
 	if i == "rings:muddy_vision" then
+		rings[name] = i
 		if players[name].ring ~= i then
 			players[name].ring = i
 			player:set_properties({nametag = "\n"})
 		end
 		s:add_wear(500)
 		inv:set_stack("backpack", 1, s)
-		rings[name] = i
 		return
 	elseif i == "rings:invisibility" then
+		rings[name] = i
 		if players[name].ring ~= i then
 			players[name].ring = i
 			player:set_properties({nametag = "\n"})
@@ -73,15 +164,16 @@ local function is_ring(player)
 		end
 		s:add_wear(1000)
 		inv:set_stack("backpack", 1, s)
-		rings[name] = i
 		return
 	elseif i == "rings:levitation" then
+		rings[name] = i
 		if players[name].ring ~= i then
 			players[name].ring = i
-			--
+			flight(player)
 		end
 		s:add_wear(2500)
 		inv:set_stack("backpack", 1, s)
+		return
 	end
 	-- Cancel
 	if players[name].ring ~= "" then
@@ -92,6 +184,13 @@ local function is_ring(player)
 			local gender = player:get_meta():get_string("gender")
 			multiskin.set_player_skin(player, "player_" .. gender .. ".png")
 			multiskin.update_player_visuals(player)
+		elseif players[name].ring == "rings:levitation" then
+			player:set_physics_override({
+				speed = 1,
+				gravity = 1,
+				jump = 1,
+			})
+			flying[name] = false
 		end
 		players[name].ring = ""
 		rings[name] = nil
@@ -136,10 +235,16 @@ minetest.register_craft({
 	}
 })
 
---[[
-minetest.register_craftitem("rings:levitation", {})
-minetest.register_craft({})
---]]
+minetest.register_tool("rings:levitation", {
+	description = "Ring of Levitation",
+	inventory_image = "rings_muddy_vision.png^[colorize:red:90",
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "rings:levitation",
+	recipe = {"rings:invisibility", "rings:muddy_vision"},
+})
 
 minetest.register_on_joinplayer(function(player)
 	players[player:get_player_name()] = {ring = ""}
@@ -150,6 +255,12 @@ minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	players[name] = nil
 	rings[name] = nil
+	if flying[name] then
+		flying[name] = nil
+	end
+	if breaking[name] then
+		breaking[name] = nil
+	end
 end)
 
 minetest.register_globalstep(function(dtime)

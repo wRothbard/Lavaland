@@ -107,6 +107,9 @@ end
 
 cozy.sit = function(player, pos, state)
 	local name = player:get_player_name()
+	if rings[name] and rings[name] == "rings:levitation" then
+		return
+	end
 	if cozy.players[name] and cozy.players[name] == "sit" then
 		cozy.reset(player)
 	else
@@ -121,6 +124,9 @@ end
 
 cozy.lay = function(player, pos, state)
 	local name = player:get_player_name()
+	if rings[name] and rings[name] == "rings:levitation" then
+		return
+	end
 	if cozy.players[name] and cozy.players[name] == "lay" then
 		cozy.reset(player)
 	else
@@ -159,7 +165,7 @@ local function sprint(player)
 
 	local name = player:get_player_name()
 	local attached = player_api.player_attached[name]
-	if not attached then
+	if not attached and not (rings[name] and rings[name] == "rings:levitation") then
 		local max_stam = stats.update_stats(player, {stam_max = ""}).stam_max
 		local pos = player:get_pos()
 		local c = control(player)
