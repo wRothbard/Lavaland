@@ -41,17 +41,15 @@ local function throw_clothing(player)
 end
 
 local function governor(player)
-	minetest.after(0.18, function()
+	minetest.after(0.09, function()
 		local name = player:get_player_name()
 		if not minetest.get_player_by_name(name) then
 			return
 		end
 		local vel = player:get_player_velocity()
-		vel = vector.normalize(vel)
-		if vel.x > 1 or vel.y > 1 or vel.z > 1 then
-			return
-		end
-		player:add_player_velocity({x = -vel.x, y = -vel.y, z = -vel.z})
+		local invel = {x = -vel.x, y = -vel.y, z = -vel.z}
+		invel = vector.divide(invel, 2.5)
+		player:add_player_velocity(invel)
 		breaking[name] = false
 	end)
 end
@@ -70,56 +68,55 @@ local function flight(player)
 			speed = 0,
 			gravity = 0,
 			jump = 0,
+			sneak_glitch = false,
+			sneak = false,
+			new_move = false,
 		})
 	end
-	if not breaking[name] then
-		local hs = player:get_player_velocity()
+	local hs = player:get_player_velocity()
+	local hss = hs.x < 11 and hs.x > -11 and
+			hs.y < 11 and hs.y > -11 and
+			hs.z < 11 and hs.z > -11
+	if not breaking[name] and hss then
 		local control = player:get_player_control()
-		local dir = player:get_look_dir()
-		local v = vector.new(dir)
+		local v = player:get_look_dir()
 		v.y = 0
 		v = vector.normalize(v)
-		v = vector.multiply(v, 3)
-		local hss = hs.x < 6 and hs.x > -6 and
-				hs.z < 6 and hs.z > -6
-		if control.jump and hs.y < 6 then
-			player:add_player_velocity({x = 0, y = 3, z = 0})
+		local avel = {x = 0, y = 0, z = 0}
+		if control.jump then
+			avel = vector.add(avel, {x = 0, y = 5, z = 0})
+			it_go = true
+		elseif control.sneak then
+			avel = vector.add(avel, {x = 0, y = -5, z = 0})
+			it_go = true
 		end
-		if control.sneak and hs.y > -6 then
-			player:add_player_velocity({x = 0, y = -3, z = 0})
+		if control.up then
+			avel = vector.add(avel, {x = v.x, y = 0, z = v.z})
+			it_go = true
+		elseif control.down then
+			avel = vector.add(avel, {x = -v.x, y = 0, z = -v.z})
+			it_go = true
 		end
-		if control.up and hss then
-			player:add_player_velocity({x = v.x, y = 0, z = v.z})
-		elseif control.down and hss then
-			player:add_player_velocity({x = -v.x, y = 0, z = -v.z})
-		end
-		if control.left and hss then
+		if control.left then
 			local yaw = player:get_look_horizontal()
-			if yaw <= 0.75 or yaw >= 5.75 then
-				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
-			elseif yaw <= 5.75 and yaw >= 3.75 then
-				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
-			elseif yaw <= 3.75 and yaw >= 2.5 then
-				player:add_player_velocity({x = -v.z, y = 0, z = -v.x})
-			elseif yaw <= 2.5 and yaw >= 0.75 then
-				player:add_player_velocity({x = -v.z, y = 0, z = v.x})
-			end
-		elseif control.right and hss then
+			yaw = yaw + 1.5
+			avel = vector.add(avel, minetest.yaw_to_dir(yaw))
+			it_go = true
+		elseif control.right then
 			local yaw = player:get_look_horizontal()
-			if yaw <= 0.75 or yaw >= 5.75 then
-				player:add_player_velocity({x = v.z, y = 0, z = v.x})
-			elseif yaw <= 5.75 and yaw >= 3.75 then
-				player:add_player_velocity({x = v.z, y = 0, z = -v.x})
-			elseif yaw <= 3.75 and yaw >= 2.5 then
-				player:add_player_velocity({x = v.z, y = 0, z = v.x})
-			elseif yaw <= 2.5 and yaw >= 0.75 then
-				player:add_player_velocity({x = v.z, y = 0, z = -v.x})
-			end
+			yaw = yaw - 1.5
+			avel = vector.add(avel, minetest.yaw_to_dir(yaw))
+			it_go = true
+		end
+		if it_go then
+			avel = vector.normalize(avel)
+			avel = vector.multiply(avel, 5)
+			player:add_player_velocity(avel)
 		end
 		governor(player)
 		breaking[name] = true
 	end
-	minetest.after(0.09, function()
+	minetest.after(0, function()
 		flight(player)
 	end)
 end
@@ -165,7 +162,7 @@ local function is_ring(player)
 		rings[name] = i
 		if players[name].ring ~= i then
 			players[name].ring = i
-			--flight(player)
+			flight(player)
 		end
 		s:add_wear(2500)
 		inv:set_stack("backpack", 1, s)
@@ -185,6 +182,9 @@ local function is_ring(player)
 				speed = 1,
 				gravity = 1,
 				jump = 1,
+				new_move = true,
+				sneak = true,
+				sneak_glitch = false,
 			})
 			flying[name] = false
 		end
