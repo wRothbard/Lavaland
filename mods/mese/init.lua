@@ -124,9 +124,14 @@ minetest.register_craftitem("mese:crystal_seed", {
 			local pos1 = pointed_thing.above
 			local node1 = minetest.get_node(pos1)
 			if node1.name == "air" then 
-				itemstack:take_item()
 				node.name = "mese:crystal_ore1"
-				minetest.place_node(pos1, node)
+				local name = user:get_player_name()
+				if minetest.is_protected(pos, name) then
+					minetest.record_protection_violation(pos, name)
+					return itemstack
+				end
+				itemstack:take_item()
+				minetest.add_node(pos1, node)
 				return itemstack
 			end
 		end
