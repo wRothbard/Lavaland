@@ -124,6 +124,9 @@ end
 
 function rings.is_ring(player)
 	local name = player:get_player_name()
+	if not minetest.get_player_by_name(name) then
+		return
+	end
 	if not rings.players[name] then
 		local inv = player:get_inventory()
 		local s = inv:get_stack("backpack", 1)
