@@ -86,11 +86,12 @@ hud.update = function(player, elem, stat, value, modifier)
 		player:hud_change(players[name][elem],
 				"number", bar)
 	elseif hungry then
-		local sat = hunger.status(player)
-		local sat_max = stats.update_stats(player, {sat_max = ""}).sat_max
+		local s = stats.update_stats(player, {sat_max = "", sat = ""})
+		local sat = s.sat
+		local sat_max = s.sat_max
 		local bar = 20 / (sat_max / sat)
 		player:hud_change(players[name][elem],
-				"number", bar)
+				"number", math.ceil(bar))
 	elseif stamina then
 		local stam = stamina.get_stamina(player)
 		local stam_max = stats.update_stats(player, {stam_max = ""}).stam_max

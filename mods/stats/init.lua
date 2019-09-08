@@ -68,15 +68,13 @@ stats.update_stats = function(player, status_table)
 			end
 			res.sat_max = players[name].sat_max
 		elseif s == "sat" then
-			--[[
 			if not players[name].sat then
-				players[name].sat = hunger.status(player)
+				players[name].sat = 20
 			end
-			--]]
 			if v ~= "" then
-				hunger.status(player, v)
+				players[name].sat = v
 			end
-			res.sat = hunger.status(player)
+			res.sat = players[name].sat
 		elseif s == "xp" then
 			if v ~= "" then
 				players[name].xp = v
@@ -111,6 +109,7 @@ stats.add_xp = function(player, amount, notify)
 		level = "",
 		hp = "",
 		hp_max = "",
+		sat = "",
 		sat_max = "",
 		stam_max = "",
 		breath_max = "",
@@ -135,7 +134,7 @@ stats.add_xp = function(player, amount, notify)
 			stats.update_stats(player, {sat_max = max_sat})
 			x.sat_max = nil
 		end
-		hunger.status(player, max_sat)
+		stats.update_stats(player, {sat = max_sat})
 		local max_stam = x.stam_max
 		if max_stam < 100 then
 			max_stam = max_stam + rand(1, 3)

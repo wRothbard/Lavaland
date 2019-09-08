@@ -663,8 +663,8 @@ end
 -- should mob follow what I'm holding ?
 local follow_holding = function(self, clicker)
 	local name = clicker:get_player_name()
-	if rings[name] and
-			rings[name] == "rings:invisibility" then
+	if rings.players[name] and
+			rings.players[name] == "rings:invisibility" then
 		return false
 	end
 	local item = clicker:get_wielded_item()
@@ -1214,9 +1214,10 @@ local follow_flop = function(self)
 		local s = self.object:get_pos()
 		local players = minetest.get_connected_players()
 		for n = 1, #players do
-			local ring = rings[players[n]:get_player_name()]
+			local pname = players[n]:get_player_name()
+			local ring = rings.players[pname]
 			if get_distance(players[n]:get_pos(), s) < self.view_range and
-					not (rings and rings == "rings:invisibility") then
+					not (rings.players[pname] and rings.players[pname] == "rings:invisibility") then
 				self.following = players[n]
 				break
 			end
@@ -1442,7 +1443,7 @@ local do_states = function(self, dtime)
 		local p = self.attack:get_pos() or s
 		local dist = get_distance(p, s)
 		-- stop attacking if player out of range or invisible
-		local ring = rings[self.attack:get_player_name()]
+		local ring = rings.players[self.attack:get_player_name()]
 		if dist > self.view_range or not self.attack or
 				not self.attack:get_pos() or
 				self.attack:get_hp() <= 0 or
@@ -1936,7 +1937,7 @@ local mob_punch = function(self, hitter, tflp, tool_capabilities, dir)
 			self.child == false and
 			self.attack_players == true and
 			hitter:get_player_name() ~= self.owner and
-			not (rings[name] and rings[name] == "rings:invisibility") then
+			not (rings.players[name] and rings.players[name] == "rings:invisibility") then
 		-- attack whoever punched mob
 		self.state = ""
 		do_attack(self, hitter)

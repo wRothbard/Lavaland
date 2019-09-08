@@ -1,21 +1,10 @@
 hunger = {}
 
-local players = {}
-
-hunger.status = function(player, set)
-	if set then
-		players[player:get_player_name()] = set
-		hud.update(player, "hunger", "number", set, {name = "hunger"})
-	else
-		return math.ceil(players[player:get_player_name()])
-	end
-end
-
 local function cons(player)
 	local name = player:get_player_name()
 	local hp = player:get_hp()
 	if hp > 0 then
-		local sat = players[name]
+		local sat = stats.update_stats(player, {sat = ""}).sat
 		if not sat then
 			return
 		end
@@ -32,7 +21,7 @@ local function cons(player)
 		else
 			sat = sat - 0.01
 		end
-		players[name] = sat
+		stats.update_stats(player, {sat = sat})
 		hud.update(player, "hunger", "number", sat, {name = "hunger"})
 
 		if sat > 16 and hp < player:get_properties().hp_max and
@@ -40,7 +29,7 @@ local function cons(player)
 			player:set_hp(hp + 1)
 		end
 	else
-		players[name] = 0
+		stats.update_stats(player, {sat = 0})
 		hud.update(player, "hunger", "number", 0)
 	end
 	minetest.after(3, function()
@@ -51,22 +40,23 @@ end
 minetest.register_on_item_eat(function(hp_change, replace_with_item,
 		itemstack, user, pointed_thing)
 	local name = user:get_player_name()
-	local sat = players[name]
-	local sat_max = stats.update_stats(user, {sat_max = ""}).sat_max
+	local s = stats.update_stats(user, {sat = "", sat_max = ""})
+	local sat = s.sat
+	local sat_max = s.sat_max
 	if sat < sat_max and hp_change > 0 then
 		itemstack:take_item()
 		sat = sat + hp_change
 		if sat > sat_max then
 			sat = sat_max
 		end
-		players[name] = sat
+		stats.update_stats(user, {sat = sat})
 		local xp_inc = math.ceil(hp_change / 2)
 		if xp_inc < 1 then
 			xp_inc = 1
 		end
 		stats.add_xp(user, xp_inc, true)
 	elseif hp_change < 0 then
-		players[name] = sat / 2
+		stats.update_stats(user, {sat = sat / 2})
 		itemstack:take_item()
 		user:set_hp(user:get_hp() + hp_change)
 	end
@@ -75,30 +65,16 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 end)
 
 minetest.register_on_joinplayer(function(player)
-	local name = player:get_player_name()
-	local meta = player:get_meta()
-	local sat = meta:get_int("satiation")
-	if sat == 0 then
-		sat = 20
-	end
-	players[name] = sat
 	cons(player)
 end)
 
 minetest.register_on_dieplayer(function(player)
-	local name = player:get_player_name()
-	players[name] = 0
+	stats.update_stats(player, {sat = 0})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 end)
 
 minetest.register_on_respawnplayer(function(player)
-	players[player:get_player_name()] = stats.update_stats(player, {sat_max = ""}).sat_max
-end)
-
-minetest.register_on_leaveplayer(function(player)
-	local name = player:get_player_name()
-	player:get_meta():set_int("satiation", players[name])
-	players[name] = nil
+	 stats.update_stats(player, {sat_max = 20})
 end)
 
 print("loaded hunger")

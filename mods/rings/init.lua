@@ -1,4 +1,5 @@
 rings = {}
+rings.players = {}
 
 local players = {}
 local timer = 1
@@ -41,7 +42,7 @@ local function throw_clothing(player)
 end
 
 local function governor(player)
-	minetest.after(0.09, function()
+	minetest.after(0.2, function()
 		local name = player:get_player_name()
 		if not minetest.get_player_by_name(name) then
 			return
@@ -59,7 +60,7 @@ local function flight(player)
 	if not minetest.get_player_by_name(name) then
 		return
 	end
-	if not (rings[name] and rings[name] == "rings:levitation") then
+	if not (rings.players[name] and rings.players[name] == "rings:levitation") then
 		return
 	end
 	if not flying[name] then
@@ -116,57 +117,68 @@ local function flight(player)
 		governor(player)
 		breaking[name] = true
 	end
-	minetest.after(0, function()
+	minetest.after(0.1, function()
 		flight(player)
 	end)
 end
 
-local function is_ring(player)
-	local inv = player:get_inventory()
-	local s = inv:get_stack("backpack", 1)
-	local i = s:get_name()
+function rings.is_ring(player)
 	local name = player:get_player_name()
-	if i == "rings:muddy_vision" then
-		rings[name] = i
-		if players[name].ring ~= i then
-			players[name].ring = i
-			player:set_properties({nametag = "\n"})
-		end
-		s:add_wear(500)
-		inv:set_stack("backpack", 1, s)
-		return
-	elseif i == "rings:invisibility" then
-		rings[name] = i
-		if players[name].ring ~= i then
-			players[name].ring = i
-			player:set_properties({nametag = "\n"})
-			local skin = inv:get_stack("skin", 1)
-			if skin ~= "" then
-				inventory.throw_inventory(player:get_pos(),
-						{skin})
+	if not rings.players[name] then
+		local inv = player:get_inventory()
+		local s = inv:get_stack("backpack", 1)
+		local i = s:get_name()
+		if i == "rings:muddy_vision" then
+			rings.players[name] = i
+			if players[name].ring ~= i then
+				players[name].ring = i
+				player:set_properties({nametag = "\n"})
 			end
-			inv:set_list("skin", {})
-			local d_inv = minetest.get_inventory({type = "detached",
-					name = name .. "_skin"})
-			d_inv:set_list("skin", {})
-			multiskin.set_player_skin(player, "default_blank.png")
-			multiskin.update_player_visuals(player)
-			wieldview:update_wielded_item(player, true)
-			throw_armor(player)
-			throw_clothing(player)
+			s:add_wear(500)
+			inv:set_stack("backpack", 1, s)
+			if s:get_wear() <= 500 then
+				minetest.after(1, rings.is_ring, player)
+			end
+			return
+		elseif i == "rings:invisibility" then
+			rings.players[name] = i
+			if players[name].ring ~= i then
+				players[name].ring = i
+				player:set_properties({nametag = "\n"})
+				local skin = inv:get_stack("skin", 1)
+				if skin ~= "" then
+					inventory.throw_inventory(player:get_pos(),
+							{skin})
+				end
+				inv:set_list("skin", {})
+				local d_inv = minetest.get_inventory({type = "detached",
+						name = name .. "_skin"})
+				d_inv:set_list("skin", {})
+				multiskin.set_player_skin(player, "default_blank.png")
+				multiskin.update_player_visuals(player)
+				wieldview:update_wielded_item(player, true)
+				throw_armor(player)
+				throw_clothing(player)
+			end
+			s:add_wear(1000)
+			inv:set_stack("backpack", 1, s)
+			if s:get_wear() <= 1000 then
+				minetest.after(1, rings.is_ring, player)
+			end
+			return
+		elseif i == "rings:levitation" then
+			rings.players[name] = i
+			if players[name].ring ~= i then
+				players[name].ring = i
+				flight(player)
+			end
+			s:add_wear(2500)
+			inv:set_stack("backpack", 1, s)
+			if s:get_wear() <= 2500 then
+				minetest.after(1, rings.is_ring, player)
+			end
+			return
 		end
-		s:add_wear(1000)
-		inv:set_stack("backpack", 1, s)
-		return
-	elseif i == "rings:levitation" then
-		rings[name] = i
-		if players[name].ring ~= i then
-			players[name].ring = i
-			flight(player)
-		end
-		s:add_wear(2500)
-		inv:set_stack("backpack", 1, s)
-		return
 	end
 	-- Cancel
 	if players[name].ring ~= "" then
@@ -189,7 +201,8 @@ local function is_ring(player)
 			flying[name] = false
 		end
 		players[name].ring = ""
-		rings[name] = nil
+		rings.players[name] = nil
+		rings.is_ring(player)
 	end
 end
 
@@ -199,7 +212,7 @@ local function query()
 		if not player then
 			break
 		end
-		is_ring(player)
+		rings.is_ring(player)
 	end
 end
 
@@ -244,13 +257,13 @@ minetest.register_craft({
 
 minetest.register_on_joinplayer(function(player)
 	players[player:get_player_name()] = {ring = ""}
-	minetest.after(3, is_ring, player)
+	minetest.after(3, rings.is_ring, player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	players[name] = nil
-	rings[name] = nil
+	rings.players[name] = nil
 	if flying[name] then
 		flying[name] = nil
 	end
@@ -273,24 +286,26 @@ minetest.register_globalstep(function(dtime)
 end)
 
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
-	if inventory_info.to_list == "backpack" or inventory_info.from_list == "backpack" then
-		is_ring(player)
+	if inventory_info.to_list == "backpack" or inventory_info.from_list == "backpack" or
+			inventory_info.listname == "backpack" or
+			(inventory_info.stack and inventory_info.stack:get_name():sub(1, 6) == "rings:") then
+		rings.is_ring(player)
 	end
 end)
 
 armor:register_on_equip(function(player)
 	local name = player:get_player_name()
-	if rings[name] and rings[name] == "rings:invisibility" then
+	if rings.players[name] and rings.players[name] == "rings:invisibility" then
 		throw_armor(player)
-		is_ring(player)
+		rings.is_ring(player)
 	end
 end)
 
 clothing:register_on_equip(function(player)
 	local name = player:get_player_name()
-	if rings[name] and rings[name] == "rings:invisibility" then
+	if rings.players[name] and rings.players[name] == "rings:invisibility" then
 		throw_clothing(player)
-		is_ring(player)
+		rings.is_ring(player)
 	end
 end)
 

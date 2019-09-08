@@ -107,7 +107,7 @@ end
 
 cozy.sit = function(player, pos, state)
 	local name = player:get_player_name()
-	if rings[name] and rings[name] == "rings:levitation" then
+	if rings.players[name] and rings.players[name] == "rings:levitation" then
 		return
 	end
 	if cozy.players[name] and cozy.players[name] == "sit" then
@@ -124,7 +124,7 @@ end
 
 cozy.lay = function(player, pos, state)
 	local name = player:get_player_name()
-	if rings[name] and rings[name] == "rings:levitation" then
+	if rings.players[name] and rings.players[name] == "rings:levitation" then
 		return
 	end
 	if cozy.players[name] and cozy.players[name] == "lay" then
@@ -165,7 +165,7 @@ local function sprint(player)
 
 	local name = player:get_player_name()
 	local attached = player_api.player_attached[name]
-	if not attached and not (rings[name] and rings[name] == "rings:levitation") then
+	if not attached and not (rings.players[name] and rings.players[name] == "rings:levitation") then
 		local max_stam = stats.update_stats(player, {stam_max = ""}).stam_max
 		local pos = player:get_pos()
 		local c = control(player)
@@ -355,7 +355,7 @@ minetest.register_on_dieplayer(function(player, reason)
 	end
 
 	minetest.get_inventory({type = "detached", name = name .. "_skin"}):set_list("skin", {})
-	if not (rings[name] and rings[name] == "rings:invisibility") then
+	if not (rings.players[name] and rings.players[name] == "rings:invisibility") then
 		local gender = player:get_meta():get("gender")
 		multiskin.set_player_skin(player, "player_" .. gender .. ".png")
 		multiskin.update_player_visuals(player)

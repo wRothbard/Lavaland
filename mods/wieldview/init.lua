@@ -57,7 +57,7 @@ wieldview.update_wielded_item = function(self, player, fu)
 		if self.wielded_item[name] == item and not fu then
 			return
 		end
-		if rings[name] and rings[name] == "rings:invisibility" then
+		if rings.players[name] and rings.players[name] == "rings:invisibility" then
 			armor.textures[name].wielditem = self:get_item_texture("")
 			armor:update_player_visuals(player)
 		else
