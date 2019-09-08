@@ -4,7 +4,12 @@ local function cons(player)
 	local name = player:get_player_name()
 	local hp = player:get_hp()
 	if hp > 0 then
-		local sat = stats.update_stats(player, {sat = ""}).sat
+		local sat = stats.update_stats(player, {sat = ""})
+		if not sat then
+			return
+		end
+
+		sat = sat.sat
 		if not sat then
 			return
 		end
