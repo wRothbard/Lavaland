@@ -124,6 +124,9 @@ end
 
 function rings.is_ring(player)
 	local name = player:get_player_name()
+	if not minetest.get_player_by_name(name) then
+		return
+	end
 	if not rings.players[name] then
 		local inv = player:get_inventory()
 		local s = inv:get_stack("backpack", 1)
@@ -181,9 +184,6 @@ function rings.is_ring(player)
 		end
 	end
 	-- Cancel
-	if not players[name].ring then
-		return
-	end
 	if players[name].ring ~= "" then
 		if players[name].ring == "rings:muddy_vision" then
 			player:set_properties({nametag = ""})
