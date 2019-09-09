@@ -109,7 +109,7 @@ for _, col in ipairs(all_colours) do
 			local itemname = item:get_name()
 			local name = clicker:get_player_name()
 			--are we giving a haircut>
-			if itemname == "mobs:shears" then
+			if itemname == "tools:shears" then
 				if self.gotten ~= false or self.child ~= false then
 					return
 				end
