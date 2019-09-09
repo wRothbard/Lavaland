@@ -11,14 +11,14 @@ minetest.register_node("water:ice", {
 
 minetest.register_abm({
 	nodenames = "water:ice",
-	neighbors = "group:water",
+	neighbors = "water:source",
 	interval = 60,
 	chance = 3,
 	catch_up = false,
 	action = function(pos, node)
 		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
 		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
-		local water = minetest.find_nodes_in_area(p1, p2, {"group:water"})
+		local water = minetest.find_nodes_in_area(p1, p2, {"water:source"})
 		if #water > 4 then
 			minetest.set_node(water[rand(#water)], {name = "water:ice"})
 		end
@@ -30,6 +30,25 @@ minetest.register_craft({
 	output = "water:ice 2",
 	recipe = {"bucket:bucket_water", "water:ice"},
 	replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}},
+})
+
+minetest.register_abm({
+	nodenames = {"water:source"},
+	neighbors = {"water:flowing", "air"},
+	interval = 3,
+	chance = 2,
+	catch_up = false,
+	action = function(pos, node)
+		local pb = {x = pos.x, y = pos.y - 1, z = pos.z}
+		local nb = minetest.get_node(pb)
+		if not nb.name then
+			return
+		end
+		if nb.name == "water:flowing" or nb.name == "air" then
+			minetest.remove_node(pos)
+			minetest.set_node(pb, {name = "water:source"})
+		end
+	end,
 })
 
 minetest.register_node("water:source", {
@@ -147,10 +166,22 @@ local cool_lava = function(pos, node)
 end
 
 minetest.register_abm({
-	label = "Lava cooling",
-	nodenames = {"lava:source", "lava:flowing"},
+	label = "Lava source cooling",
+	nodenames = {"lava:source"},
 	neighbors = {"group:cools_lava", "group:water"},
-	interval = 2,
+	interval = 4,
+	chance = 2,
+	catch_up = false,
+	action = function(...)
+		cool_lava(...)
+	end,
+})
+
+minetest.register_abm({
+	label = "Lava flowing cooling",
+	nodenames = {"lava:flowing"},
+	neighbors = {"group:cools_lava", "group:water"},
+	interval = 3,
 	chance = 2,
 	catch_up = false,
 	action = function(...)

@@ -1,3 +1,22 @@
+minetest.register_abm({
+	nodenames = {"lava:source"},
+	neighbors = {"lava:flowing", "air"},
+	interval = 3,
+	chance = 2,
+	catch_up = false,
+	action = function(pos, node)
+		local pb = {x = pos.x, y = pos.y - 1, z = pos.z}
+		local nb = minetest.get_node(pb)
+		if not nb.name then
+			return
+		end
+		if nb.name == "lava:flowing" or nb.name == "air" then
+			minetest.remove_node(pos)
+			minetest.set_node(pb, {name = "lava:source"})
+		end
+	end,
+})
+
 minetest.register_node("lava:source", {
 	description = "Lava Source",
 	drawtype = "liquid",
