@@ -461,7 +461,7 @@ local is_at_cliff = function(self)
 	local ypos = pos.y + self.collisionbox[2] -- just above floor
 	local tt, ttt = minetest.line_of_sight(
 		{x = pos.x + dir_x, y = ypos, z = pos.z + dir_z},
-		{x = pos.x + dir_x, y = ypos - 20, z = pos.z + dir_z},
+		{x = pos.x + dir_x, y = ypos - 10, z = pos.z + dir_z},
 		1
 	)
 	if tt then

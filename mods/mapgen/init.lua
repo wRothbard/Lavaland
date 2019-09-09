@@ -71,7 +71,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		for y = minp.y, maxp.y do
 			for x = minp.x, maxp.x do
 				if y < 1 then
-					if y >= -3 then
+					if y >= -9 then
 						local vi = a:index(x, y, z)
 						data[vi] = c_lava
 					else
