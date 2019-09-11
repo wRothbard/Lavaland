@@ -64,7 +64,11 @@ multiskin.set_player_skin = function(player, skin)
 		player_format[name] = format
 		player:set_attribute("multiskin_format", format)
 	end
-	player_skins[name].skin = skin
+	if not player_skins[name] then
+		player_skins[name] = {skin = skin}
+	else
+		player_skins[name].skin = skin
+	end
 	player:get_meta():set_string("multiskin_skin", skin)
 end
 
