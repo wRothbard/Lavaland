@@ -18,9 +18,10 @@ local function show_chat(name)
 		chatbox = chatbox .. chat[i] .. "\n"
 	end
 	local chat_fs = "size[8,7.25]" ..
-		"field[0.06,7.12;7.59,1;chatsend;;]" ..
+		"field[0.06,7.12;6.89,1;chatsend;;]" ..
 		"textarea[0.08,-0.28;8.5,8.3;;;" .. chatbox .. "]" ..
 		"field_close_on_enter[chatsend;false]" ..
+		"image_button[6.54,6.89;0.83,0.83;chat_update.png;update;]" ..
 		"button[7.24,6.81;1,1;ok;OK]" ..
 	""
 	minetest.show_formspec(name, "chat:chat", chat_fs)
@@ -50,7 +51,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		show_chat(player:get_player_name())
 	elseif formname == "chat:chat" and (fields.chatsend or fields.ok) then
 		local name = player:get_player_name()
-		if fields.chatsend == "" then
+		if fields.chatsend == "" or fields.update then
 			show_chat(name)
 		else
 			local thing = minetest.formspec_escape(fields.chatsend)
