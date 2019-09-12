@@ -183,7 +183,7 @@ end
 
 minetest.register_abm({
 	nodenames = {"mese:crystal_ore1", "mese:crystal_ore2",
-		"mese:crystal_ore3"},
+			"mese:crystal_ore3"},
 	neighbors = {"obsidian:obsidian", "lava:source"},
 	interval = 80,
 	chance = 20,
@@ -203,10 +203,23 @@ minetest.register_abm({
 		if nn ~= "air" then
 			return
 		end
-		local l = minetest.find_node_near(pos, 1, "lava:source")
-		if l then
-			minetest.set_node(pos, {name = "mese:crystal_ore1"})
+
+		local pos1 = {x = pos.x, y = pos.y - 1, z = pos.z}
+		local lava_count = 0
+		pos1.z = pos.z - 1
+		lava_count = lava_count + check_lava(pos1)
+		pos1.z = pos.z + 1
+		lava_count = lava_count + check_lava(pos1)
+		pos1.z = pos.z
+		pos1.x = pos.x - 1
+		lava_count = lava_count + check_lava(pos1)
+		pos1.x = pos.x + 1
+		lava_count = lava_count + check_lava(pos1)
+		if lava_count < 2 then
+			return
 		end
+
+		minetest.set_node(pos, {name = "mese:crystal_ore1"})
 	end,
 })
 
@@ -239,11 +252,11 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "mese:crystal_seed",
+	output = "mese:crystal_seed 3",
 	recipe = {
-		{'mese:crystal','mese:crystal','mese:crystal'},
-		{'mese:crystal','obsidian:shard','mese:crystal'},
-		{'mese:crystal','mese:crystal','mese:crystal'},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
+		{"mese:crystal", "obsidian:shard", "mese:crystal"},
+		{"mese:crystal", "mese:crystal", "mese:crystal"},
 	}
 })
 
@@ -277,7 +290,7 @@ minetest.register_node("mese:post_light", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 })
 
 minetest.register_craft({
