@@ -1,4 +1,7 @@
 local lpp = 14 -- Lines per book's page
+local max_text_size = 10000
+local max_title_size = 80
+local short_title_size = 35
 
 local function on_place(itemstack, placer, pointed_thing)
 	if minetest.is_protected(pointed_thing.above, placer:get_player_name()) then
@@ -28,6 +31,7 @@ local function after_place_node(pos, placer, itemstack, pointed_thing)
 		meta:set_string("page_max", data.page_max)
 		meta:set_string("infotext", data.title .. "\n\n" ..
 				"by " .. data.owner)
+		meta:set_string("description", data.description)
 	end
 end
 
@@ -123,6 +127,7 @@ local function on_dig(pos, node, digger)
 		text_len = meta:get_int("text_len"),
 		page = meta:get_int("page"),
 		page_max = meta:get_int("page_max"),
+		description = meta:get_string("description")
 	}
 	local stack
 	if data.owner ~= "" then
@@ -199,10 +204,6 @@ local function book_on_use(itemstack, user)
 	minetest.show_formspec(player_name, "books:book", formspec)
 	return itemstack
 end
-
-local max_text_size = 10000
-local max_title_size = 80
-local short_title_size = 35
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "books:book" then
@@ -286,13 +287,20 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
 
-			meta:set_string("title", fields.title)
+			local short_title = fields.title
+			-- Don't bother triming the title if the trailing dots would make it longer
+			if #short_title > short_title_size + 3 then
+				short_title = short_title:sub(1, short_title_size) .. "..."
+			end
+			local name = player:get_player_name()
+			meta:set_string("title", fields.title:sub(1, max_title_size))
 			meta:set_string("text", fields.text)
-			meta:set_string("owner", player:get_player_name())
+			meta:set_string("owner", name)
 			meta:set_string("infotext", fields.text)
 			meta:set_int("text_len", fields.text:len())
 			meta:set_int("page", 1)
 			meta:set_int("page_max", math.ceil((fields.text:gsub("[^\n]", ""):len() + 1) / lpp))
+			meta:set_string("description", "\"" .. short_title .. "\" by " .. name)
 		elseif fields.book_next or fields.book_prev then
 			local pos = minetest.string_to_pos(formname:sub(12))
 			local node = minetest.get_node(pos)
@@ -319,12 +327,12 @@ minetest.register_node("books:book_open", {
 	description = "Book Open (you hacker you!)",
 	inventory_image = "default_book.png",
 	tiles = {
-		"books_book_open_top.png",	-- Top
-		"books_book_open_bottom.png",	-- Bottom
-		"books_book_open_side.png",	-- Right
-		"books_book_open_side.png",	-- Left
-		"books_book_open_front.png",	-- Back
-		"books_book_open_front.png"	-- Front
+		"books_book_open_top.png", -- Top
+		"books_book_open_bottom.png", -- Bottom
+		"books_book_open_side.png", -- Right
+		"books_book_open_side.png", -- Left
+		"books_book_open_front.png", -- Back
+		"books_book_open_front.png" -- Front
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
@@ -347,12 +355,12 @@ minetest.register_node("books:book_closed", {
 	description = "Book Closed (you hacker you!)",
 	inventory_image = "default_book.png",
 	tiles = {
-		"books_book_closed_topbottom.png",	-- Top
-		"books_book_closed_topbottom.png",	-- Bottom
-		"books_book_closed_right.png",	-- Right
-		"books_book_closed_left.png",	-- Left
-		"books_book_closed_front.png^[transformFX",	-- Back
-		"books_book_closed_front.png"	-- Front
+		"books_book_closed_topbottom.png", -- Top
+		"books_book_closed_topbottom.png", -- Bottom
+		"books_book_closed_right.png", -- Right
+		"books_book_closed_left.png", -- Left
+		"books_book_closed_front.png^[transformFX", -- Back
+		"books_book_closed_front.png" -- Front
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
