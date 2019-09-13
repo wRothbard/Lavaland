@@ -105,14 +105,16 @@ stats.add_xp = function(player, amount, notify)
 	end
 	--]]
 	local x = stats.update_stats(player, {
-		xp = "",
-		level = "",
 		hp = "",
 		hp_max = "",
 		sat = "",
 		sat_max = "",
+		stam = "",
 		stam_max = "",
+		breath = "",
 		breath_max = "",
+		xp = "",
+		level = "",
 	})
 	local lvl = tonumber(x.level)
 	local xp = tonumber(x.xp)
@@ -125,27 +127,23 @@ stats.add_xp = function(player, amount, notify)
 		local max = x.hp_max
 		if max < 100 then
 			max = max + rand(1, 3)
-			stats.update_stats(player, {hp_max = max})
-			x.hp_max = nil
+			x.hp_max = max
 		end
 		local max_sat = x.sat_max
 		if max_sat < 100 then
 			max_sat = max_sat + rand(1, 3)
-			stats.update_stats(player, {sat_max = max_sat})
-			x.sat_max = nil
+			x.sat_max = max_sat
 		end
-		stats.update_stats(player, {sat = max_sat})
+		x.sat = max_sat
 		local max_stam = x.stam_max
 		if max_stam < 100 then
 			max_stam = max_stam + rand(1, 3)
-			stats.update_stats(player, {stam_max = max_stam})
-			x.stam_max = nil
+			x.stam_max = max_stam
 		end
 		local max_breath = x.breath_max
 		if max_breath < 100 then
 			max_breath = max_breath + rand(1, 3)
-			stats.update_stats(player, {breath_max = max_breath})
-			x.breath_max = nil
+			x.breath_max = max_breath
 		end
 		x.hp = max
 		x.xp = (xp + amount) % (100 * lvl)
