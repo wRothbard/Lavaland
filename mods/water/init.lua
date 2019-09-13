@@ -5,7 +5,15 @@ minetest.register_node("water:ice", {
 	tiles = {"default_ice.png"},
 	is_ground_content = false,
 	paramtype = "light",
-	groups = {cracky = 3, cools_lava = 1, slippery = 3},
+	groups = {cracky = 3, puts_out_fire = 1, cools_lava = 1, slippery = 3},
+	sounds = music.sounds.nodes.glass,
+})
+
+minetest.register_node("water:packed_ice", {
+	description = "Packed Ice",
+	tiles = {"water_packed_ice.png"},
+	paramtype = "light",
+	groups = {cracky = 1, puts_out_fire = 1, cools_lava = 1, slippery = 3},
 	sounds = music.sounds.nodes.glass,
 })
 
@@ -30,6 +38,14 @@ minetest.register_craft({
 	output = "water:ice 2",
 	recipe = {"bucket:bucket_water", "water:ice"},
 	replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}},
+})
+
+minetest.register_craft({
+	output = "water:packed_ice",
+	recipe = {
+		{"water:ice", "water:ice"},
+		{"water:ice", "water:ice"}
+	}
 })
 
 minetest.register_abm({
