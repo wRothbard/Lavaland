@@ -3,7 +3,7 @@ minetest.register_node("gold:block", {
 	tiles = {"default_gold_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 1},
-	--sounds = default.node_sound_metal_defaults(),
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craftitem("gold:ingot", {
@@ -55,11 +55,10 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "default:gold_ingot",
 	recipe = {
-		{"shop:coin", "shop:coin", "shop:coin"},
-		{"shop:coin", "shop:coin", "shop:coin"},
-		{"shop:coin", "shop:coin", "shop:coin"}
+		{"gold:coin", "gold:coin", "gold:coin"},
+		{"gold:coin", "gold:coin", "gold:coin"},
+		{"gold:coin", "gold:coin", "gold:coin"}
 	}
 })
-
 
 print("loaded gold")
