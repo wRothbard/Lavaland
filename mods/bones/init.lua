@@ -12,6 +12,15 @@ minetest.register_node("bones:bones", {
 	paramtype2 = "facedir",
 	groups = {bones = 1, dig_immediate = 3},
 	sounds = music.sounds.nodes.bones,
+	after_place_node = function(pos, placer, itemstack, pointed_thing)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		inv:set_size("main", 8 * 4)
+		meta:set_string("formspec", "size[8,9]" ..
+				"list[context;main;0,0;8,4]" ..
+				"list[current_player;main;0,5;8,4]" ..
+				"listring[]")
+	end,
 	on_dig = function(pos, node, digger)
 		local t = {"bones:bone", "bones:bone", "bones:skull"}
 		local inv = minetest.get_meta(pos):get_inventory()
