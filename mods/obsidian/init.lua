@@ -2,7 +2,7 @@ minetest.register_node("obsidian:obsidian", {
 	description = "Obsidian",
 	tiles = {"obsidian_obsidian.png"},
 	sounds = music.sounds.nodes.obsidian,
-	groups = {oddly_breakable_by_hand = 1, cracky = 3},
+	groups = {oddly_breakable_by_hand = 1, cracky = 3, obsidian = 1},
 })
 minetest.register_alias("obsidian:node", "obsidian:obsidian")
 
@@ -13,7 +13,7 @@ minetest.register_node("obsidian:brick", {
 	tiles = {"obsidian_brick.png"},
 	is_ground_content = false,
 	sounds = music.sounds.nodes.obsidian,
-	groups = {cracky = 2, level = 2},
+	groups = {cracky = 2, level = 2, obsidian = 1},
 })
 
 minetest.register_node("obsidian:block", {
@@ -21,7 +21,7 @@ minetest.register_node("obsidian:block", {
 	tiles = {"obsidian_block.png"},
 	is_ground_content = false,
 	sounds = music.sounds.nodes.obsidian,
-	groups = {cracky = 2, level = 2},
+	groups = {cracky = 2, level = 2, obsidian = 1},
 })
 
 minetest.register_craft({
@@ -76,7 +76,7 @@ minetest.register_node("obsidian:glass", {
 	is_ground_content = false,
 	sunlight_propagates = true,
 	sounds = music.sounds.nodes.obsidian,
-	groups = {cracky = 3},
+	groups = {cracky = 3, obsidian = 1},
 })
 
 print("loaded obsidian")
