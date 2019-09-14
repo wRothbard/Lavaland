@@ -227,6 +227,7 @@ minetest.register_on_punchplayer(function(player, hitter,
 		armor:punch(player, hitter, time_from_last_punch, tool_capabilities)
 		last_punch_time[name] = minetest.get_gametime()
 	else
+		hitter:set_hp(hitter:get_hp() - 1)
 		return true
 	end
 end)
