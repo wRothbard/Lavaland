@@ -43,8 +43,6 @@ function trees.grow_sapling(pos)
 	end
 	local node = minetest.get_node(pos)
 	if node.name == "trees:sapling" then
-		minetest.log("action", "A sapling grows into a tree at "..
-		minetest.pos_to_string(pos))
 		trees.grow_new_apple_tree(pos)
 	end
 end
@@ -59,9 +57,9 @@ minetest.register_lbm({
 
 function trees.grow_new_apple_tree(pos)
 	local path = minetest.get_modpath("trees") ..
-		"/schematics/apple_tree_from_sapling.mts"
+			"/schematics/apple_tree_from_sapling.mts"
 	minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3},
-		path, "random", nil, false)
+			path, "random", nil, false)
 end
 
 minetest.register_alias("default:tree", "trees:tree")
@@ -72,7 +70,7 @@ minetest.register_node("trees:tree", {
 	is_ground_content = false,
 	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
 	sounds = music.sounds.nodes.wood,
-	on_place = minetest.rotate_node
+	on_place = minetest.rotate_node,
 })
 
 minetest.register_node("trees:wood", {

@@ -15,7 +15,7 @@ minetest.register_node("mese:mese", {
 	tiles = {"mese_mese.png"},
 	paramtype = "light",
 	groups = {cracky = 2, level = 2},
-	sounds = sounds,
+	sounds = music.sounds.nodes.mese,
 	light_source = minetest.LIGHT_MAX,
 })
 
@@ -44,7 +44,7 @@ minetest.register_node("mese:crystal_ore1", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 1",
 	use_texture_alpha = true,
-	sounds = sounds,
+	sounds = music.sounds.material.glass,
 	light_source = 7,
 	selection_box = {
 		type = "fixed",
@@ -63,7 +63,7 @@ minetest.register_node("mese:crystal_ore2", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 2",
 	use_texture_alpha = true,
-	sounds = sounds,
+	sounds = music.sounds.material.glass,
 	light_source = 8,
 	selection_box = {
 		type = "fixed",
@@ -82,7 +82,7 @@ minetest.register_node("mese:crystal_ore3", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 3",
 	use_texture_alpha = true,
-	sounds = sounds,
+	sounds = music.sounds.material.glass,
 	light_source = 9,
 	selection_box = {
 		type = "fixed",
@@ -101,7 +101,7 @@ minetest.register_node("mese:crystal_ore4", {
 	groups = {cracky = 1, oddly_breakable_by_hand = 1},
 	drop = "mese:crystal 4",
 	use_texture_alpha = true,
-	sounds = sounds,
+	sounds = music.sounds.material.glass,
 	light_source = 10,
 	selection_box = {
 		type = "fixed",
@@ -132,6 +132,7 @@ minetest.register_craftitem("mese:crystal_seed", {
 				end
 				itemstack:take_item()
 				minetest.add_node(pos1, node)
+				music.play("glass_hard", {gain = 0.5})
 				return itemstack
 			end
 		end

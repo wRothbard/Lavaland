@@ -7,7 +7,7 @@ minetest.register_node("glass:glass", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	groups = {cracky = 3, oddly_breakable_by_hand = 3, glass = 1},
-	sounds = music.sounds.nodes.glass,
+	sounds = music.sounds.material.glass,
 })
 
 minetest.register_craft({

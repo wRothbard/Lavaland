@@ -217,7 +217,7 @@ if flame_sound then
 				fposmid = vector.divide(vector.add(fposmin, fposmax), 2)
 			end
 			-- Play sound
-			local handle = minetest.sound_play(
+			local handle = music.play(
 				"fire_fire",
 				{
 					pos = fposmid,

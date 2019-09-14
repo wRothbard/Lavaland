@@ -59,6 +59,7 @@ minetest.register_node("lava:source", {
 	damage_per_second = 4 * 2,
 	post_effect_color = {a = 191, r = 255, g = 64, b = 0},
 	groups = {lava = 3, liquid = 2, igniter = 1},
+	sounds = music.sounds.nodes.lava,
 })
 
 minetest.register_node("lava:flowing", {
@@ -105,7 +106,8 @@ minetest.register_node("lava:flowing", {
 	damage_per_second = 4 * 2,
 	post_effect_color = {a = 191, r = 255, g = 64, b = 0},
 	groups = {lava = 3, liquid = 2, igniter = 1,
-		not_in_creative_inventory = 1},
+			not_in_creative_inventory = 1},
+	sounds = music.sounds.nodes.lava,
 })
 
 minetest.register_craft({
@@ -123,8 +125,8 @@ minetest.register_craft({
 
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
 	if action == "put" and inventory_info.stack:get_name() == "lava:source" then
-		player:set_hp(0)
 		minetest.set_node(player:get_pos(), {name = "lava:source"})
+		player:set_hp(0)
 	end
 end)
 

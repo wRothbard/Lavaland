@@ -49,4 +49,12 @@ minetest.register_on_leaveplayer(function(player)
 end)
 --]]
 
+function music.play(sss, spt)
+	if type(sss) == "string" then
+		sss = {name = sss}
+	end
+	spt = spt or {}
+	return minetest.sound_play(sss, spt)
+end
+
 print("loaded music")

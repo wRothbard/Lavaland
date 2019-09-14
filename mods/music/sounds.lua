@@ -19,9 +19,34 @@ music.sounds = {
 			},
 		},
 		stone = {},
-		wood = {},
+		wood = {
+			footstep = {
+				name = "trees_wood_footstep",
+				gain = 0.3,
+			},
+			dug = {
+				name = "trees_wood_footstep",
+				gain = 1.0,
+			},
+		},
 		water = {},
-		glass = {},
+		glass = {
+			footstep = {
+				name = "glass_hard",
+				gain = 1.0,
+				pitch = 0.7,
+				fade = 8.0,
+			},
+			dig = {
+				name = "glass_hard",
+			},
+			dug = {
+				name = "glass_glass",
+			},
+			place = {
+				name = "glass_hard",
+			},
+		},
 		lava = {},
 	},
 	player = {
@@ -84,12 +109,21 @@ music.sounds = {
 		},
 		wood = {
 			footstep = {
-				name = "trees_wood_footstep",
-				gain = 0.3,
+				name = "trees_wood",
+				gain = 0.34,
+				pitch = 0.67,
+			},
+			dig = {
+				name = "trees_wood",
+				gain = 0.67,
 			},
 			dug = {
-				name = "trees_wood_footstep",
-				gain = 1.0,
+				name = "trees_wood_hard",
+				gain = 0.69,
+			},
+			place = {
+				name = "trees_wood_hard",
+				gain = 0.72,
 			},
 		},
 		leaves = {
@@ -128,16 +162,23 @@ music.sounds = {
 		},
 		obsidian = {
 			footstep = {
-				name = "obsidian_footstep",
-				gain = 0.3,
+				name = "obsidian_obsidian",
+				gain = 0.67,
+				pitch = 0.9,
 			},
 			dig = {
-				name = "obsidian_footstep",
-				gain = 1.0,
+				name = "obsidian_obsidian",
+				gain = 0.89,
+				pitch = 0.7,
 			},
 			dug = {
-				name = "obsidian_footstep",
-				gain = 1.0,
+				name = "obsidian_obsidian",
+				gain = 0.89,
+				pitch = 1.1,
+			},
+			place = {
+				name = "obsidian_obsidian",
+				gain = 0.99,
 			},
 		},
 		plants = {
@@ -156,6 +197,28 @@ music.sounds = {
 			footstep = {
 				name = "dirt_footstep",
 				gain = 0.4,
+			},
+		},
+		mese = {
+			footstep = {
+				name = "mese_footstep",
+				gain = 0.3
+			},
+			dig = {
+				name = "mese_footstep",
+				gain = 1.0
+			},
+			dug = {
+				name = "mese_footstep",
+				gain = 1.0
+			},
+		},
+		lava = {
+			footstep = {
+				name = "water_cool_lava",
+				gain = 0.24,
+				pitch = 0.9,
+				fade = 1.0,
 			},
 		},
 	},
