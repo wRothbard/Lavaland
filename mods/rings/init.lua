@@ -42,14 +42,14 @@ local function throw_clothing(player)
 end
 
 local function governor(player)
-	minetest.after(0.2, function()
+	minetest.after(0.3, function()
 		local name = player:get_player_name()
 		if not minetest.get_player_by_name(name) then
 			return
 		end
 		local vel = player:get_player_velocity()
 		local invel = {x = -vel.x, y = -vel.y, z = -vel.z}
-		invel = vector.divide(invel, 2.5)
+		invel = vector.divide(invel, 1.25)
 		player:add_player_velocity(invel)
 		breaking[name] = false
 	end)
@@ -117,7 +117,7 @@ local function flight(player)
 		governor(player)
 		breaking[name] = true
 	end
-	minetest.after(0.1, function()
+	minetest.after(0, function()
 		flight(player)
 	end)
 end
