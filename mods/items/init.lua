@@ -19,14 +19,16 @@ local function auto_pickup(player)
 			local p = obj:is_player()
 			if not p then
 				local ent = obj:get_luaentity()
-				if ent and ent.age and ent.age > 0.5 then
-					obj:remove()
+				if ent and ent.age and ent.age > 0.67 then
 					local inv = player:get_inventory()
-					local add = inv:add_item("main", ent.itemstring)
-					if add then
-						minetest.add_item(player:get_pos(), add)
+					if inv:room_for_item("main", ent.itemstring) then
+						obj:remove()
+						local add = inv:add_item("main", ent.itemstring)
+						if add then
+							minetest.add_item(player:get_pos(), add)
+						end
+						minetest.sound_play("items_plop", {pos = obj:get_pos()})
 					end
-					minetest.sound_play("items_plop", {pos = obj:get_pos()})
 				end
 			end
 		end
