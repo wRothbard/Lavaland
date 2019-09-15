@@ -184,7 +184,7 @@ function rings.is_ring(player)
 		end
 	end
 	-- Cancel
-	if players[name].ring ~= "" then
+	if players[name].ring and players[name].ring ~= "" then
 		if players[name].ring == "rings:muddy_vision" then
 			player:set_properties({nametag = ""})
 		elseif players[name].ring == "rings:invisibility" then

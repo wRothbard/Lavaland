@@ -6,8 +6,11 @@ end
 
 local function can_craft(input, rep)
 	local res = 0
+	print(dump(input))
 	for i = 1, #rep do
 		local it = rep[i]
+		if it and it:sub(1, 6) == "group:" then
+		end
 		local itt = input[it]
 		if itt then
 			if itt > 1 then
@@ -62,6 +65,15 @@ local function make_list(player)
 	return result
 end
 
+local function show_ac(player)
+	local craft_items = make_list(player)
+	craft_items = table.concat(craft_items, ",")
+	local fs = "size[8,7.25]" ..
+		"table[0,0;8,7.25;craftitem;" .. craft_items .. "]" ..
+	""
+	minetest.show_formspec(player:get_player_name(), "autocraft:autocraft", fs)
+end
+
 minetest.register_on_mods_loaded(function()
 	for _, item in pairs(minetest.registered_items) do
 		local name = item.name
@@ -83,11 +95,13 @@ end)
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" and fields.autocraft then
-		print(dump(make_list(player)))
+		show_ac(player)
+		--print(dump(make_list(player)))
 	end
 end)
 
 minetest.register_chatcommand("ac", {
+	privs = "server",
 	func = function(name, param)
 		if param == "" then
 			return false, "Need a name."
