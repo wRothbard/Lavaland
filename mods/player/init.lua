@@ -241,7 +241,7 @@ local formspec_prepend = "bgcolor[#080808BB;false]" ..
 local formspec_default = "size[8,7.25]" ..
 		"button_exit[0.5,1;2,1;home;Home]" ..
 		"button[0.5,0;2,1;status;Status]" ..
-		--"button[6,2;1,1;autocraft;AC]" ..
+		"button[6,2;1,1;autocraft;AC]" ..
 		"button[6,0;1,1;chat;...]" ..
 		"button_exit[7,0;1,1;quit;X]" ..
 		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
