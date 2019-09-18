@@ -26,6 +26,8 @@ local function cons(player)
 		else
 			sat = sat - 0.01
 		end
+		sat = tostring(sat):sub(1, 4)
+		sat = tonumber(sat)
 		stats.update_stats(player, {sat = sat})
 		hud.update(player, "hunger", "number", sat, {name = "hunger"})
 
@@ -79,7 +81,7 @@ minetest.register_on_dieplayer(function(player)
 end)
 
 minetest.register_on_respawnplayer(function(player)
-	 stats.update_stats(player, {sat_max = 20})
+	 stats.update_stats(player, {sat_max = 20, sat = 20})
 end)
 
 print("loaded hunger")
