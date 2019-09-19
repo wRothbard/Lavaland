@@ -5,6 +5,22 @@ local xp_add = function(pos, oldnode, oldmetadata, digger)
 	stats.add_xp(digger, (10 * ((0.1 * lvl.level) + 1)), true)
 end
 
+minetest.register_node("stone:rune", {
+	description = "Stone Rune",
+	tiles = {"stone_rune.png"},
+	groups = {cracky = 2, stone = 1, oddly_breakable_by_hand = 1},
+	sounds = music.sounds.nodes.stone,
+})
+
+minetest.register_craft({
+	output = "stone:rune 4",
+	recipe = {
+		{"stone:stone", "stone:stone", "stone:stone"},
+		{"stone:stone", "", "stone:stone"},
+		{"stone:stone", "stone:stone", "stone:stone"},
+	},
+})
+
 minetest.register_node("stone:stone", {
 	description = "Stone",
 	tiles = {"stone_stone.png"},

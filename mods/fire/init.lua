@@ -281,7 +281,7 @@ minetest.register_abm({
 	chance = 12,
 	catch_up = false,
 	action = function(pos)
-		if minetest.is_protected(pos, "") then
+		if minetest.is_protected(pos, ":fire") then
 			return
 		end
 		local p = minetest.find_node_near(pos, 1, {"air"})

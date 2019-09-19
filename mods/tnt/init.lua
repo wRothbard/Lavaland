@@ -83,7 +83,7 @@ local basic_flame_on_construct -- cached value
 local function destroy(drops, npos, cid, c_air, c_fire,
 		on_blast_queue, on_construct_queue,
 		ignore_protection, ignore_on_blast, owner)
-	if minetest.is_protected(npos, "") then
+	if not ignore_protection and minetest.is_protected(npos, ":tnt") then
 		return cid
 	end
 
@@ -511,7 +511,7 @@ minetest.register_node("tnt:gunpowder_burning", {
 		attached_node = 1,
 		connect_to_raillike = minetest.raillike_group("gunpowder")
 	},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 	on_timer = function(pos, elapsed)
 		for dx = -1, 1 do
 		for dz = -1, 1 do
@@ -597,7 +597,7 @@ function tnt.register_tnt(def)
 		tiles = {tnt_top, tnt_bottom, tnt_side},
 		is_ground_content = false,
 		groups = {dig_immediate = 2, mesecon = 2, tnt = 1, flammable = 5},
-		--sounds = default.node_sound_wood_defaults(),
+		sounds = music.sounds.nodes.wood,
 		after_place_node = function(pos, placer)
 			if placer:is_player() then
 				local meta = minetest.get_meta(pos)
@@ -650,7 +650,7 @@ function tnt.register_tnt(def)
 			},
 		light_source = 5,
 		drop = "",
-		--sounds = default.node_sound_wood_defaults(),
+		sounds = music.sounds.nodes.wood,
 		groups = {falling_node = 1},
 		on_timer = function(pos, elapsed)
 			tnt.boom(pos, def)
@@ -669,6 +669,7 @@ tnt.register_tnt({
 	name = "tnt:tnt",
 	description = "TNT",
 	radius = tnt_radius,
+	ignore_protection = true,
 })
 
 print("loaded tnt")

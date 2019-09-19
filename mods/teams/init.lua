@@ -1,4 +1,10 @@
+teams = {}
+
 local players = {}
+
+teams.get_team = function(name)
+	return players[name]
+end
 
 minetest.register_on_leaveplayer(function(player)
 	players[player:get_player_name()] = nil
@@ -17,11 +23,11 @@ minetest.register_chatcommand("team", {
 				s = s .. v .. ","
 			end
 			s = s:sub(1, -2)
-			return true, s
+			return true, "Your team is: " .. s
 		elseif param[1] == "set" then
 			local n = param[2]:gsub("%W", "")
 			players[name] = n
-			return true, n
+			return true, "Your team is now set to " .. n
 		end
 	end,
 })
