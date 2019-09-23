@@ -11,10 +11,14 @@ if saved then
 	end
 end
 
+local wd = minetest.get_modpath("help")
+local external_pages = minetest.get_dir_list(wd .. "/pages")
+
 if not pages[1] then
-	pages[1] = {title = "Help",
-			text = "This is the help system." ..
-			"\nType /new_page to create a new help page."}
+	for i = 1, #external_pages do
+		local page = external_pages[i]
+		pages[i] = {title = page, text = dofile(wd .. "/pages/" .. page)}
+	end
 end
 
 minetest.register_privilege("help", "Can edit help documentation.")
