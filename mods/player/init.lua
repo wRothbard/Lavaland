@@ -9,7 +9,6 @@ local dead = {}
 
 dofile(minetest.get_modpath("player") .. "/api.lua")
 
--- Default player appearance
 player_api.register_model("character.b3d", {
 	animation_speed = 30,
 	textures = {"player_male.png"},
@@ -304,9 +303,9 @@ minetest.register_item(":", {
 minetest.register_on_newplayer(function(player)
 	local inv = player:get_inventory()
 	local s_items = {
+		"warpstones:diamond",
 		"torch:torch 25",
 		"tools:pick_mese_bone",
-		"tools:sword_mese_bone",
 		"craftguide:book",
 		"wool:red",
 		"wool:green",
@@ -315,11 +314,14 @@ minetest.register_on_newplayer(function(player)
 		"stone:cobble 50",
 		"bucket:bucket_water",
 		"mese:crystal_fragment 10",
+		"backpacks:backpack_leather",
+		"walkie:talkie",
 	}
 	for i = 1, #s_items do
 		local s = s_items[i]
 		inv:add_item("main", s)
 	end
+	minetest.after(1, help.show, player, "NewPlayerInfo")
 end)
 
 minetest.register_on_dieplayer(function(player, reason)

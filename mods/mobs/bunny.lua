@@ -27,7 +27,6 @@ mobs:register_mob("mobs:bunny", {
 	--jump_height = 6,
 	drops = {
 		{name = "mobs:meat_raw", chance = 1, min = 1, max = 2},
-		{name = "mobs:leather", chance = 1, min = 0, max = 1},
 	},
 	lava_damage = 4,
 	animation = {
@@ -74,3 +73,9 @@ mobs:register_mob("mobs:bunny", {
 })
 
 mobs:register_egg("mobs:bunny", S("Bunny"), "mobs_bunny_inv.png", 0)
+
+minetest.register_craft({
+	type = "shapeless",
+	recipe = {"mobs:bunny"},
+	output = "mobs:leather 3",
+})

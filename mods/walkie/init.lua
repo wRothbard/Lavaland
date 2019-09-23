@@ -6,6 +6,9 @@ walkie = {}
 walkie.players = {}
 walkie.meters = {}
 
+local floor = math.floor
+local pi = math.pi
+
 local hud_elem_compass = {
 	hud_elem_type = "image",
 	position = {x = 1, y = 1},
@@ -49,7 +52,7 @@ local function updater(player)
 		walkie.players[name].pos = player:get_pos()
 		walkie.players[name].dir = player:get_look_horizontal()
 		local p = vector.round(walkie.players[name].pos)
-		local d = math.floor(walkie.players[name].dir * math.pi)
+		local d = floor(walkie.players[name].dir * pi)
 		if d >= 1 and d < 4 then
 			player:hud_change(walkie.meters[name].compass,
 					"text",

@@ -1,3 +1,5 @@
+help = {}
+
 local pages = {}
 
 local store = minetest.get_mod_storage()
@@ -69,6 +71,22 @@ local function show_formspec_editor(player, page_num)
 	""
 
 	minetest.show_formspec(name, "help:edit_" .. page_num, formspec)
+end
+
+function help.show(player, topic)
+	if not player then
+		return
+	end
+	local page_num = 1
+	if topic then
+		for i = 1, #pages do
+			if pages[i].title == topic then
+				page_num = i
+				break
+			end
+		end
+	end
+	show_formspec(player, page_num)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
@@ -169,6 +187,20 @@ minetest.register_chatcommand("new_page", {
 
 		store:set_string("pages", minetest.serialize(pages))
 		return true, param .. " created."
+	end,
+})
+
+minetest.register_chatcommand("show_help", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Must be in-game!"
+		end
+		if param ~= "" then
+			help.show(player, param)
+		else
+			help.show(player)
+		end
 	end,
 })
 

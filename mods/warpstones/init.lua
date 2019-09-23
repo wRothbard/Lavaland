@@ -239,7 +239,7 @@ for label, color in pairs(warps) do
 			fixed = {-0.25, -0.5, -0.25,  0.25, 0.5, 0.25}
 		},
 		on_rightclick = on_rightclick,
-		on_blast = on_blast,
+		--on_blast = on_blast,
 		after_place_node = after_place_node,
 		after_dig_node = after_dig_node,
 		on_punch = on_punch,

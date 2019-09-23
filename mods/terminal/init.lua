@@ -251,8 +251,23 @@ terminal.display = function(source, user, pos, input)
 			return close_fs(name, pos, source_n)
 		end
 	elseif command == "waypoint" then
-		output = "set|display"
-		feedback = "Not yet implemented."
+		if args[2] and args[2] == "set" and
+				args[3] and args[3] == "base" then
+			local pteam = teams.get_team(name)
+			local base_loc = bases[pteam]
+			if pteam and base_loc then
+				feedback = function()
+					print("show base")
+				end
+			end
+		elseif args[2] and args[2] == "display" and
+				args[3] and args[3] == "off" then
+			feedback = function()
+				print("toggle display")
+			end
+		else
+			output = "set [base|home|bones|specify <pos>] | display [on | off]"
+		end
 	else
 		output = "Unknown command. Type help for a list."
 		feedback = ""

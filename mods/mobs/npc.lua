@@ -95,12 +95,13 @@ local pg_fs = function(pg_st)
 end
 
 npc_drops = {
-	{name = "tools:pick_mese", chance = 0.9},
+	{name = "tools:pick_mese 1 21323", chance = 0.6},
+	{name = "tools:pick_diamond", chance = 0.9},
 	{name = "tools:sword_mese", chance = 0.9},
 	{name = "tools:axe_mese", chance = 0.9},
 	{name = "tools:shovel_mese", chance = 0.9},
 	{name = "fireflies:bug_net", chance = 0.7},
-	{name = "mobs:shears", chance = 0.5},
+	{name = "tools:shears", chance = 0.5},
 	{name = "tools:crystalline_bell", chance = 0.2},
 	{name = "farming:bread", chance = 0.8, count = {1, 2}},
 	{name = "gravel:gravel", chance = 0.8, count = {15, 25}},
@@ -123,9 +124,10 @@ npc_drops = {
 	{name = "dye:blue", chance = 0.8, count = {2, 4}},
 	{name = "trees:wood", chance = 0.8},
 	{name = "wool:white", chance = 0.8, count = {5, 10}},
-	{name = "wool:red", chance = 0.8},
-	{name = "wool:green", chance = 0.8},
+	{name = "wool:red", chance = 0.8, count = {1, 3}},
+	{name = "wool:green", chance = 0.8, count = {1, 3}},
 	{name = "copper:ingot", chance = 0.8, count = {1, 3}},
+	{name = "mobs:leather", chance = 0.8, count = {1, 5}},
 }
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)

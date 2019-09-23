@@ -154,6 +154,28 @@ function hud.message(player, message)
 	end
 end
 
+local waypoint = {
+	name = "",
+	text = "",
+	number = 0xFFFFFF,
+	world_pos = {x = 0, y = 0, z = 0},
+}
+
+function hud.waypoint(player, det)
+	local name = player:get_player_name()
+	local w = players[name].waypoints
+	if not det then
+		for i = 1, #w do
+			player:hud_remove(w[i].id)
+		end
+		return
+	end
+	local d = waypoint
+	d.pos = det.pos or {x = 0, y = 0, z = 0}
+	local id = player:hud_add(d)
+	players[name].waypoints[#w + 1] = {id = id}
+end
+
 minetest.register_chatcommand("hmsg", {
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
@@ -177,6 +199,7 @@ minetest.register_on_joinplayer(function(player)
 		armor = player:hud_add(sb_armor),
 		hunger = player:hud_add(sb_hunger),
 		messages = player:hud_add(hmsg),
+		waypoints = {}
 	}
 	messages[name] = {[1] = "", [2] = "", [3] = "", [4] = "", [5] = 1}
 end)
