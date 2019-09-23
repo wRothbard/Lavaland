@@ -522,6 +522,36 @@ minetest.register_node("books:bookshelf", {
 	end,
 })
 
+minetest.register_node("books:multishelf", {
+	description = "Multishelf",
+	on_rotate = screwdriver.rotate_simple,
+	tiles = {
+		"default_wood.png", "default_wood.png", "default_wood.png",
+		"default_wood.png", "default_wood.png^books_multishelf.png"
+	},
+	paramtype2 = "facedir",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		inv:set_size("main", 8 * 2)
+		inv:set_list("main", {})
+		meta:set_string("formspec",
+				"size[8,6.5]list[context;main;0,0;8,2]" ..
+				"list[current_player;main;0,2.5;8,4]listring[]")
+	end,
+	groups = {choppy = 3, oddly_breakable_by_hand = 2, flammable = 3},
+	sounds = music.sounds.nodes.wood,
+})
+
+minetest.register_craft({
+	output = "books:multishelf",
+	recipe = {
+		{"group:wood", "group:wood", "group:wood"},
+		{"group:vessel", "group:book", "group:vessel"},
+		{"group:wood", "group:wood", "group:wood"}
+	}
+})
+
 minetest.register_craft({
 	type = "fuel",
 	recipe = "books:bookshelf",

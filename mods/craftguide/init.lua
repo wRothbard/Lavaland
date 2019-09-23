@@ -1014,6 +1014,12 @@ else
 	})
 
 	M.register_craft({
+		type = "shapeless",
+		output = "books:book",
+		recipe = {"craftguide:book"},
+	})
+
+	M.register_craft({
 		output = "craftguide:book",
 		recipe = {
 			{"books:book"}
