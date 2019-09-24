@@ -18,9 +18,9 @@ local damage = function(pos, res, amt)
 	st = st - amt
 	if st <= 0 then
 		minetest.remove_node(pos)
-		minetest.add_item(pos, "bases:base")
 	else
 		meta:set_int("integrity", st)
+		meta:set_string("infotext", "Integrity is at " .. st .. "!")
 	end
 	if res then
 		return st
