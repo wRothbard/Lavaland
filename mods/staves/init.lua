@@ -1,9 +1,120 @@
 local cooldown = {}
 local boom = {radius = 3, explode_center = true}
 
+local warp = function(name, pos)
+	local player = minetest.get_player_by_name(name)
+	if not player then
+		return
+	end
+	local e = pos
+	e.y = e.y + 1
+	local ne = minetest.get_node(e)
+	local nn = minetest.get_node(pos)
+	local def
+	if nn and nn.name then
+		def = minetest.registered_nodes[nn.name]
+	end
+	if def then
+		def = def.walkable
+	end
+	if ne and ne.name ~= "air" then
+		def = nil
+	end
+	if def then
+		def = vector.floor(e)
+		def.y = def.y + 1
+		player:set_pos(def)
+	else
+		player:set_pos(pos)
+	end
+end
+
+minetest.register_entity("staves:warp", {
+	description = "Fireball",
+	visual = "sprite",
+	textures = {"mobs_fireball.png^[brighten^[colorize:blue:59"},
+	glow = 14,
+	on_activate = function(self, staticdata, dtime_s)
+		self.owner = staticdata or "singleplayer"
+	end,
+	on_step = function(self, dtime)
+		local step = self.step or 0
+		self.step = step + 1
+		local pos = self.object:get_pos()
+		if step > 36 then
+			warp(self.owner, pos)
+			self.object:remove()
+			return
+		end
+		local objects = minetest.get_objects_inside_radius(pos, 0.85)
+		for i = 1, #objects do
+			if objects[i]:is_player() then
+				if objects[i]:get_player_name() ~= self.owner then
+					warp(self.owner, self.obect:get_pos())
+					self.object:remove()
+					return
+				end
+			elseif objects[i]:get_luaentity().horny ~= nil then
+				warp(self.owner, self.object:get_pos())
+				self.object:remove()
+				return
+			end
+		end
+		local node = minetest.get_node_or_nil(pos)
+		if not node then
+			return
+		end
+		local node_name = node.name
+		if not node_name then
+			return
+		end
+		local node_def = minetest.registered_nodes[node_name]
+		if not node_def then
+			return
+		end
+		local walkable = node_def.walkable
+		if not walkable then
+			return
+		end
+		warp(self.owner, self.object:get_pos())
+		self.object:remove()
+	end,
+
+})
+
 minetest.register_tool("staves:teleportation", {
 	description = "Staff of Teleportation",
-	inventory_image = "default_stick.png",
+	inventory_image = "staves_teleportation.png",
+	wield_scale = {x = 1, y = 1.2, z = 1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name()
+		if not cooldown[name] then
+			cooldown[name] = true
+			minetest.after(1, function()
+				if cooldown[name] then
+					cooldown[name] = nil
+				end
+			end)
+			local pos = user:get_pos()
+			pos.y = pos.y + 1.25
+			local dir = user:get_look_dir()
+			pos = vector.add(pos, dir)
+			local arrow = minetest.add_entity(pos, "staves:warp", name)
+			arrow:set_acceleration(dir)
+			arrow:set_velocity(vector.multiply(dir, 12))
+			itemstack:add_wear(3800)
+		end
+		return itemstack
+	end,
+})
+
+minetest.register_craft({
+	output = "staves:teleportation",
+	recipe = {
+		{"diamond:diamond"},
+		{"obsidian:shard"},
+		{"trees:stick"},
+	},
 })
 
 minetest.register_entity("staves:fireball", {
