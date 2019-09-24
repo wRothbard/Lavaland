@@ -349,12 +349,21 @@ minetest.register_on_dieplayer(function(player, reason)
 	local items = {}
 	for k, list in pairs(p_inv:get_lists()) do
 		if k ~= "bed" and k ~= "backpack" then
+			local wit
 			for i, n in pairs(list) do
 				if not n:is_empty() then
-					items[#items + 1] = n
+					if n:get_name() == "walkie:talkie" and
+							not wit then
+						wit = n
+					else
+						items[#items + 1] = n
+					end
 				end
 			end
 			p_inv:set_list(k, {})
+			if wit then
+				p_inv:set_stack("main", 1, wit)
+			end
 		end
 	end
 
