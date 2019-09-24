@@ -51,10 +51,6 @@ local on_punch = function(pos, node, puncher, pointed_thing)
 	boom(pos)
 end
 
-local can_dig = function(pos, player)
-	return damage(pos, true, 300) <= 0 
-end
-
 local on_timer = function(pos, elapsed)
 	if elapsed > 667 then
 		minetest.remove_node(pos)
@@ -67,6 +63,13 @@ end
 
 local on_blast = function(pos)
 	damage(pos, nil, 100)
+	return
+end
+
+local after_place_node = function(pos, placer, itemstack, pointed_thing)
+	if not minetest.check_player_privs(placer, "game_master") then
+		minetest.remove_node(pos)
+	end
 end
 
 local check_air = function(pos)
@@ -81,36 +84,37 @@ end
 minetest.register_node("bases:base", {
 	description = "Base",
 	tiles = {"stone_rune.png^(bases_base.png^[opacity:99)"},
-	groups = {snappy = 1},
 	on_rightclick = on_rightclick,
+	can_dig = function() end,
+	after_place_node = after_place_node,
 })
 
 minetest.register_node("bases:base_green", {
 	description = "Base Active (Green, You Hacker You!)",
 	tiles = {"stone_rune.png^(bases_base_green.png^[opacity:99)"},
-	groups = {snappy = 1},
 	paramtype = "light",
 	light_source = minetest.LIGHT_MAX,
-	drop = "bases:base",
+	drop = "",
 	on_rightclick = on_rightclick,
 	on_punch = on_punch,
-	can_dig = can_dig,
+	can_dig = function() end,
 	on_timer = on_timer,
 	on_blast = on_blast,
+	after_place_node = after_place_node,
 })
 
 minetest.register_node("bases:base_red", {
 	description = "Base Active (Red, You Hacker You!)",
 	tiles = {"stone_rune.png^(bases_base_red.png^[opacity:99)"},
-	groups = {snappy = 1},
 	paramtype = "light",
 	light_source = minetest.LIGHT_MAX,
-	drop = "bases:base",
+	drop = "",
 	on_rightclick = on_rightclick,
 	on_punch = on_punch,
-	can_dig = can_dig,
+	can_dig = function() end,
 	on_timer = on_timer,
 	on_blast = on_blast,
+	after_place_node = after_place_node,
 })
 
 minetest.register_node("bases:base_blue", {
@@ -119,12 +123,13 @@ minetest.register_node("bases:base_blue", {
 	groups = {snappy = 1},
 	paramtype = "light",
 	light_source = minetest.LIGHT_MAX,
-	drop = "bases:base",
+	drop = "",
 	on_rightclick = on_rightclick,
 	on_punch = on_punch,
-	can_dig = can_dig,
+	can_dig = function() end,
 	on_timer = on_timer,
 	on_blast = on_blast,
+	after_place_node = after_place_node,
 })
 
 minetest.register_abm({
@@ -151,5 +156,7 @@ minetest.register_abm({
 		end
 	end,
 })
+
+minetest.register_privilege("game_master", "Can administer games.")
 
 print("loaded bases")
