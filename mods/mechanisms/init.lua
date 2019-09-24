@@ -29,13 +29,6 @@ mechanisms.warp = function(player, send)
 	end
 end
 
-mechanisms.boom = function(player)
-	local d = {
-		radius = 1.5,
-	}
-	return tnt.boom(player:get_pos(), d)
-end
-
 local function door_toggle(pos_actuator, pos_door, player)
 	local rating = minetest.get_item_group(minetest.get_node_or_nil(pos_door).name)
 	local door = doors.get(pos_door)
@@ -71,7 +64,12 @@ local function door_toggle(pos_actuator, pos_door, player)
 					return mechanisms.warp(player, f[i + 1])
 				elseif word == "boom" and
 						i == 3 then
-					return mechanisms.boom(player)
+					tnt.boom(player:get_pos(), {
+						radius = 1.5,
+						ignore_protection = false,
+						explode_center = true,
+					})
+					return
 				elseif word == "say" and
 						i == 3 then
 					local t = minetest.get_node_timer(pos_door)
