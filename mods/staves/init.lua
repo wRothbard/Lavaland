@@ -1,5 +1,5 @@
 local cooldown = {}
-local boom = {radius = 3}
+local boom = {radius = 3, explode_center = true}
 
 minetest.register_tool("staves:teleportation", {
 	description = "Staff of Teleportation",
@@ -58,7 +58,8 @@ minetest.register_entity("staves:fireball", {
 
 minetest.register_tool("staves:destruction", {
 	description = "Staff of Destruction",
-	inventory_image = "default_stick.png",
+	inventory_image = "staves_destruction.png",
+	wield_scale = {x = 1, y = 1.2, z = 1},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name()
 		if not cooldown[name] then
@@ -75,10 +76,19 @@ minetest.register_tool("staves:destruction", {
 			local arrow = minetest.add_entity(pos, "staves:fireball", name)
 			arrow:set_acceleration(dir)
 			arrow:set_velocity(vector.multiply(dir, 12))
-			itemstack:add_wear(1000)
+			itemstack:add_wear(7600)
 		end
 		return itemstack
 	end,
+})
+
+minetest.register_craft({
+	output = "staves:destruction",
+	recipe = {
+		{"mese:crystal"},
+		{"obsidian:shard"},
+		{"trees:stick"},
+	},
 })
 
 minetest.register_on_leaveplayer(function(player)
