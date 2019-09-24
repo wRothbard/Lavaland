@@ -300,21 +300,30 @@ minetest.register_item(":", {
 	},
 })
 
+local bp = {
+	meta = {
+		infotext = "Leather Backpack",
+		inventory = "return {\"bucket:bucket_water\", \"stone:cobble 50\", \"mese:crystal_fragment 10\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"}",
+		description = "Leather Backpack"
+	},
+	metadata = "",
+	count = 1,
+	name = "backpacks:backpack_leather",
+	wear = 0,
+}
+
 minetest.register_on_newplayer(function(player)
 	local inv = player:get_inventory()
 	local s_items = {
 		"warpstones:diamond",
-		"torch:torch 25",
 		"tools:pick_mese_bone",
+		"torch:torch 25",
 		"craftguide:book",
 		"wool:red",
 		"wool:green",
 		"wool:blue",
 		"gold:block",
-		"stone:cobble 50",
-		"bucket:bucket_water",
-		"mese:crystal_fragment 10",
-		"backpacks:backpack_leather",
+		ItemStack(bp),
 		"walkie:talkie",
 	}
 	for i = 1, #s_items do
