@@ -81,7 +81,9 @@ mobs:register_arrow("mobs:fireball", {
 		self.object:set_armor_groups({immortal = 1, fleshy = 100})
 	end,
 	hit_player = function(self, player)
-		boom(self.object:get_pos())
+		if self.owner_id ~= player:get_player_name() then
+			boom(self.object:get_pos())
+		end
 	end,
 	hit_mob = function(self, player)
 		boom(self.object:get_pos())

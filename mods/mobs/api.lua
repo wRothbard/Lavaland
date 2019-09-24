@@ -2687,11 +2687,8 @@ function mobs:register_arrow(name, def)
 
 			local pos = self.object:get_pos()
 
-			if self.switch == 0
-			or self.timer > 150 then
-
-				self.object:remove() ; -- print ("removed arrow")
-
+			if self.switch == 0 or self.timer > 150 then
+				self.object:remove()
 				return
 			end
 
