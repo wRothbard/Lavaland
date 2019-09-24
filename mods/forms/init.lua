@@ -9,26 +9,35 @@ forms.get_hotbar_bg = function(x, y)
 	return out
 end
 
-forms.exit_button = function(x, y)
-	if not x then
-		x = 0
-	end
-	if not y then
-		y = 0
-	end
-	return "button_exit[" .. 7.44 + x .. "," ..
-			-0.034 + y .. ";0.7,0.667;;x]"
+forms.exit_button = function(x, y, w, h)
+	x = x or 0
+	y = y or 0
+	w = w or 7.44
+	h = h or -0.034
+	return "button_exit[" .. w + x .. "," ..
+			h + y .. ";0.7,0.667;;x]"
 end
 
-forms.help_button = function(x, y)
-	if not x then
-		x = 0
-	end
-	if not y then
-		y = 0
-	end
-	return "button[" .. 6.94 + x .. "," ..
-			-0.034 + y .. ";0.7,0.667;help;?]"
+forms.help_button = function(x, y, w, h)
+	x = x or 0
+	y = y or 0
+	w = w or 6.94
+	h = h or -0.034
+	return "button[" .. w + x .. "," ..
+			h + y .. ";0.7,0.667;help;?]"
+end
+
+forms.title_bar = function(x, y, w, h)
+	x = x or 0
+	y = y or 0
+	w = w or 8
+	h = h or 1
+	return "container[" .. x .. "," .. y .. ";" .. w .. "," .. h .. "]" ..
+		--"box[0,0;8,1;black]" ..
+		"label[0,0;WTF]" ..
+		forms.help_button() ..
+		forms.exit_button() ..
+	"container_end[]"
 end
 
 forms.message = function(player, message, dialog, formname, title, no_chat_msg)
