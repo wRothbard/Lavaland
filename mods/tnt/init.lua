@@ -669,7 +669,7 @@ tnt.register_tnt({
 	name = "tnt:tnt",
 	description = "TNT",
 	radius = tnt_radius,
-	ignore_protection = true,
+	ignore_protection = false,
 })
 
 print("loaded tnt")
