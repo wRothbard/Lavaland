@@ -54,7 +54,6 @@ end
 local on_timer = function(pos, elapsed)
 	if elapsed > 667 then
 		minetest.remove_node(pos)
-		minetest.add_item(pos, "bases:base")
 		boom(pos)
 	end
 	local wt = minetest.get_node_timer(pos)
