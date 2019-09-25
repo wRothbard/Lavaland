@@ -1,12 +1,37 @@
-local warps = {
-	mese = "yellow",
-	--amethyst = "0x542164CC",
-	diamond = "blue",
-	--ruby = "red",
-	--emerald = "emerald",
-}
+local ar = {pvp = {}, b = {}}
+local as = AreaStore()
+local ms = minetest.get_mod_storage()
+local wa = ms:get("wa")
+if wa then
+	wa = minetest.deserialize(wa)
+	if wa then
+		ar = wa
+		for i = 1, #ar.pvp do
+			as:insert_area(ar.pvp[i][1], ar.pvp[i][2], "nopvp")
+		end
+	end
+end
+
+local function ppp(pos)
+	local p = as:get_areas_for_pos(pos)
+	for k, v in pairs(p) do
+		if k then
+			return true, k
+		end
+	end
+	return false
+end
+warpstones = {ppp = ppp}
 
 local selected = {}
+local function show_rest(name, pos)
+	minetest.show_formspec(name, "warpstones:emerald",
+		"size[8,8]" ..
+		"button[0,0;1.5,1;show;Show]" ..
+		"button[1.5,0;1.5,1;set;Set]" ..
+	"")
+end
+
 local function warp_formspec(name)
 	local dest = selected[name]
 	if dest then
@@ -19,6 +44,14 @@ local function warp_formspec(name)
 		"field_close_on_enter[warp;true]" ..
 	""
 end
+
+local warps = {
+	mese = "yellow",
+	--amethyst = "0x542164CC",
+	diamond = "blue",
+	--ruby = "red",
+	emerald = "emerald",
+}
 
 local timer
 local on_punch = function(pos, node, puncher, pointed_thing)
@@ -84,6 +117,8 @@ local on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 			stats.show_more(clicker, true)
 		end
 		return
+	elseif node.name == "warpstones:emerald" then
+		show_rest(name, pos)
 	end
 end
 
@@ -208,6 +243,27 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			sat = 20,
 		})
 	end
+	if formname == "warpstones:emerald" then
+		local pos = selected[name] --player:get_pos()
+		if fields.set then
+			if minetest.is_protected(pos, name) then
+				return
+			end
+			local a, p = ppp(pos)
+			if a then
+				as:remove_area(p)
+				ar.pvp[p] = nil
+				ms:set_string("wa", minetest.serialize(ar))
+			else
+				local p1, p2 = s_protect.get_area_bounds(pos)
+				as:insert_area(p1, p2, "nopvp")
+				table.insert(ar.pvp, {p1, p2})
+				ms:set_string("wa", minetest.serialize(ar))
+			end
+		elseif fields.show then
+			minetest.chat_send_player(name, tostring(ppp(pos)))
+		end
+	end
 end)
 
 minetest.register_on_leaveplayer(function(player)
@@ -244,11 +300,9 @@ for label, color in pairs(warps) do
 		after_dig_node = after_dig_node,
 		on_punch = on_punch,
 	})
-	local mat
+	local mat = "mese:mese"
 	if label ~= "mese" then
-		mat = "diamond:block"
-	else
-		mat = "mese:mese"
+		mat = label .. ":block"
 	end
 	minetest.register_craft({
 		output = "warpstones:" .. label,

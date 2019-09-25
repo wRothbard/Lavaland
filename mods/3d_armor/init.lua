@@ -223,7 +223,8 @@ end)
 minetest.register_on_punchplayer(function(player, hitter,
 		time_from_last_punch, tool_capabilities)
 	local name = player:get_player_name()
-	if name and player:get_wielded_item():get_name():sub(1, 11) ~= "warpstones:" then
+	if name and not warpstones.ppp(player:get_pos())
+			and player:get_wielded_item():get_name():sub(1, 11) ~= "warpstones:" then
 		armor:punch(player, hitter, time_from_last_punch, tool_capabilities)
 		last_punch_time[name] = minetest.get_gametime()
 	else

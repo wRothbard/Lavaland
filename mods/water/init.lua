@@ -159,20 +159,23 @@ minetest.register_node("water:flowing", {
 })
 
 local minerals = {
-	"stone:stone_with_iron",
-	"stone:stone_with_coal",
-	"stone:stone_with_copper",
-	"stone:stone_with_gold",
-	"stone:stone_with_diamond",
+	{name = "stone:stone_with_emerald", chance = 75},
+	{name = "stone:stone_with_diamond", chance = 60},
+	{name = "stone:stone_with_gold", chance = 40},
+	{name = "stone:stone_with_coal", chance = 25},
+	{name = "stone:stone_with_copper", chance = 20},
+	{name = "stone:stone_with_iron", chance = 15},
 }
 
 local cool_lava = function(pos, node)
 	if node.name == "lava:source" then
 		minetest.set_node(pos, {name = "obsidian:obsidian"})
 	else -- Lava flowing
-		local n = "stone:stone"
-		if rand() < 0.15 then
-			n = minerals[rand(#minerals)]
+		local n = minerals[rand(#minerals)]
+		if rand() < 0.334 and rand(100) > n.chance then
+			n = n.name
+		else
+			n = "stone:stone"
 		end
 		minetest.set_node(pos, {name = n})
 	end

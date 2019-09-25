@@ -126,6 +126,30 @@ minetest.register_node("stone:stone_with_diamond", {
 	after_dig_node = xp_add,
 })
 
+minetest.register_node("stone:stone_with_emerald", {
+	description = "Emerald Ore",
+	tiles = {"stone_stone.png^stone_mineral_emerald.png"},
+	groups = {cracky = 2, oddly_breakable_by_hand = 1},
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				rarity = 5,
+				items = {"stone:cobble"}
+			},
+			{
+				rarity = 3,
+				items = {"stone:cobble", "emerald:emerald 2"}
+			},
+			{
+				items = {"stone:cobble", "emerald:emerald"}
+			},
+		}
+	},
+	sounds = music.sounds.nodes.stone,
+	after_dig_node = xp_add,
+})
+
 minetest.register_node("stone:stone_with_iron", {
 	description = "Iron Ore",
 	tiles = {"stone_stone.png^stone_mineral_iron.png"},
