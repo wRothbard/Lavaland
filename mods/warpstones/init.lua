@@ -21,7 +21,6 @@ local function ppp(pos, t)
 		if k then
 			if t then
 				local t = as:get_area(k, true, true)
-				print(dump(t))
 				if t.data == "base" then
 					return true
 				else

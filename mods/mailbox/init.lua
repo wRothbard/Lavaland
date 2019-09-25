@@ -138,7 +138,6 @@ minetest.register_node("mailbox:letterbox", {
 	can_dig = can_dig,
 	on_metadata_inventory_put = on_metadata_inventory_put,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		print(stack:get_name())
 		if minetest.get_node(pos).name == "mailbox:letterbox" and
 				stack:get_name() ~= "books:book_written" then
 			minetest.chat_send_player(player:get_player_name(),
