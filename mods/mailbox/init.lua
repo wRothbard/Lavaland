@@ -83,7 +83,9 @@ local function can_dig(pos, player)
 	local owner = meta:get_string("owner")
 	local player_name = player:get_player_name()
 	local inv = meta:get_inventory()
-	return inv:is_empty("mailbox") and player and player_name == owner
+	return inv:is_empty("mailbox") and
+			player and (player_name == owner or
+			protector.can_interact_with_node(player, pos))
 end
 
 minetest.register_node("mailbox:mailbox", {

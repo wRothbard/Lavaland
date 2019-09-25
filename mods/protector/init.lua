@@ -2,7 +2,8 @@ protector = {}
 
 function protector.can_interact_with_node(player, pos)
 	if player then
-		if minetest.check_player_privs(player, "protection_bypass") then
+		if minetest.check_player_privs(player, "protection_bypass") or
+				warpstones.ppp(pos, true) then
 			return true
 		end
 	else

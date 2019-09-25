@@ -1,7 +1,22 @@
 bases = {}
 
+local selected = {}
+
 local boom = function(pos)
 	tnt.boom(pos, {ignore_protection = true, explode_center = true, radius = 4})
+end
+
+local remover = function(pos)
+	local n = minetest.get_node(pos)
+	if n and n.name then
+		n = n.name:sub(12, -1)
+	end
+	if bases[n] then
+		bases[n] = nil
+	end
+	minetest.chat_send_all(n .. " destroyed!!")
+	minetest.remove_node(pos)
+	boom(pos)
 end
 
 local damage = function(pos, res, amt)
@@ -17,7 +32,7 @@ local damage = function(pos, res, amt)
 	end
 	st = st - amt
 	if st <= 0 then
-		minetest.remove_node(pos)
+		remover(pos)
 	else
 		meta:set_int("integrity", st)
 		meta:set_string("infotext", "Integrity is at " .. st .. "!")
@@ -27,41 +42,38 @@ local damage = function(pos, res, amt)
 	end
 end
 
-local cycle = function(pos, name)
-	local meta = minetest.get_meta(pos)
-	local team = teams.get_team(name)
-	local base = meta:get("base")
-	if not base or base == "blue" then
-		base = "red"
-	elseif base == "red" then
-		base = "green"
-	elseif base == "green" then
-		base = "blue"
-	end
-	minetest.swap_node(pos, {name = "bases:base_" .. base})
-	meta:set_string("base", base)
-	bases[base] = pos
+local function activate(pos, player)
+	local fs = "size[8,4]" ..
+		"button[0,0;2,1;set;Set]" ..
+		"button[2,0;2,1;show;Show]" ..
+	""
+	minetest.show_formspec(player:get_player_name(), "bases:base", fs)
 end
 
 local on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-	cycle(pos, clicker:get_player_name())
+	if node.name == "bases:base" then
+		selected[clicker:get_player_name()] = pos
+		activate(pos, clicker)
+	end
 end
 
 local on_punch = function(pos, node, puncher, pointed_thing)
+	if node.name == "bases:base" then
+		return
+	end
 	boom(pos)
 end
 
 local on_timer = function(pos, elapsed)
 	if elapsed > 667 then
-		minetest.remove_node(pos)
-		boom(pos)
+		remover(pos)
 	end
 	local wt = minetest.get_node_timer(pos)
 	wt:set(0.1, elapsed + 0.1)
 end
 
 local on_blast = function(pos)
-	damage(pos, nil, 100)
+	damage(pos, nil, 334)
 	return
 end
 
@@ -80,11 +92,41 @@ local check_air = function(pos)
 			n.name == "bases:base_green")
 end
 
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "bases:base" then
+		local name = player:get_player_name()
+		local pos = selected[name]
+		if fields.show then
+			minetest.chat_send_player(name, tostring(warpstones.ppp(pos, true)))
+		elseif fields.set then
+			local a
+			if not bases.red then
+				bases.red = pos
+				a = "red"
+			elseif not bases.blue then
+				bases.blue = pos
+				a = "blue"
+			elseif not bases.green then
+				bases.green = pos
+				a = "green"
+			end
+			if not a then
+				return false, "Bases full."
+			end
+			minetest.swap_node(pos, {name = "bases:base_" .. a})
+			if not warpstones.ppp(pos, true) then
+				warpstones.base(pos)
+			end
+		end
+	end
+end)
+
 minetest.register_node("bases:base", {
 	description = "Base",
 	tiles = {"stone_rune.png^(bases_base.png^[opacity:99)"},
 	on_rightclick = on_rightclick,
 	can_dig = function() end,
+	drop = "",
 	after_place_node = after_place_node,
 })
 
@@ -155,6 +197,10 @@ minetest.register_abm({
 		end
 	end,
 })
+
+minetest.register_on_leaveplayer(function(player)
+	selected[player:get_player_name()] = nil
+end)
 
 minetest.register_privilege("game_master", "Can administer games.")
 

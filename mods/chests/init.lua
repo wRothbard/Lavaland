@@ -209,15 +209,13 @@ function chests.register_chest(name, d)
 			chests.open_chests[clicker:get_player_name()] = { pos = pos,
 					sound = def.sound_close, swap = name }
 		end
-		--[[
 		def.on_blast = function(pos)
 			local drops = {}
-			default.get_inventory_drops(pos, "main", drops)
+			inventory.get_inventory_drops(pos, "main", drops)
 			drops[#drops+1] = "default:" .. name
 			minetest.remove_node(pos)
 			return drops
 		end
-		--]]
 	end
 
 	def.on_metadata_inventory_move = function(pos, from_list, from_index,
@@ -278,7 +276,7 @@ chests.register_chest("chest", {
 		"default_chest_front.png",
 		"default_chest_inside.png"
 	},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 	sound_open = "default_chest_open",
 	sound_close = "default_chest_close",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
@@ -294,7 +292,7 @@ chests.register_chest("chest_locked", {
 		"default_chest_lock.png",
 		"default_chest_inside.png"
 	},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 	sound_open = "default_chest_open",
 	sound_close = "default_chest_close",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},

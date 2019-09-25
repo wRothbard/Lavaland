@@ -9,19 +9,46 @@ if wa then
 		for i = 1, #ar.pvp do
 			as:insert_area(ar.pvp[i][1], ar.pvp[i][2], "nopvp")
 		end
+		for i = 1, #ar.b do
+			as:insert_area(ar.b[i][1], ar.b[i][2], "base")
+		end
 	end
 end
 
-local function ppp(pos)
+local function ppp(pos, t)
 	local p = as:get_areas_for_pos(pos)
 	for k, v in pairs(p) do
 		if k then
-			return true, k
+			if t then
+				local t = as:get_area(k, true, true)
+				print(dump(t))
+				if t.data == "base" then
+					return true
+				else
+					return false
+				end
+			else
+				return true, k
+			end
 		end
 	end
 	return false
 end
 warpstones = {ppp = ppp}
+
+warpstones.base = function(pos)
+	local a, p = warpstones.ppp(pos)
+	if a then
+		as:remove_area(p)
+		ar.b[p] = nil
+		ms:set_string("wa", minetest.serialize(ar))
+	else
+		local p1, p2 = s_protect.get_area_bounds(pos)
+		as:insert_area(p1, p2, "base")
+		table.insert(ar.b, {p1, p2})
+		ms:set_string("wa", minetest.serialize(ar))
+	end
+end
 
 local selected = {}
 local function show_rest(name, pos)

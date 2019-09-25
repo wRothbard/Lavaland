@@ -175,10 +175,10 @@ minetest.register_node("shop:shop", {
 		elseif fields.ok then
 			-- Shop's closed if not set up, or the till is full.
 			if inv:is_empty("sell" .. pg_current) or
-			    inv:is_empty("buy" .. pg_current) or
-			    (not inv:room_for_item("register", b[1])) then
-				output(player, "Shop closed.")
-				return
+				    inv:is_empty("buy" .. pg_current) or
+				    (not inv:room_for_item("register", b[1])) then
+					output(player, "Shop closed.")
+					return
 			end
 
 			-- Player has funds.
@@ -215,7 +215,7 @@ minetest.register_node("shop:shop", {
 		local n = stack:get_name()
 		local playername = player:get_player_name()
 		if playername ~= owner and
-		    (not minetest.check_player_privs(playername, "shop_admin")) then
+				(not minetest.check_player_privs(playername, "shop_admin")) then
 			return 0
 		else
 			return stack:get_count()
@@ -226,7 +226,7 @@ minetest.register_node("shop:shop", {
 		local owner = meta:get_string("owner")
 		local playername = player:get_player_name()
 		if playername ~= owner and
-		    (not minetest.check_player_privs(playername, "shop_admin"))then
+				(not minetest.check_player_privs(playername, "shop_admin"))then
 			return 0
 		else
 			return stack:get_count()
@@ -237,7 +237,7 @@ minetest.register_node("shop:shop", {
 		local owner = meta:get_string("owner")
 		local playername = player:get_player_name()
 		if playername ~= owner and
-		    (not minetest.check_player_privs(playername, "shop_admin")) then
+				(not minetest.check_player_privs(playername, "shop_admin")) then
 			return 0
 		else
 			return count
@@ -247,12 +247,13 @@ minetest.register_node("shop:shop", {
                 local meta = minetest.get_meta(pos) 
                 local owner = meta:get_string("owner") 
                 local inv = meta:get_inventory() 
-                return player:get_player_name() == owner and
-		    inv:is_empty("register") and
-		    inv:is_empty("stock") and
-		    -- FIXME Make all contents in the buy/sell lists drop as items.
-		    inv:is_empty("buy1") and
-		    inv:is_empty("sell1")
+                return inv:is_empty("register") and
+				inv:is_empty("stock") and
+				-- FIXME Make all contents in the buy/sell lists drop as items.
+				inv:is_empty("buy1") and
+				inv:is_empty("sell1") and
+				(player:get_player_name() == owner or
+				protector.can_interact_with_node(player, pos))
 	end,
 })
 
