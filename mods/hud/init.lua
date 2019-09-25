@@ -155,10 +155,10 @@ function hud.message(player, message)
 end
 
 local waypoint = {
+	hud_elem_type = "waypoint",
 	name = "",
 	text = "",
 	number = 0xFFFFFF,
-	world_pos = {x = 0, y = 0, z = 0},
 }
 
 function hud.waypoint(player, det)

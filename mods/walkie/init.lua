@@ -46,8 +46,7 @@ local function updater(player)
 	if not walkie.players[name] then
 		return
 	end
-	local wielded_name = player:get_wielded_item():get_name()
-	if wielded_name == "walkie:talkie" then
+	if player:get_wielded_item():get_name() == "walkie:talkie" then
 		-- Show compass & coordinates.
 		walkie.players[name].pos = player:get_pos()
 		walkie.players[name].dir = player:get_look_horizontal()
@@ -89,8 +88,7 @@ local function updater(player)
 		player:hud_change(walkie.meters[name].coords,
 				"text",
 				p.x .. ", " .. p.y .. ", " .. p.z)
-		--player:set_properties({zoom_fov = 45})
-		--player:hud_set_flags({minimap = true, minimap_radar = true})
+
 		-- Add waypoint HUD.
 		if not walkie.meters[name].waypoint and
 				walkie.players[name].waypoints.pos then
@@ -103,7 +101,6 @@ local function updater(player)
 			end
 		end
 	else
-		--player:hud_set_flags({minimap = false, minimap_radar = false})
 		-- "Remove" compass and coordinate HUDs.
 		player:hud_change(walkie.meters[name].coords,
 				"text",
@@ -114,8 +111,6 @@ local function updater(player)
 		-- Remove waypoints HUD.
 		if walkie.meters[name].waypoint then
 			player:hud_remove(walkie.meters[name].waypoint)
-			--player:set_properties({zoom_fov = 0})
-			--player:hud_set_flags({minimap = false, minimap_radar = false})
 			walkie.meters[name].waypoint = nil
 		end
 	end
