@@ -94,6 +94,14 @@ terminal.display = function(source, user, pos, input)
 			forms.message(name, chat_message)
 			close_fs(name, pos, source_n)
 		end
+	elseif command == "base" then
+		local a = {}
+		for i = 2, #args do
+			a[#a + 1] = args[i]
+		end
+		feedback = function()
+			bases.set(name, a)
+		end
 	elseif command == "broadcast" then
 		output = "Broadcasting to all players with a walkie talkie on any channel."
 		feedback = ""

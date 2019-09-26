@@ -108,6 +108,14 @@ local function door_toggle(pos_actuator, pos_door, player)
 						end
 						return message(n, m)
 					end
+				elseif word == "base" and
+						i == 3 then
+					local pos = f[4]
+					pos = pos:gsub("\\", "")
+					local y = tonumber(f[5])
+					local color = f[6]
+					bases.initiate(player, pos, y, color)
+					return
 				end
 			end
 		end

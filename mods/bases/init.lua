@@ -1,5 +1,69 @@
 bases = {}
 
+local place_base = function(name, pos, y, color)
+	if not pos then
+		return
+	end
+	pos = minetest.string_to_pos(pos)
+	if not pos then
+		return
+	end
+	if not warpstones.ppp(pos) then
+		return
+	end
+	local player = minetest.get_player_by_name(name)
+	if not player then
+		return
+	end
+	y = y or 0
+	if y < -75 or y > 75 then
+		y = 0
+	end
+	local center = s_protect.get_center(pos)
+	center.y = center.y + y
+	local nn = "bases:base"
+	if color then
+		if bases[color] then
+			return
+		end
+		nn = nn .. "_" .. color
+		bases[color] = center
+	end
+	minetest.set_node(center, {name = nn})
+end
+
+bases.set = function(name, args)
+	local c = args[1]
+	if not c then
+		return
+	end
+	local a = {}
+	for i = 2, #args do
+		local b = args[i]
+		if not b then
+			break
+		end
+		a[#a + 1] = b
+	end
+	if c == "set" then
+		if not minetest.check_player_privs(name, "game_master") then
+			return
+		end
+		local p = a[1]
+		p = p:gsub("\\", "")
+		local y = tonumber(a[2])
+		local color = a[3]
+		place_base(name, p, y, color)
+	end
+end
+
+bases.initiate = function(player, pos, y, color)
+	local name = player:get_player_name()
+	local fs = "size[8,8]"
+	minetest.show_formspec(name, "bases:initiate", fs)
+	bases.set(name, {"set", pos, y, color})
+end
+
 local selected = {}
 
 local boom = function(pos)
