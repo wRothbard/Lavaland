@@ -158,9 +158,16 @@ minetest.register_on_protection_violation(function(pos, name)
 	local now = minetest.get_us_time()
 	local lc = tolc[name] or now
 	tolc[name] = now
-	local t = (tolc[name] - lc) * 0.000001
-	if t > 0 and t < 2.5 then
-		player:set_hp(player:get_hp() - 1)
+	local t = (tolc[name] - lc) * 0.00001
+	if t > 0 and t < 0.5 then
+		minetest.after(0.1, function()
+			if minetest.get_player_by_name(player:get_player_name()) then
+				local h = player:get_hp()
+				if h > 0 then
+					player:set_hp(player:get_hp() - 1)
+				end
+			end
+		end)
 		minetest.chat_send_player(name, "Yellow flag.")
 		tolc[name] = nil
 		judge(player, "yellow")
