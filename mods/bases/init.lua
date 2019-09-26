@@ -1,5 +1,19 @@
 bases = {}
 
+local colors = {}
+local ms = minetest.get_mod_storage()
+local save = ms:get("colors")
+if save then
+	save = minetest.deserialize(m)
+end
+if save then
+	colors = save
+end
+
+save = function()
+	ms:set_string("colors", minetest.serialize(bases))
+end
+
 local ini = function(pos)
 	if not warpstones.ppp(pos, true) then
 		minetest.chat_send_player(player:get_player_name(),
@@ -46,11 +60,12 @@ local place_base = function(name, pos, y, color)
 	center.y = center.y + y
 	local nn = "bases:base"
 	if color then
-		if bases[color] then
+		if colors[color] then
 			return
 		end
 		nn = nn .. "_" .. color
-		bases[color] = center
+		colors[color] = center
+		save()
 	end
 	ini(center)
 	minetest.set_node(center, {name = nn})
@@ -96,12 +111,13 @@ local remover = function(pos)
 	if n and n.name then
 		n = n.name:sub(12, -1)
 	end
-	if bases[n] then
-		bases[n] = nil
+	if colors[n] then
+		colors[n] = nil
 	end
 	minetest.chat_send_all(n .. " destroyed!!")
 	minetest.remove_node(pos)
 	boom(pos)
+	save()
 end
 
 local damage = function(pos, res, amt)
@@ -185,14 +201,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			minetest.chat_send_player(name, tostring(warpstones.ppp(pos, true)))
 		elseif fields.set then
 			local a
-			if not bases.red then
-				bases.red = pos
+			if not colors.red then
+				colors.red = pos
 				a = "red"
-			elseif not bases.blue then
-				bases.blue = pos
+			elseif not colors.blue then
+				colors.blue = pos
 				a = "blue"
-			elseif not bases.green then
-				bases.green = pos
+			elseif not colors.green then
+				colors.green = pos
 				a = "green"
 			end
 			if not a then
@@ -202,6 +218,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if not warpstones.ppp(pos, true) then
 				warpstones.base(pos)
 			end
+			save()
 		end
 	end
 end)
