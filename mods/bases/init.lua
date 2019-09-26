@@ -204,4 +204,37 @@ end)
 
 minetest.register_privilege("game_master", "Can administer games.")
 
+local ini = function(player)
+	local pos = player:get_pos()
+	if not warpstones.ppp(pos, true) then
+		minetest.chat_send_player(player:get_player_name(),
+				"Must be a base!")
+		return
+	end
+	local p1, p2 = s_protect.get_area_bounds(pos)
+	local vm = minetest.get_voxel_manip(p1, p2)
+	local data = vm:get_data()
+	local c_air = minetest.CONTENT_AIR
+	for i = 1, #data do
+		local di = data[i]
+		if di ~= c_air then
+			data[i] = c_air
+		end
+	end
+	vm:set_data(data)
+	vm:update_liquids()
+	vm:write_to_map()
+end
+
+minetest.register_chatcommand("vmtest", {
+	privs = "server",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Must be in-game!"
+		end
+		ini(player)
+	end,
+})
+
 print("loaded bases")
