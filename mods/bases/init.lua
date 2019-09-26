@@ -70,9 +70,6 @@ bases.set = function(name, args)
 		a[#a + 1] = b
 	end
 	if c == "set" then
-		if not minetest.check_player_privs(name, "game_master") then
-			return
-		end
 		local p = a[1]
 		p = p:gsub("\\", "")
 		local y = tonumber(a[2])
@@ -291,16 +288,5 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_privilege("game_master", "Can administer games.")
-
-minetest.register_chatcommand("vmtest", {
-	privs = "server",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return false, "Must be in-game!"
-		end
-		ini(player)
-	end,
-})
 
 print("loaded bases")
