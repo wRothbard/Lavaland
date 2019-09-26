@@ -152,7 +152,7 @@ local function entity_physics(pos, radius, drops)
 		local dist = math.max(1, vector.distance(pos, obj_pos))
 
 		local damage = (4 / dist) * radius
-		if obj:is_player() then
+		if obj:is_player() and obj:get_hp() > 0 then
 			-- currently the engine has no method to set
 			-- player velocity. See #2960
 			-- instead, we knock the player back 1.0 node, and slightly upwards
@@ -162,7 +162,11 @@ local function entity_physics(pos, radius, drops)
 			newpos = vector.add(newpos, {x = 0, y = 0.2, z = 0})
 			obj:set_pos(newpos)
 
-			obj:set_hp(obj:get_hp() - damage)
+			minetest.after(0.1, function()
+				if minetest.get_player_by_name(obj:get_player_name()) then
+					obj:set_hp(obj:get_hp() - damage)
+				end
+			end)
 		else
 			local do_damage = true
 			local do_knockback = true
