@@ -212,8 +212,8 @@ local ini = function(player)
 		return
 	end
 	local p1, p2 = s_protect.get_area_bounds(pos)
-	p1.y = p1.y + 1
-	p2.y = p2.y - 1
+	p1.y = p1.y + 15
+	p2.y = p2.y - 15
 	local vm = minetest.get_voxel_manip(p1, p2)
 	local data = vm:get_data()
 	local c_air = minetest.CONTENT_AIR
