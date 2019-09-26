@@ -1,5 +1,28 @@
 bases = {}
 
+local ini = function(pos)
+	if not warpstones.ppp(pos, true) then
+		minetest.chat_send_player(player:get_player_name(),
+				"Must be a base!")
+		return
+	end
+	local p1, p2 = s_protect.get_area_bounds(pos)
+	p1.y = p1.y + 5
+	p2.y = p2.y - 5
+	local vm = minetest.get_voxel_manip(p1, p2)
+	local data = vm:get_data()
+	local c_air = minetest.CONTENT_AIR
+	for i = 1, #data do
+		local di = data[i]
+		if di ~= c_air then
+			data[i] = c_air
+		end
+	end
+	vm:set_data(data)
+	vm:update_liquids()
+	vm:write_to_map()
+end
+
 local place_base = function(name, pos, y, color)
 	if not pos then
 		return
@@ -29,6 +52,7 @@ local place_base = function(name, pos, y, color)
 		nn = nn .. "_" .. color
 		bases[color] = center
 	end
+	ini(center)
 	minetest.set_node(center, {name = nn})
 end
 
@@ -59,7 +83,7 @@ end
 
 bases.initiate = function(player, pos, y, color)
 	local name = player:get_player_name()
-	local fs = "size[8,8]"
+	local fs = "size[8,8]label[0,0;Attempting to restart the base!]"
 	minetest.show_formspec(name, "bases:initiate", fs)
 	bases.set(name, {"set", pos, y, color})
 end
@@ -267,30 +291,6 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_privilege("game_master", "Can administer games.")
-
-local ini = function(player)
-	local pos = player:get_pos()
-	if not warpstones.ppp(pos, true) then
-		minetest.chat_send_player(player:get_player_name(),
-				"Must be a base!")
-		return
-	end
-	local p1, p2 = s_protect.get_area_bounds(pos)
-	p1.y = p1.y + 5
-	p2.y = p2.y - 5
-	local vm = minetest.get_voxel_manip(p1, p2)
-	local data = vm:get_data()
-	local c_air = minetest.CONTENT_AIR
-	for i = 1, #data do
-		local di = data[i]
-		if di ~= c_air then
-			data[i] = c_air
-		end
-	end
-	vm:set_data(data)
-	vm:update_liquids()
-	vm:write_to_map()
-end
 
 minetest.register_chatcommand("vmtest", {
 	privs = "server",
