@@ -1,3 +1,18 @@
+local get_inv = function(pos)
+	local t = {"bones:bone", "bones:bone", "bones:skull"}
+	local inv = minetest.get_meta(pos):get_inventory()
+	local list = inv:get_list("main")
+	if list then
+		for _, v in pairs(list) do
+			local n = v:get_name()
+			if n ~= "" then
+				t[#t + 1] = n
+			end
+		end
+	end
+	return t
+end
+
 minetest.register_node("bones:bones", {
 	description = "Bones",
 	tiles = {
@@ -22,19 +37,13 @@ minetest.register_node("bones:bones", {
 				"listring[]")
 	end,
 	on_dig = function(pos, node, digger)
-		local t = {"bones:bone", "bones:bone", "bones:skull"}
-		local inv = minetest.get_meta(pos):get_inventory()
-		local list = inv:get_list("main")
-		if list then
-			for _, v in pairs(list) do
-				local n = v:get_name()
-				if n ~= "" then
-					t[#t + 1] = n
-				end
-			end
-		end
-		inventory.throw_inventory(pos, t)
+		inventory.throw_inventory(pos, get_inv(pos))
 		minetest.set_node(pos, {name = "air"})
+	end,
+	on_blast = function(pos)
+		local t = get_inv(pos)
+		minetest.set_node(pos, {name = "air"})
+		return t
 	end,
 	on_timer = function(pos, elapsed)
 		local timer = minetest.get_node_timer(pos)
