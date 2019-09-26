@@ -98,6 +98,7 @@ bases.initiate = function(player, pos, y, color)
 	local fs = "size[8,8]label[0,0;Attempting to restart the base!]"
 	minetest.show_formspec(name, "bases:initiate", fs)
 	bases.set(name, {"set", pos, y, color})
+	teams.set_team(name, color)
 end
 
 local selected = {}

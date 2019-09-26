@@ -31,6 +31,9 @@ local function set_clothing(player, team)
 end
 
 teams.set_team = function(name, team)
+	if not team then
+		return
+	end
 	local player = minetest.get_player_by_name(name)
 	if not player then
 		return
