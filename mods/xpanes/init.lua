@@ -100,7 +100,14 @@ function xpanes.register_pane(name, def)
 		inventory_image = def.inventory_image,
 		wield_image = def.wield_image,
 		paramtype2 = "facedir",
-		tiles = {def.textures[3], def.textures[3], def.textures[1]},
+		tiles = {
+			def.textures[3],
+			def.textures[3],
+			def.textures[3],
+			def.textures[3],
+			def.textures[1],
+			def.textures[1],
+		},
 		groups = flatgroups,
 		drop = "xpanes:" .. name .. "_flat",
 		sounds = def.sounds,
@@ -169,7 +176,7 @@ xpanes.register_pane("obsidian_pane", {
 	},
 	inventory_image = "obsidian_glass.png",
 	wield_image = "obsidian_glass.png",
-	sounds = {}, --default.node_sound_glass_defaults(),
+	sounds = music.sounds.nodes.glass,
 	groups = {snappy=2, cracky=3},
 	recipe = {
 		{"obsidian:glass", "obsidian:glass", "obsidian:glass"},
@@ -183,7 +190,7 @@ xpanes.register_pane("bar", {
 	inventory_image = "xpanes_bar.png",
 	wield_image = "xpanes_bar.png",
 	groups = {cracky=2},
-	sounds = {},
+	sounds = music.sounds.material.metal,
 	recipe = {
 		{"steel:ingot", "steel:ingot", "steel:ingot"},
 		{"steel:ingot", "steel:ingot", "steel:ingot"}
