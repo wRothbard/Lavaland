@@ -125,11 +125,13 @@ function flowers.flower_spread(pos, node)
 	-- Replace flora with dry shrub in desert sand and silver sand,
 	-- as this is the only way to generate them.
 	-- However, preserve grasses in sand dune biomes.
+	--[[
 	if minetest.get_item_group(under.name, "sand") == 1 and
 			under.name ~= "sand:sand" then
 		minetest.set_node(pos, {name = "flowers:dry_shrub"})
 		return
 	end
+	--]]
 
 	if minetest.get_item_group(under.name, "soil") == 0 then
 		return

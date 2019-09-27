@@ -56,7 +56,7 @@ function cauldron.filling(pos, node, clicker, itemstack)
 					inv:add_item("main", "bucket:bucket_water 1")
 				else
 					minetest.chat_send_player(clicker:get_player_name(),
-						"No room in your inventory to add a bucket of water.")
+							"No room in your inventory to add a bucket of water.")
 					return itemstack
 				end
 			else

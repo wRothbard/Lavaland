@@ -473,7 +473,7 @@ shapes.register_shapes(
 	{"stone_stone.png"},
 	"Stone Stair",
 	"Stone Slab",
-	{},
+	music.sounds.nodes.stone,
 	true
 )
 
@@ -484,7 +484,7 @@ shapes.register_shapes(
 	{"stone_cobble.png"},
 	"Cobblestone Stair",
 	"Cobblestone Slab",
-	{},
+	music.sounds.nodes.stone,
 	true
 )
 
@@ -495,7 +495,7 @@ shapes.register_shapes(
 	{"stone_mossycobble.png"},
 	"Mossy Cobblestone Stair",
 	"Mossy Cobblestone Slab",
-	{},
+	music.sounds.nodes.stone,
 	true
 )
 
@@ -506,7 +506,7 @@ shapes.register_shapes(
 	{"stone_brick.png"},
 	"Stone Brick Stair",
 	"Stone Brick Slab",
-	{},
+	music.sounds.nodes.stone,
 	false
 )
 
@@ -517,7 +517,7 @@ shapes.register_shapes(
 	{"stone_block.png"},
 	"Stone Block Stair",
 	"Stone Block Slab",
-	{},
+	music.sounds.nodes.stone,
 	true
 )
 --[[
@@ -751,7 +751,7 @@ shapes.register_shapes(
 	music.sounds.material.metal,
 	true
 )
---]]
+
 shapes.register_shapes(
 	"goldblock",
 	"gold:block",
@@ -762,18 +762,18 @@ shapes.register_shapes(
 	music.sounds.material.metal,
 	true
 )
---[[
+
 shapes.register_shapes(
 	"ice",
-	"default:ice",
+	"water:ice",
 	{cracky = 3, cools_lava = 1, slippery = 3},
 	{"default_ice.png"},
 	"Ice Stair",
 	"Ice Slab",
-	default.node_sound_glass_defaults(),
+	music.sounds.nodes.glass,
 	true
 )
-
+--[[
 shapes.register_shapes(
 	"snowblock",
 	"default:snowblock",
@@ -795,7 +795,7 @@ shapes.register_stair(
 	"stairs_glass_stairside.png^[transformFX", "stairs_glass_stairside.png",
 	"default_glass.png", "stairs_glass_split.png"},
 	"Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -805,7 +805,7 @@ shapes.register_slab(
 	{cracky = 3},
 	{"default_glass.png", "default_glass.png", "stairs_glass_split.png"},
 	"Glass Slab",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -817,7 +817,7 @@ shapes.register_stair_inner(
 	"stairs_glass_stairside.png^[transformFX", "default_glass.png",
 	"default_glass.png", "stairs_glass_stairside.png"},
 	"Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -829,7 +829,7 @@ shapes.register_stair_outer(
 	"stairs_glass_outer_stairside.png", "stairs_glass_stairside.png",
 	"stairs_glass_stairside.png^[transformR90","stairs_glass_outer_stairside.png"},
 	"Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -841,7 +841,7 @@ shapes.register_stair(
 	"stairs_obsidian_glass_stairside.png^[transformFX", "stairs_obsidian_glass_stairside.png",
 	"obsidian_glass.png", "stairs_obsidian_glass_split.png"},
 	"Obsidian Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -851,7 +851,7 @@ shapes.register_slab(
 	{cracky = 3},
 	{"obsidian_glass.png", "obsidian_glass.png", "stairs_obsidian_glass_split.png"},
 	"Obsidian Glass Slab",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -863,7 +863,7 @@ shapes.register_stair_inner(
 	"stairs_obsidian_glass_stairside.png^[transformFX", "obsidian_glass.png",
 	"obsidian_glass.png", "stairs_obsidian_glass_stairside.png"},
 	"Obsidian Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 
@@ -875,7 +875,7 @@ shapes.register_stair_outer(
 	"stairs_obsidian_glass_outer_stairside.png", "stairs_obsidian_glass_stairside.png",
 	"stairs_obsidian_glass_stairside.png^[transformR90","stairs_obsidian_glass_outer_stairside.png"},
 	"Obsidian Glass Stair",
-	{},
+	music.sounds.nodes.glass,
 	false
 )
 

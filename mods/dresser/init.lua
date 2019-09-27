@@ -2,9 +2,7 @@
 -- Copyright 2018 James Stevenson
 -- GNU GPL 3
 
-
 local players = {}
---dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/skins.lua")
 
 local function formspec(name)
 	local player = minetest.get_player_by_name(name)
@@ -53,16 +51,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
---[[
-minetest.register_on_joinplayer(function(player)
-	if not player then
-		return
-	end
-	local inv = player:get_inventory()
-	inv:set_size("skin", 1)
-end)
---]]
-
 minetest.register_allow_player_inventory_action(function(player, action, inventory, inventory_info)
 	if action == "move" then
 		if inventory_info.from_list == "main" and inventory_info.to_list == "skin" then
@@ -75,28 +63,6 @@ minetest.register_allow_player_inventory_action(function(player, action, invento
 		end
 	end
 end)
-
---[[
-minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
-	if action == "move" and inventory_info.to_list == "skin" then
-		local skin = inventory:get_stack("skin", 1):get_definition()._skin
-		if skin then
-			multiskin.set_player_skin(player, skin)
-			multiskin.update_player_visuals(player)
-		end
-	elseif (action == "move" and
-				inventory_info.from_list == "skin") or
-				(action == "take" and
-				inventory_info.listname == "skin") then
-		local gender = player:get_meta():get_string("gender")
-		local skin = "multiskin_" .. gender .. ".png"
-		if skin ~= player:get_meta():get_string("multiskin_skin") then
-			multiskin.set_player_skin(player, skin)
-			multiskin.update_player_visuals(player)
-		end
-	end
-end)
---]]
 
 minetest.register_on_respawnplayer(function(player)
 	if not player then

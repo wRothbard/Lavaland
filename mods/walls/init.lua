@@ -40,12 +40,12 @@ walls.register = function(wall_name, wall_desc, wall_texture_table, wall_mat, wa
 end
 
 walls.register("walls:cobble", "Cobblestone Wall", {"stone_cobble.png"},
-		"stone:cobble", {})
+		"stone:cobble", music.sounds.nodes.stone)
 
 walls.register("walls:mossycobble", "Mossy Cobblestone Wall", {"stone_mossycobble.png"},
-		"stone:mossycobble", {})
+		"stone:mossycobble", music.sounds.nodes.stone)
 
 walls.register("walls:obsidian", "Obsidian Wall", {"obsidian_obsidian.png"},
-		"obsidian:obsidian", {})
+		"obsidian:obsidian", music.sounds.nodes.obsidian)
 
 print("loaded walls")

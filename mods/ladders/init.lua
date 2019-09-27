@@ -18,7 +18,7 @@ minetest.register_node("ladders:ladder_wood", {
 	},
 	groups = {choppy = 2, oddly_breakable_by_hand = 3, flammable = 2},
 	legacy_wallmounted = true,
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 })
 
 minetest.register_node("ladders:ladder_steel", {
@@ -40,7 +40,7 @@ minetest.register_node("ladders:ladder_steel", {
 		--wall_side = = <default>
 	},
 	groups = {cracky = 2},
-	--sounds = default.node_sound_metal_defaults(),
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({

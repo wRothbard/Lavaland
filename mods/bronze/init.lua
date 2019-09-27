@@ -8,7 +8,7 @@ minetest.register_node("bronze:block", {
 	tiles = {"default_bronze_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 1, level = 2},
-	--sounds = default.node_sound_metal_defaults(),
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({
