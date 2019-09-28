@@ -35,7 +35,7 @@ minetest.register_node("torch:torch", {
 		type = "wallmounted",
 		wall_bottom = {-1/8, -1/2, -1/8, 1/8, 2/16, 1/8},
 	},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 	on_place = function(itemstack, placer, pointed_thing)
 		local under = pointed_thing.under
 		local node = minetest.get_node(under)
@@ -85,7 +85,7 @@ minetest.register_node("torch:torch_wall", {
 		type = "wallmounted",
 		wall_side = {-1/2, -1/2, -1/8, -1/8, 1/8, 1/8},
 	},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 	floodable = true,
 	on_flood = on_flood,
 })
@@ -108,7 +108,7 @@ minetest.register_node("torch:torch_ceiling", {
 		type = "wallmounted",
 		wall_top = {-1/8, -1/16, -5/16, 1/8, 1/2, 1/8},
 	},
-	--sounds = default.node_sound_wood_defaults(),
+	sounds = music.sounds.nodes.wood,
 	floodable = true,
 	on_flood = on_flood,
 })
