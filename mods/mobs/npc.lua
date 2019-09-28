@@ -331,6 +331,7 @@ mobs:register_mob("mobs:npc", {
 
 		local item = clicker:get_wielded_item()
 		local name = clicker:get_player_name()
+		local col = self.collected
 		if not self.tid then
 			local tid = minetest.get_us_time()
 			local inv_id = minetest.create_detached_inventory("npc_" ..
@@ -338,10 +339,12 @@ mobs:register_mob("mobs:npc", {
 			inv_id:set_size("trade", 8 * 4)
 
 			local ls = {
-				-- Skin(s)
 				"skins:" .. skins.list[random(#skins.list)],
 
 			}
+			for i = 1, #col do
+				ls[#ls + 1] = col[i]
+			end
 			for i = random(1, 3), #npc_drops, random(1, 2) do
 				if npc_drops[i].chance > random() then
 					local c = npc_drops[i].count or {1, 1}
@@ -374,14 +377,26 @@ mobs:register_mob("mobs:npc", {
 			self.inv = minetest.serialize(ls)
 			self.tid = tid
 		else
+			local mi = self.inv
+			mi = minetest.deserialize(mi)
+			for i = 1, #col do
+				for ii = 1, #mi do
+					if mi[ii] == "" then
+						mi[ii] = col[i]
+						break
+					end
+				end
+			end
+			self.inv = minetest.serialize(mi)
 			local mob_inv = minetest.get_inventory({type = "detached",
 					name = "npc_" .. self.tid})
 			if not mob_inv then
 				mob_inv = minetest.create_detached_inventory("npc_" ..
 						self.tid, mob_detached_inv(self))
-				mob_inv:set_list("trade", minetest.deserialize(self.inv))
 			end
+			mob_inv:set_list("trade", mi)
 		end
+		self.collected = {}
 		self.order = "stand"
 		self.state = "stand"
 		minetest.after(0.1, function()

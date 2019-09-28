@@ -1665,7 +1665,7 @@ local do_states = function(self, dtime)
 									minetest.add_item(self.object:get_pos(), boat)
 								end
 								if it then
-									print(it)
+									table.insert(self.collected, it)
 								end
 							end
 						end
@@ -2349,6 +2349,7 @@ function mobs:register_mob(name, def)
 		name = name,
 		type = def.type,
 		i_am_mob = true,
+		collected = {},
 		attack_type = def.attack_type,
 		fly = def.fly,
 		fly_in = def.fly_in or "air",
