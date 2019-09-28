@@ -25,12 +25,24 @@ local warp = function(name, pos)
 		def.y = def.y + 1
 		player:set_pos(def)
 	else
+		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
+		local a = minetest.find_nodes_in_area_under_air(p1, p2, "group:reliable")
+		if a and a[1] then
+			pos = a[math.random(#a)]
+			pos.y = pos.y + 1
+		else
+			a = minetest.find_node_near(pos, 1, {"air"}, true)
+			if a then
+				pos = a
+			end
+		end
 		player:set_pos(pos)
 	end
 end
 
 minetest.register_entity("staves:warp", {
-	description = "Fireball",
+	description = "Warp",
 	visual = "sprite",
 	textures = {"mobs_fireball.png^[brighten^[colorize:blue:59"},
 	glow = 14,
@@ -41,7 +53,7 @@ minetest.register_entity("staves:warp", {
 		local step = self.step or 0
 		self.step = step + 1
 		local pos = self.object:get_pos()
-		if step > 36 then
+		if step > 56 then
 			warp(self.owner, pos)
 			self.object:remove()
 			return
@@ -101,7 +113,7 @@ minetest.register_tool("staves:teleportation", {
 			pos = vector.add(pos, dir)
 			local arrow = minetest.add_entity(pos, "staves:warp", name)
 			arrow:set_acceleration(dir)
-			arrow:set_velocity(vector.multiply(dir, 12))
+			arrow:set_velocity(vector.multiply(dir, 9))
 			itemstack:add_wear(3800)
 		end
 		return itemstack
@@ -186,7 +198,7 @@ minetest.register_tool("staves:destruction", {
 			pos = vector.add(pos, dir)
 			local arrow = minetest.add_entity(pos, "staves:fireball", name)
 			arrow:set_acceleration(dir)
-			arrow:set_velocity(vector.multiply(dir, 12))
+			arrow:set_velocity(vector.multiply(dir, 9))
 			itemstack:add_wear(7600)
 		end
 		return itemstack

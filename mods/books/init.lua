@@ -512,13 +512,11 @@ minetest.register_node("books:bookshelf", {
 		update_bookshelf(pos)
 	end,
 	on_blast = function(pos)
-		--[[
 		local drops = {}
-		default.get_inventory_drops(pos, "books", drops)
-		drops[#drops+1] = "default:bookshelf"
+		inventory.get_inventory_drops(pos, "books", drops)
+		drops[#drops+1] = "books:bookshelf"
 		minetest.remove_node(pos)
 		return drops
-		--]]
 	end,
 })
 

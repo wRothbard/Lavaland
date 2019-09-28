@@ -7,7 +7,7 @@ minetest.register_node("emerald:block", {
 	description = "Emerald Block",
 	tiles = {"emerald_block.png"},
 	groups = {cracky = 2},
-	sounds = music.sounds.nodes.stone,
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({

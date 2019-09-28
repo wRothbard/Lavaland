@@ -8,7 +8,7 @@ minetest.register_node("diamond:block", {
 	tiles = {"default_diamond_block.png"},
 	is_ground_content = false,
 	groups = {cracky = 1, level = 3},
-	--sounds = default.node_sound_stone_defaults(),
+	sounds = music.sounds.material.metal,
 })
 
 minetest.register_craft({
