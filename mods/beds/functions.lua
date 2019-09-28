@@ -9,11 +9,6 @@ end)
 
 local pi = math.pi
 local player_in_bed = 0
-local is_sp = minetest.is_singleplayer()
-local enable_respawn = minetest.settings:get_bool("enable_bed_respawn")
-if enable_respawn == nil then
-	enable_respawn = true
-end
 
 -- Helper functions
 
@@ -139,12 +134,13 @@ function beds.skip_night(f)
 	if f then
 		return
 	end
-	if beds.night_toggle == "enabled" then
-		minetest.set_timeofday((beds.time.hour * 60 + beds.time.min) / 1440)
-		beds.night_toggle = "disabled"
+	local t = os.date("*t")
+	if beds.night_toggle then
+		minetest.set_timeofday((t.hour * 60 + t.min) / 1440)
+		beds.night_toggle = false
 	else
-		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)
-		beds.night_toggle = "enabled"
+		minetest.set_timeofday(((t.hour + 12) % 24 * 60 + t.min) / 1440)
+		beds.night_toggle = true
 	end
 end
 
@@ -185,9 +181,7 @@ function beds.on_rightclick(pos, player)
 		lay_down(player, nil, nil, false)
 	end
 
-	if not is_sp then
-		update_formspecs(false)
-	end
+	update_formspecs(false)
 
 	-- skip the night and let all players stand up
 	if check_in_beds() then
@@ -211,19 +205,15 @@ function beds.can_dig(bed_pos)
 	return true
 end
 
--- Callbacks
--- Only register respawn callback if respawn enabled
-if enable_respawn then
-	-- respawn player at bed if enabled and valid position is found
-	minetest.register_on_respawnplayer(function(player)
-		local name = player:get_player_name()
-		local pos = beds.spawn[name]
-		if pos then
-			player:set_pos(pos)
-			return true
-		end
-	end)
-end
+-- respawn player at bed if enabled and valid position is found
+minetest.register_on_respawnplayer(function(player)
+	local name = player:get_player_name()
+	local pos = beds.spawn[name]
+	if pos then
+		player:set_pos(pos)
+		return true
+	end
+end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
@@ -298,13 +288,19 @@ end
 
 minetest.register_chatcommand("night_toggle", {
 	func = function(name, param)
-		if param == "enabled" or param == "disabled" then
-			if not minetest.check_player_privs(name, {server = true}) then
-				return false, "Not enough privs!"
-			end
-			beds.night_toggle = param
+		if not minetest.check_player_privs(name, {server = true}) and
+				param ~= "" then
+			return false, "Not enough privs!"
 		end
-		return true, beds.night_toggle
+		local t = os.date("*t")
+		if param == "false" and beds.night_toggle then
+			minetest.set_timeofday((t.hour * 60 + t.min) / 1440)
+			beds.night_toggle = false
+		elseif param == "true" and not beds.night_toggle then
+			minetest.set_timeofday(((t.hour + 12) % 24 * 60 + t.min) / 1440)
+			beds.night_toggle = true
+		end
+		return true, tostring(beds.night_toggle)
 	end,
 })
 

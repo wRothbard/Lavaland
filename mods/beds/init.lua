@@ -14,9 +14,9 @@ beds.formspec = "size[8,15;false]" ..
 	"bgcolor[#080808BB;true]" ..
 	"button_exit[2,12;4,0.75;leave;Leave Bed]" ..
 ""
-beds.time = os.date("*t")
-minetest.after(1, minetest.set_timeofday, (beds.time.hour * 60 + beds.time.min) / 1440)
-beds.night_toggle = "disabled" 
+local t = os.date("*t")
+minetest.after(1, minetest.set_timeofday, (t.hour * 60 + t.min) / 1440)
+beds.night_toggle = false
 beds.selected = {}
 beds.beds = {}
 beds.beds_public = {}
@@ -35,11 +35,11 @@ minetest.register_globalstep(function(dtime)
 		step = step + dtime
 		return
 	end
-	beds.time = os.date("*t")
-	if beds.night_toggle == "enabled" then
-		minetest.set_timeofday(((beds.time.hour + 12) % 24 * 60 + beds.time.min) / 1440)
+	local t = os.date("*t")
+	if beds.night_toggle then
+		minetest.set_timeofday(((t.hour + 12) % 24 * 60 + t.min) / 1440)
 	else
-		minetest.set_timeofday((beds.time.hour * 60 + beds.time.min) / 1440)
+		minetest.set_timeofday((t.hour * 60 + t.min) / 1440)
 	end
 	store:set_string("beds", minetest.serialize(beds.beds))
 	store:set_string("beds_public", minetest.serialize(beds.beds_public))
