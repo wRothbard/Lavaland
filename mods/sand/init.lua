@@ -2,7 +2,7 @@ minetest.register_node("sand:sand", {
 	description = "Sand",
 	tiles = {"default_sand.png"},
 	groups = {crumbly = 3, falling_node = 1, sand = 1},
-	--sounds = default.node_sound_sand_defaults(),
+	sounds = music.sounds.nodes.sand
 })
 
 minetest.register_node("sand:sandstone", {

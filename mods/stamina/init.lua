@@ -1,9 +1,16 @@
 stamina = {}
 
 local players = {}
+local timers = {}
 
 stamina.add_stamina = function(player, amount)
 	local name = player:get_player_name()
+	local t = timers[name]
+	local z = minetest.get_us_time()
+	if z - t < 10000 and amount < 0 then
+		return
+	end
+	timers[name] = z
 	local s = players[name]
 	if not s then
 		s = 0
@@ -29,11 +36,15 @@ end)
 
 minetest.register_on_joinplayer(function(player)
 	local stam_max = stats.update_stats(player, {stam_max = ""}).stam_max
-	players[player:get_player_name()] = stam_max
+	local name = player:get_player_name()
+	players[name] = stam_max
+	timers[name] = minetest.get_us_time()
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	players[player:get_player_name()] = nil
+	local name = player:get_player_name()
+	players[name] = nil
+	timers[name] = nil
 end)
 
 print("loaded stamina")

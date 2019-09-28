@@ -442,7 +442,7 @@ minetest.register_node("tnt:gunpowder", {
 	},
 	groups = {dig_immediate = 2, attached_node = 1, flammable = 5,
 		connect_to_raillike = minetest.raillike_group("gunpowder")},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 
 	on_punch = function(pos, node, puncher)
 		if puncher:get_wielded_item():get_name() == "torch:torch" then

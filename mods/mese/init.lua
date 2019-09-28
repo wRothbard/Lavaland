@@ -3,12 +3,6 @@ minetest.register_craftitem("mese:crystal", {
 	inventory_image = "mese_crystal.png",
 })
 
-local sounds = {
-	footstep = {name = "mese_footstep", gain = 0.3},
-	dig = {name = "mese_footstep", gain = 1.0},
-	dug = {name = "mese_footstep", gain = 1.0},
-}
-
 minetest.register_alias("mese:node", "mese:mese")
 minetest.register_node("mese:mese", {
 	description = "Mese",
@@ -269,7 +263,7 @@ minetest.register_node("mese:lamp", {
 	sunlight_propagates = true,
 	is_ground_content = false,
 	groups = {cracky = 3, oddly_breakable_by_hand = 3},
-	--sounds = default.node_sound_glass_defaults(),
+	sounds = music.sounds.nodes.glass,
 	light_source = minetest.LIGHT_MAX,
 })
 

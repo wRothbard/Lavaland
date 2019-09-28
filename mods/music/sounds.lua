@@ -140,6 +140,20 @@ music.sounds = {
 				gain = 1.0,
 			},
 		},
+		sand = {
+			footstep = {
+				name = "default_sand_footstep",
+				gain = 0.12,
+			},
+			dug = {
+				name = "default_sand_footstep",
+				gain = 0.24,
+			},
+			place = {
+				name = "default_place_node",
+				gain = 1.0,
+			},
+		},
 		bones = {
 			footstep = {
 				name = "bones_footstep",
