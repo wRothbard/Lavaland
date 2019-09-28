@@ -163,13 +163,11 @@ mobs.on_timer = function(pos, elapsed)
 		"mobs:rat",
 		"mobs:npc",
 	}
-	--local biome = minetest.get_biome_name(minetest.get_biome_data(pos).biome)
 	local tod = (minetest.get_timeofday() or 0) * 24000
 	local night = tod > 19000 or tod < 06000
 	local light = minetest.get_node_light(pos)
-	local protection = minetest.find_node_near(pos, 13,
-			{"protector:protect", "protector:protect2"}, true)
-	if (night or not protected) and light < 7 then
+	local protected = minetest.is_protected(pos, "")
+	if (night or not protected) and light < 13 then
 		local mobs_to_insert = {
 			"mobs:dungeon_master",
 			"mobs:oerkki",
@@ -179,16 +177,14 @@ mobs.on_timer = function(pos, elapsed)
 			mobs[#mobs + 1] = mobs_to_insert[i]
 		end
 	end
-	--if biome ~= "underground" then
-		local mobs_to_insert = {
-			"mobs:sheep_white",
-			"mobs:kitten",
-			"mobs:bunny",
-		}
-		for i = 1, #mobs_to_insert do
-			mobs[#mobs + 1] = mobs_to_insert[i]
-		end
-	--end
+	local mobs_to_insert = {
+		"mobs:sheep_white",
+		"mobs:kitten",
+		"mobs:bunny",
+	}
+	for i = 1, #mobs_to_insert do
+		mobs[#mobs + 1] = mobs_to_insert[i]
+	end
 	local mob = mobs[random(#mobs)]
 	local colbox = minetest.registered_entities[mob].collisionbox
 	local spawn_pos = {

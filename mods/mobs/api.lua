@@ -1086,22 +1086,21 @@ local general_attack = function(self)
 			if self.attack_players == false or (self.owner and self.type ~= "monster") or
 					not specific_attack(self.specific_attack, "player") then
 				objs[n] = nil
-				--print("- pla", n)
 			end
 		-- or are we a mob?
 		elseif ent then
 			-- remove mobs not to attack
+			local is = ent.itemstring
 			if self.name == ent.name or (not self.attack_animals and
 					ent.type == "animal") or
 					(not self.attack_monsters and ent.type == "monster") or
 					(not self.attack_npcs and ent.type == "npc") or
-					not specific_attack(self.specific_attack, ent.name) then
+					not specific_attack(self.specific_attack, ent.name) or
+					(is and self.name ~= "mobs:npc") then
 				objs[n] = nil
-				--print("- mob", n, self.name, ent.name)
 			end
 		-- remove all other entities
 		else
-			--print(" -obj", n)
 			objs[n] = nil
 		end
 	end
@@ -1648,12 +1647,15 @@ local do_states = function(self, dtime)
 							if attached then
 								self.attack = attached
 							end
+							local s = self.attack
+							local it = s:get_luaentity()
+							it = it and it.itemstring
 							self.attack:punch(self.object, 1.0, {
 								full_punch_interval = 0.5,
 								damage_groups = {fleshy = self.damage}
 							}, nil)
 							if self.object:get_entity_name() == "mobs:npc" then
-								local boat = self.attack:get_entity_name()
+								local boat = s:get_entity_name()
 								if boat and boat:match("^boats:boat_") then
 									minetest.after(0.189, function()
 										if boat then
@@ -1661,6 +1663,9 @@ local do_states = function(self, dtime)
 										end
 									end)
 									minetest.add_item(self.object:get_pos(), boat)
+								end
+								if it then
+									print(it)
 								end
 							end
 						end
