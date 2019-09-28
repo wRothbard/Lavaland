@@ -159,7 +159,7 @@ xpanes.register_pane("pane", {
 	textures = {"default_glass.png","xpanes_pane_half.png","xpanes_edge.png"},
 	inventory_image = "default_glass.png",
 	wield_image = "default_glass.png",
-	sounds = {},--default.node_sound_glass_defaults(),
+	sounds = music.sounds.nodes.glass,
 	groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3},
 	recipe = {
 		{"glass:glass", "glass:glass", "glass:glass"},
