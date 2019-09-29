@@ -39,7 +39,7 @@ local function cons(player)
 		stats.update_stats(player, {sat = 0})
 		hud.update(player, "hunger", "number", 0)
 	end
-	minetest.after(3, function()
+	minetest.after(5, function()
 		cons(player)
 	end)
 end

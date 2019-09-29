@@ -14,4 +14,19 @@ minetest.register_chatcommand("w", {
 	end,
 })
 
+minetest.register_chatcommand("is_protected", {
+	func = function(name, param)
+		local p = minetest.get_player_by_name(name)
+		if not p then
+			return true, "Not in-game!"
+		end
+		p = p:get_pos()
+		if param == "" then
+			return true, tostring(minetest.is_protected(p, ""))
+		else
+			return true, tostring(minetest.is_protected(p, param))
+		end
+	end,
+})
+
 print("loaded system")

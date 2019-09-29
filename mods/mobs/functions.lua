@@ -166,8 +166,8 @@ mobs.on_timer = function(pos, elapsed)
 	local tod = (minetest.get_timeofday() or 0) * 24000
 	local night = tod > 19000 or tod < 06000
 	local light = minetest.get_node_light(pos)
-	local protected = minetest.is_protected(pos, "")
-	if (night or not protected) and light < 13 then
+	local protected = minetest.is_protected(pos, ":mobs")
+	if (night or not protected) and light < 7 then
 		local mobs_to_insert = {
 			"mobs:dungeon_master",
 			"mobs:oerkki",
