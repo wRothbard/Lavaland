@@ -6,7 +6,7 @@ local get_inv = function(pos)
 		for _, v in pairs(list) do
 			local n = v:get_name()
 			if n ~= "" then
-				t[#t + 1] = n
+				t[#t + 1] = v
 			end
 		end
 	end

@@ -3,7 +3,8 @@ local S = mobs.intllib
 minetest.register_craftitem("mobs:rotten_flesh", {
 	description = "Rotten Flesh",
 	inventory_image = "mobs_rotten_flesh.png",
-	on_use = minetest.item_eat(-2),
+	groups = {poison = 5},
+	on_use = minetest.item_eat(-10),
 })
 
 minetest.register_craft({

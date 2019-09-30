@@ -1,5 +1,9 @@
 hunger = {}
 
+local function snd(pos)
+	music.play("hunger_eat", {pos = pos})
+end
+
 local function cons(player)
 	local name = player:get_player_name()
 	local hp = player:get_hp()
@@ -50,8 +54,10 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 	local s = stats.update_stats(user, {sat = "", sat_max = ""})
 	local sat = s.sat
 	local sat_max = s.sat_max
+
 	if sat < sat_max and hp_change > 0 then
 		itemstack:take_item()
+		snd(user:get_pos())
 		sat = sat + hp_change
 		if sat > sat_max then
 			sat = sat_max
@@ -65,8 +71,14 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 	elseif hp_change < 0 then
 		stats.update_stats(user, {sat = sat / 2})
 		itemstack:take_item()
-		user:set_hp(user:get_hp() + hp_change)
+		snd(user:get_pos())
+		minetest.after(0.09, function()
+			if minetest.get_player_by_name(user:get_player_name()) then
+				user:set_hp(user:get_hp() + hp_change)
+			end
+		end)
 	end
+	--local g = minetest.get_item_group(itemstack:get_name(), "poison")
 	hud.update(user, "hunger", "number", nil, {name = "hunger"})
 	return itemstack
 end)
