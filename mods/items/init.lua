@@ -94,4 +94,14 @@ minetest.register_on_joinplayer(function(player)
 	auto_pickup(player)
 end)
 
+minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack, pointed_thing)
+	local n = minetest.registered_nodes[oldnode.name]
+	if n.buildable_to then
+		local d = minetest.get_node_drops(oldnode.name)
+		if d then
+			inventory.throw_inventory(pos, d)
+		end
+	end
+end)
+
 print("loaded items")
