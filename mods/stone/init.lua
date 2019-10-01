@@ -231,21 +231,4 @@ minetest.register_node("stone:mossycobble", {
 	sounds = music.sounds.nodes.stone, 
 })
 
-minetest.register_abm({
-	label = "Moss growth",
-	nodenames = {"stone:cobble"},
-	neighbors = {"group:water", "group:lava"},
-	interval = 9,
-	chance = 75,
-	catch_up = false,
-	action = function(pos, node)
-		local la = minetest.find_node_near(pos, 1, "group:lava")
-		if la then
-			minetest.set_node(pos, {name = "stone:stone"})
-		else
-			minetest.set_node(pos, {name = "stone:mossycobble"})
-		end
-	end
-})
-
 print("loaded stone")
