@@ -62,7 +62,7 @@ minetest.register_entity("staves:warp", {
 		for i = 1, #objects do
 			if objects[i]:is_player() then
 				if objects[i]:get_player_name() ~= self.owner then
-					warp(self.owner, self.obect:get_pos())
+					warp(self.owner, self.object:get_pos())
 					self.object:remove()
 					return
 				end
