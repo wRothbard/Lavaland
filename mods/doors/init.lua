@@ -1,8 +1,14 @@
+-- doors/init.lua
+
 -- our API object
 doors = {}
 
 doors.registered_doors = {}
 doors.registered_trapdoors = {}
+
+-- Load support for MT game translation.
+local S = minetest.get_translator("doors")
+
 
 local function replace_old_owner_information(pos)
 	local meta = minetest.get_meta(pos)
@@ -71,7 +77,7 @@ end
 -- this hidden node is placed on top of the bottom, and prevents
 -- nodes from being placed in the top half of the door.
 minetest.register_node("doors:hidden", {
-	description = "Hidden Door Segment",
+	description = S("Hidden Door Segment"),
 	-- can't use airlike otherwise falling nodes will turn to entities
 	-- and will be forever stuck until door is removed.
 	drawtype = "nodebox",
@@ -327,7 +333,7 @@ function doors.register(name, def)
 
 			if def.protected then
 				meta:set_string("owner", pn)
-				meta:set_string("infotext", "Owned by " .. pn)
+				meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
 			end
 
 			if not (creative and creative.is_enabled_for and creative.is_enabled_for(pn)) then
@@ -401,7 +407,7 @@ function doors.register(name, def)
 			-- verify placer is owner of lockable door
 			if owner ~= pname then
 				minetest.record_protection_violation(pos, pname)
-				minetest.chat_send_player(pname, "You do not own this locked door.")
+				minetest.chat_send_player(pname, S("You do not own this locked door."))
 				return nil
 			end
 
@@ -411,7 +417,7 @@ function doors.register(name, def)
 				meta:set_string("key_lock_secret", secret)
 			end
 
-			return secret, "a locked door", owner
+			return secret, S("a locked door"), owner
 		end
 		def.node_dig_prediction = ""
 	else
@@ -449,7 +455,7 @@ end
 
 doors.register("door_wood", {
 		tiles = {{ name = "doors_door_wood.png", backface_culling = true }},
-		description = "Wooden Door",
+		description = S("Wooden Door"),
 		inventory_image = "doors_item_wood.png",
 		groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2},
 		recipe = {
@@ -461,7 +467,7 @@ doors.register("door_wood", {
 
 doors.register("door_steel", {
 		tiles = {{name = "doors_door_steel.png", backface_culling = true}},
-		description = "Steel Door",
+		description = S("Steel Door"),
 		inventory_image = "doors_item_steel.png",
 		protected = true,
 		groups = {cracky = 1, level = 2},
@@ -477,7 +483,7 @@ doors.register("door_steel", {
 
 doors.register("door_glass", {
 		tiles = {"doors_door_glass.png"},
-		description = "Glass Door",
+		description = S("Glass Door"),
 		inventory_image = "doors_item_glass.png",
 		groups = {cracky=3, oddly_breakable_by_hand=3},
 		sounds = music.sounds.nodes.glass,
@@ -492,7 +498,7 @@ doors.register("door_glass", {
 
 doors.register("door_obsidian_glass", {
 		tiles = {"doors_door_obsidian_glass.png"},
-		description = "Obsidian Glass Door",
+		description = S("Obsidian Glass Door"),
 		inventory_image = "doors_item_obsidian_glass.png",
 		groups = {cracky=3},
 		sounds = music.sounds.nodes.glass,
@@ -580,7 +586,7 @@ function doors.register_trapdoor(name, def)
 			local pn = placer:get_player_name()
 			local meta = minetest.get_meta(pos)
 			meta:set_string("owner", pn)
-			meta:set_string("infotext", "Owned by "..pn)
+			meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
 
 			return (creative and creative.is_enabled_for and creative.is_enabled_for(pn))
 		end
@@ -599,7 +605,7 @@ function doors.register_trapdoor(name, def)
 			-- verify placer is owner of lockable door
 			if owner ~= pname then
 				minetest.record_protection_violation(pos, pname)
-				minetest.chat_send_player(pname, "You do not own this trapdoor.")
+				minetest.chat_send_player(pname, S("You do not own this trapdoor."))
 				return nil
 			end
 
@@ -609,7 +615,7 @@ function doors.register_trapdoor(name, def)
 				meta:set_string("key_lock_secret", secret)
 			end
 
-			return secret, "a locked trapdoor", owner
+			return secret, S("a locked trapdoor"), owner
 		end
 		def.node_dig_prediction = ""
 	else
@@ -679,7 +685,7 @@ function doors.register_trapdoor(name, def)
 end
 
 doors.register_trapdoor("doors:trapdoor", {
-	description = "Wooden Trapdoor",
+	description = S("Wooden Trapdoor"),
 	inventory_image = "doors_trapdoor.png",
 	wield_image = "doors_trapdoor.png",
 	tile_front = "doors_trapdoor.png",
@@ -688,7 +694,7 @@ doors.register_trapdoor("doors:trapdoor", {
 })
 
 doors.register_trapdoor("doors:trapdoor_steel", {
-	description = "Steel Trapdoor",
+	description = S("Steel Trapdoor"),
 	inventory_image = "doors_trapdoor_steel.png",
 	wield_image = "doors_trapdoor_steel.png",
 	tile_front = "doors_trapdoor_steel.png",
@@ -719,6 +725,7 @@ minetest.register_craft({
 
 
 ----fence gate----
+local fence_collision_extra = minetest.settings:get_bool("enable_fence_tall") and 3/8 or 0
 
 function doors.register_fencegate(name, def)
 	local fence = {
@@ -742,7 +749,7 @@ function doors.register_fencegate(name, def)
 		end,
 		selection_box = {
 			type = "fixed",
-			fixed = {-1/2, -1/2, -1/4, 1/2, 1/2, 1/4},
+			fixed = {-1/2, -1/2, -1/4, 1/2, 1/2, 1/4}
 		},
 	}
 
@@ -768,7 +775,7 @@ function doors.register_fencegate(name, def)
 	fence_closed.sound = "doors_fencegate_open"
 	fence_closed.collision_box = {
 		type = "fixed",
-		fixed = {-1/2, -1/2, -1/4, 1/2, 1/2, 1/4},
+		fixed = {-1/2, -1/2, -1/8, 1/2, 1/2 + fence_collision_extra, 1/8}
 	}
 
 	local fence_open = table.copy(fence)
@@ -778,8 +785,8 @@ function doors.register_fencegate(name, def)
 	fence_open.groups.not_in_creative_inventory = 1
 	fence_open.collision_box = {
 		type = "fixed",
-		fixed = {{-1/2, -1/2, -1/4, -3/8, 1/2, 1/4},
-			{-1/2, -3/8, -1/2, -3/8, 3/8, 0}},
+		fixed = {{-1/2, -1/2, -1/8, -3/8, 1/2 + fence_collision_extra, 1/8},
+			 {-1/2, -3/8, -1/2, -3/8, 3/8,                         0  }}
 	}
 
 	minetest.register_node(":" .. name .. "_closed", fence_closed)
@@ -795,7 +802,7 @@ function doors.register_fencegate(name, def)
 end
 
 doors.register_fencegate("doors:gate_wood", {
-	description = "Apple Wood Fence Gate",
+	description = S("Apple Wood Fence Gate"),
 	texture = "default_wood.png",
 	material = "trees:wood",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2}
