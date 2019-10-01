@@ -49,14 +49,18 @@ local function set_clothing(player, team)
 	local name = player:get_player_name()
 	local d_inv = minetest.get_inventory({type = "detached",
 			name = name .. "_clothing"})
-	local itemss = {}
-	for i = 1, d_inv:get_size("clothing") do
-		local stack = d_inv:get_stack("clothing", i)
-		if stack:get_count() > 0 then
-			table.insert(itemss, stack)
-			d_inv:set_stack("clothing", i, nil)
-			clothing:run_callbacks("on_unequip", player, i, stack)
+	local old_team = teams.get_team(name)
+	if old_team ~= "red" and old_team ~= "green" and old_team ~= "blue" then
+		local itemss = {}
+		for i = 1, d_inv:get_size("clothing") do
+			local stack = d_inv:get_stack("clothing", i)
+			if stack:get_count() > 0 then
+				table.insert(itemss, stack)
+				d_inv:set_stack("clothing", i, nil)
+				clothing:run_callbacks("on_unequip", player, i, stack)
+			end
 		end
+		inventory.throw_inventory(player:get_pos(), itemss)
 	end
 	local c = {"hat", "shirt", "pants", "cape"}
 	for i = 1, 4 do
@@ -66,7 +70,6 @@ local function set_clothing(player, team)
 	end
 	clothing.save(player, d_inv)
 	clothing:set_player_clothing(player)
-	inventory.throw_inventory(player:get_pos(), itemss)
 end
 
 teams.set_team = function(name, team)
@@ -87,7 +90,9 @@ teams.set_team = function(name, team)
 	end
 	if team == "red" or team == "blue" or
 			team == "green" then
-		set_clothing(player, team)
+		if old_team and old_team ~= team then
+			set_clothing(player, team)
+		end
 	end
 	players[name] = team
 	local t = _teams[team]
@@ -122,7 +127,13 @@ minetest.register_chatcommand("team", {
 		end
 		param = param:split(" ")
 		if param[1] == "show" then
-			return true, "Your team is: " .. teams.get_team(name)
+			local m = teams.get_team(name)
+			if m then
+				m = "Your team is: " .. m
+			else
+				m = "Not set!"
+			end
+			return true, m
 		elseif param[1] == "set" then
 			local n = param[2]:gsub("%W", "")
 			teams.set_team(name, n)

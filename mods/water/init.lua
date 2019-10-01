@@ -143,7 +143,6 @@ minetest.register_abm({
 			local d = m:get_int("d")
 			if d > rand(5) * 5 then
 				minetest.swap_node(an, {name = "stone:cobble"})
-				print("set")
 				break
 			end
 			d = d + rand(2) * 5
