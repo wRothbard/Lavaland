@@ -199,7 +199,7 @@ minetest.register_node("flowers:mushroom_red", {
 		snappy = 3,
 		attached_node = 1,
 		flammable = 1,
-		poison = 1,
+		poison = 2,
 	},
 	floodable = true,
 	sounds = music.sounds.nodes.leaves,

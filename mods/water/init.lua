@@ -17,22 +17,6 @@ minetest.register_node("water:packed_ice", {
 	sounds = music.sounds.nodes.glass,
 })
 
-minetest.register_abm({
-	nodenames = "water:ice",
-	neighbors = "water:source",
-	interval = 60,
-	chance = 3,
-	catch_up = false,
-	action = function(pos, node)
-		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
-		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
-		local water = minetest.find_nodes_in_area(p1, p2, {"water:source"})
-		if #water > 4 then
-			minetest.set_node(water[rand(#water)], {name = "water:ice"})
-		end
-	end,
-})
-
 minetest.register_craft({
 	type = "shapeless",
 	output = "water:ice 2",
@@ -46,42 +30,6 @@ minetest.register_craft({
 		{"water:ice", "water:ice"},
 		{"water:ice", "water:ice"}
 	}
-})
-
-minetest.register_abm({
-	label = "Moss growth",
-	nodenames = {"stone:cobble"},
-	neighbors = {"group:water", "group:lava"},
-	interval = 9,
-	chance = 75,
-	catch_up = false,
-	action = function(pos, node)
-		local la = minetest.find_node_near(pos, 1, "group:lava")
-		if la then
-			minetest.set_node(pos, {name = "stone:stone"})
-		else
-			minetest.set_node(pos, {name = "stone:mossycobble"})
-		end
-	end
-})
-
-minetest.register_abm({
-	nodenames = {"water:source"},
-	neighbors = {"water:flowing", "air"},
-	interval = 3,
-	chance = 2,
-	catch_up = false,
-	action = function(pos, node)
-		local pb = {x = pos.x, y = pos.y - 1, z = pos.z}
-		local nb = minetest.get_node(pb)
-		if not nb.name then
-			return
-		end
-		if nb.name == "water:flowing" or nb.name == "air" then
-			minetest.remove_node(pos)
-			minetest.set_node(pb, {name = "water:source"})
-		end
-	end,
 })
 
 minetest.register_node("water:source", {
@@ -173,6 +121,87 @@ minetest.register_node("water:flowing", {
 	groups = {water = 3, liquid = 3, not_in_creative_inventory = 1,
 			cools_lava = 1},
 	sounds = music.sounds.nodes.water,
+})
+
+minetest.register_abm({
+	label = "Stone degradation",
+	nodenames = "water:flowing",
+	neighbors = "stone:stone",
+	interval = 25,
+	chance = 50,
+	catch_up = false,
+	action = function(pos, node)
+		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
+		local a = minetest.find_nodes_in_area(p1, p2, {"stone:stone"})
+		for i = 1, #a do
+			if rand() < 0.5 then
+				break
+			end
+			local an = a[i]
+			local m = minetest.get_meta(an)
+			local d = m:get_int("d")
+			if d > rand(5) * 5 then
+				minetest.swap_node(an, {name = "stone:cobble"})
+				print("set")
+				break
+			end
+			d = d + rand(2) * 5
+			m:set_int("d", d)
+		end
+	end,
+})
+
+minetest.register_abm({
+	label = "Ice spread",
+	nodenames = "water:ice",
+	neighbors = "water:source",
+	interval = 300,
+	chance = 34,
+	catch_up = false,
+	action = function(pos, node)
+		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
+		local water = minetest.find_nodes_in_area(p1, p2, {"water:source"})
+		minetest.swap_node(water[rand(#water)], {name = "water:ice"})
+	end,
+})
+
+minetest.register_abm({
+	label = "Moss growth",
+	nodenames = {"stone:cobble"},
+	neighbors = {"group:water", "group:lava"},
+	interval = 12,
+	chance = 80,
+	catch_up = false,
+	action = function(pos, node)
+		local la = minetest.find_node_near(pos, 1, "group:lava")
+		if la then
+			minetest.set_node(pos, {name = "stone:stone"})
+		else
+			minetest.set_node(pos, {name = "stone:mossycobble"})
+		end
+	end
+})
+
+minetest.register_abm({
+	label = "Water drop",
+	nodenames = {"water:source"},
+	neighbors = {"water:flowing", "air"},
+	interval = 3,
+	chance = 4,
+	catch_up = false,
+	action = function(pos, node)
+		local pb = {x = pos.x, y = pos.y - 1, z = pos.z}
+		local nb = minetest.get_node(pb)
+		if not nb.name then
+			return
+		end
+		if nb.name == "water:flowing" or nb.name == "air" then
+			minetest.remove_node(pos)
+			minetest.set_node(pb, {name = "water:source"})
+		end
+	end,
 })
 
 local minerals = {

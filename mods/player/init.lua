@@ -357,7 +357,8 @@ minetest.register_on_dieplayer(function(player, reason)
 	local p_inv = player:get_inventory()
 	local items = {}
 	for k, list in pairs(p_inv:get_lists()) do
-		if k ~= "bed" and k ~= "backpack" then
+		if k ~= "bed" and k ~= "backpack" and
+				k ~= "flags" then
 			local wit
 			for i, n in pairs(list) do
 				if not n:is_empty() then

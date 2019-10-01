@@ -1,5 +1,7 @@
 hunger = {}
 
+local poisoned = {}
+
 local function snd(pos)
 	music.play("hunger_eat", {pos = pos})
 end
@@ -43,9 +45,36 @@ local function cons(player)
 		stats.update_stats(player, {sat = 0})
 		hud.update(player, "hunger", "number", 0)
 	end
+	local m = player:get_meta()
+	local poison = m:get_int("poison")
+	if poison > 0 and poisoned[name] then
+		minetest.after(1, function()
+			if not minetest.get_player_by_name(name) then
+				return
+			end
+			local h = player:get_hp()
+			if h ~= 0 then
+				player:set_hp(h / 1.1)
+			end
+		end)
+		poison = poison - 1
+		m:set_int("poison", poison)
+	else
+		m:set_int("poison", 0)
+	end
 	minetest.after(5, function()
 		cons(player)
 	end)
+end
+
+local function poison(player, amount)
+	hud.message(player, "Poison!")
+	local name = player:get_player_name()
+	poisoned[name] = true
+	local m = player:get_meta()
+	local a = m:get_int("poison")
+	a = a + amount
+	m:set_int("poison", a)
 end
 
 minetest.register_on_item_eat(function(hp_change, replace_with_item,
@@ -78,7 +107,10 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 			end
 		end)
 	end
-	--local g = minetest.get_item_group(itemstack:get_name(), "poison")
+	local g = minetest.get_item_group(itemstack:get_name(), "poison")
+	if g > 0 then
+		poison(user, g)
+	end
 	hud.update(user, "hunger", "number", nil, {name = "hunger"})
 	return itemstack
 end)
@@ -88,12 +120,17 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_on_dieplayer(function(player)
+	poisoned[player:get_player_name()] = nil
 	stats.update_stats(player, {sat = 0})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 end)
 
 minetest.register_on_respawnplayer(function(player)
-	 stats.update_stats(player, {sat_max = 20, sat = 20})
+	stats.update_stats(player, {sat_max = 20, sat = 20})
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	poisoned[player:get_player_name()] = nil
 end)
 
 print("loaded hunger")
