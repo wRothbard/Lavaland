@@ -128,8 +128,8 @@ minetest.register_abm({
 	nodenames = {"water:flowing", "water:source"},
 	neighbors = {"stone:stone", "obsidian:obsidian",
 			"group:stone", "group:soil"},
-	interval = 60,
-	chance = 20,
+	interval = 30,
+	chance = 10,
 	catch_up = false,
 	action = function(pos, node)
 		local dist = 1
