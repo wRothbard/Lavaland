@@ -163,7 +163,7 @@ minetest.register_abm({
 					minetest.swap_node(an, {name = "stone:stone"})
 					break
 				end
-				d = d + rand(2) * 6
+				d = d + rand(2) * 3
 			end
 			m:set_int("d", d)
 		end
