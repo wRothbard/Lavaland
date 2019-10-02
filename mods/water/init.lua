@@ -124,28 +124,47 @@ minetest.register_node("water:flowing", {
 })
 
 minetest.register_abm({
-	label = "Stone degradation",
-	nodenames = "water:flowing",
-	neighbors = "stone:stone",
-	interval = 25,
-	chance = 50,
+	label = "Cobble generator",
+	nodenames = {"water:flowing", "water:source"},
+	neighbors = {"stone:stone", "obsidian:obsidian",
+			"group:stone", "group:soil"},
+	interval = 60,
+	chance = 20,
 	catch_up = false,
 	action = function(pos, node)
-		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
-		local p2 = {x = pos.x - 1, y = pos.y - 1, z = pos.z - 1}
-		local a = minetest.find_nodes_in_area(p1, p2, {"stone:stone"})
+		local dist = 1
+		local r = rand()
+		if r > 0.5 and r < 0.9 then
+			dist = 2
+		elseif r >= 0.9 then
+			dist = 3
+		end
+		local p1 = {x = pos.x + dist, y = pos.y + dist, z = pos.z + dist}
+		local p2 = {x = pos.x - dist, y = pos.y - dist, z = pos.z - dist}
+		local a = minetest.find_nodes_in_area(p1, p2,
+				{"stone:stone", "obsidian:obsidian"})
 		for i = 1, #a do
 			if rand() < 0.5 then
 				break
 			end
 			local an = a[i]
+			local n = minetest.get_node(an)
+			local ann = n.name
 			local m = minetest.get_meta(an)
 			local d = m:get_int("d")
-			if d > rand(5) * 5 then
-				minetest.swap_node(an, {name = "stone:cobble"})
-				break
+			if ann == "stone:stone" then
+				if d > rand(5) * 5 then
+					minetest.swap_node(an, {name = "stone:cobble"})
+					break
+				end
+				d = d + rand(2) * 5
+			elseif ann == "obsidian:obsidian" then
+				if d > rand(6) * 6 then
+					minetest.swap_node(an, {name = "stone:stone"})
+					break
+				end
+				d = d + rand(2) * 6
 			end
-			d = d + rand(2) * 5
 			m:set_int("d", d)
 		end
 	end,
