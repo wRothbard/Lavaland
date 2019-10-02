@@ -764,6 +764,28 @@ shapes.register_shapes(
 )
 
 shapes.register_shapes(
+	"diamondblock",
+	"diamond:block",
+	{cracky = 1},
+	{"default_diamond_block.png"},
+	"Diamond Block Stair",
+	"Diamond Block Slab",
+	music.sounds.material.metal,
+	true
+)
+
+shapes.register_shapes(
+	"emeraldblock",
+	"emerald:block",
+	{cracky = 1},
+	{"emerald_block.png"},
+	"Emerald Block Stair",
+	"Emerald Block Slab",
+	music.sounds.material.metal,
+	true
+)
+
+shapes.register_shapes(
 	"ice",
 	"water:ice",
 	{cracky = 3, cools_lava = 1, slippery = 3},
