@@ -1,7 +1,7 @@
 local itemframe, tmp = {}, {}
 screwdriver = screwdriver or {}
 
-local function remove_item(pos, node)
+local function remove_item(pos)
 	local objs = minetest.get_objects_inside_radius(pos, 0.5)
 	if not objs then return end
 
@@ -21,7 +21,7 @@ local facedir = {
 }
 
 local function update_item(pos, node)
-	remove_item(pos, node)
+	remove_item(pos)
 	local meta = minetest.get_meta(pos)
 	local itemstring = meta:get_string("item")
 	local posad = facedir[node.param2]
@@ -39,14 +39,14 @@ local function update_item(pos, node)
 	timer:start(15.0)
 end
 
-local function drop_item(pos, node)
+local function drop_item(pos)
 	local meta = minetest.get_meta(pos)
 	local item = meta:get_string("item")
 	if item == "" then return end
 
 	minetest.add_item(pos, item)
 	meta:set_string("item", "")
-	remove_item(pos, node)
+	remove_item(pos)
 
 	local timer = minetest.get_node_timer(pos)
 	timer:stop()
@@ -81,7 +81,7 @@ function itemframe.rightclick(pos, node, clicker, itemstack)
 		return itemstack
 	end
 
-	drop_item(pos, node)
+	drop_item(pos)
 	local itemstring = itemstack:take_item():to_string()
 	meta:set_string("item", itemstring)
 	update_item(pos, node)
@@ -95,8 +95,8 @@ function itemframe.punch(pos, node, puncher)
 	local owner = meta:get_string("owner")
 	local admin = minetest.check_player_privs(player_name, "protection_bypass")
 
-	if admin and player_name == owner then
-		drop_item(pos, node)
+	if admin or player_name == owner then
+		drop_item(pos)
 	end
 end
 
@@ -107,7 +107,11 @@ function itemframe.dig(pos, player)
 	local owner = meta:get_string("owner")
 	local admin = minetest.check_player_privs(player_name, "protection_bypass")
 
-	return admin or player_name == owner
+	if admin or player_name == owner then
+		drop_item(pos)
+		return true
+	end
+	return false
 end
 
 minetest.register_node("itemframe:itemframe", {
