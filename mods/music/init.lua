@@ -3,7 +3,35 @@ music = {}
 
 dofile(minetest.get_modpath("music") .. "/sounds.lua")
 
---local rand = math.random
+local rand = math.random
+
+function music.play(sss, spt)
+	if type(sss) == "string" then
+		sss = {name = sss}
+	end
+	spt = spt or {}
+	return minetest.sound_play(sss, spt)
+end
+
+local function show_piano(pos, node, clicker, itemstack, pointed_thing)
+	local fs = "size[12,3]" ..
+	""
+	for i = 1, 10 do
+		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
+	end
+	minetest.show_formspec(clicker:get_player_name(), "music:piano",
+			fs)
+end
+
+music.seq = function(name, times)
+	times = times % 12
+	for i = 1, times do
+		minetest.after(i * 3, function()
+			local handle = music.play("music_bell", {pitch = 0.443, gain = 0.44})
+			minetest.sound_fade(handle, -0.06, 0)
+		end)
+	end
+end
 
 --[[
 minetest.register_abm({
@@ -49,13 +77,17 @@ minetest.register_on_leaveplayer(function(player)
 end)
 --]]
 
-function music.play(sss, spt)
-	if type(sss) == "string" then
-		sss = {name = sss}
-	end
-	spt = spt or {}
-	return minetest.sound_play(sss, spt)
-end
+minetest.register_chatcommand("hum", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		music.play("music_square", {
+			to_player = name,
+			loop = true,
+			gain = 0.06,
+			pitch = 0.0334,
+		})
+	end,
+})
 
 minetest.register_chatcommand("m", {
 	func = function(name, param)
@@ -74,16 +106,6 @@ minetest.register_chatcommand("m", {
 		music.play(param[1], spt)
 	end,
 })
-
-local function show_piano(pos, node, clicker, itemstack, pointed_thing)
-	local fs = "size[12,3]" ..
-	""
-	for i = 1, 10 do
-		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
-	end
-	minetest.show_formspec(clicker:get_player_name(), "music:piano",
-			fs)
-end
 
 minetest.register_chatcommand("p", {
 	func = function(name, param)

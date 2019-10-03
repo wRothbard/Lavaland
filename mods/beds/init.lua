@@ -30,12 +30,20 @@ end
 local modpath = minetest.get_modpath("beds")
 local step = 0
 
+local bell = false
+
 minetest.register_globalstep(function(dtime)
-	if step < 60 then
+	if step < 59 then
 		step = step + dtime
 		return
 	end
 	local t = os.date("*t")
+	if t.min == 0 and not bell then
+		music.seq("bell", t.hour)
+		bell = true
+	elseif t.min == 1 and bell then
+		bell = false
+	end
 	if beds.night_toggle then
 		minetest.set_timeofday(((t.hour + 12) % 24 * 60 + t.min) / 1440)
 	else
