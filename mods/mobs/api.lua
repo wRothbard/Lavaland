@@ -1096,7 +1096,8 @@ local general_attack = function(self)
 					(not self.attack_monsters and ent.type == "monster") or
 					(not self.attack_npcs and ent.type == "npc") or
 					not specific_attack(self.specific_attack, ent.name) or
-					(is and self.name ~= "mobs:npc") then
+					(is and self.name ~= "mobs:npc") or
+					(ent.nodename and ent.nodename == "itemframe:itemframe") then
 				objs[n] = nil
 			end
 		-- remove all other entities
