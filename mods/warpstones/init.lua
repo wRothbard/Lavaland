@@ -330,14 +330,14 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.ok then
 			local inv = player:get_inventory()
 			local level = stats.update_stats(player, {level = ""}).level
-			if inv:contains_item("main", "emerald:block " .. level) then
-				inv:remove_item("main", "emerald:block " .. level)
+			if inv:contains_item("main", "mese:mese " .. level) then
+				inv:remove_item("main", "mese:mese " .. level)
 				forms.message(player, "Stats saved to mese warpstone!")
 				warpstones.save(name, selected[name], true)
 			else
 				forms.message(player,
-						"Sorry, you do not have enough emerald blocks." ..
-						"  Cost is one emerald block per level.",
+						"Sorry, you do not have enough mese." ..
+						"  Cost is one mese per level.",
 						true)
 			end
 		end
