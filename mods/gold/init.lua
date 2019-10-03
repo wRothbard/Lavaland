@@ -40,7 +40,6 @@ minetest.register_craft({
 
 minetest.register_alias("shop:coin", "gold:coin")
 minetest.register_craftitem("gold:coin", {
-
 	description = "Gold Coin",
 	inventory_image = "shop_coin.png",
 })
@@ -53,7 +52,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "default:gold_ingot",
+	output = "gold:ingot",
 	recipe = {
 		{"gold:coin", "gold:coin", "gold:coin"},
 		{"gold:coin", "gold:coin", "gold:coin"},
