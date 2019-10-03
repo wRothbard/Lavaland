@@ -1,16 +1,24 @@
 music = {}
 --music.players = {}
+local handles = {}
 
 dofile(minetest.get_modpath("music") .. "/sounds.lua")
 
 local rand = math.random
 
-function music.play(sss, spt)
+function music.play(sss, spt, player)
 	if type(sss) == "string" then
 		sss = {name = sss}
 	end
 	spt = spt or {}
-	return minetest.sound_play(sss, spt)
+	local handle = minetest.sound_play(sss, spt)
+	if player then
+		local name = player:get_player_name()
+		local ph = handles[name] or {}
+		ph[#ph + 1] = handle
+		handles[name] = ph
+	end
+	return handle
 end
 
 local function show_piano(pos, node, clicker, itemstack, pointed_thing)
@@ -30,6 +38,16 @@ music.seq = function(name, times)
 			local handle = music.play("music_bell", {pitch = 0.443, gain = 0.44})
 			minetest.sound_fade(handle, -0.06, 0)
 		end)
+	end
+end
+
+music.panic = function(name)
+	local h = handles[name]
+	if not h then
+		return
+	end
+	for i = 1, #h do
+		minetest.sound_stop(h[i])
 	end
 end
 
@@ -71,21 +89,46 @@ minetest.register_abm({
 minetest.register_on_joinplayer(function(player)
 	music.players[player:get_player_name()] = 0
 end)
-
-minetest.register_on_leaveplayer(function(player)
-	music.players[player:get_player_name()] = nil
-end)
 --]]
 
+minetest.register_on_leaveplayer(function(player)
+	--music.players[player:get_player_name()] = nil
+	handles[player:get_player_name()] = nil
+end)
+
 minetest.register_chatcommand("hum", {
+	description = "arg(bool) means this arg is a bool",
+	params = "loop(bool) gain(float) pitch(float)",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
-		music.play("music_square", {
+		if param == "stop" then
+			music.panic(name)
+		end
+		a = param:split(" ")
+		local spt = {
 			to_player = name,
-			loop = true,
+			loop = false,
 			gain = 0.06,
 			pitch = 0.0334,
-		})
+		}
+		local loop = a[1] and a[1] == "true" or
+				a[1] == "false"
+		if loop then
+			if a[1] == "true" then
+				spt.loop = true
+			else
+				spt.loop = false
+			end
+		end
+		local gain = a[2] and tonumber(a[2])
+		if gain then
+			spt.gain = tonumber(gain)
+		end
+		local pitch = a[3] and tonumber(a[3])
+		if pitch then
+			spt.pitch = tonumber(pitch)
+		end
+		music.play("music_square", spt, player)
 	end,
 })
 
@@ -95,7 +138,9 @@ minetest.register_chatcommand("m", {
 		if not player then
 			return false, "Not in game!"
 		end
-		local spt = {object = player}
+		local pos = player:get_pos()
+		pos.y = pos.y + 0.5
+		local spt = {pos = pos}
 		param = param:split(" ")
 		if not param[1] then
 			param[1] = ""
