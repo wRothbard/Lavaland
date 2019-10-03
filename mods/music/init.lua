@@ -144,9 +144,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		spt.pitch = spt.pitch and spt.pitch * 0.6
 		spt.object = player
-		spt.gain = 0.2
+		spt.gain = 0.34
 		local h = music.play("music_bell", spt)
-		minetest.sound_fade(h, -0.23, 0)
+		minetest.after(0, minetest.sound_fade, h, -0.23, 0)
 	end
 end)
 

@@ -3,7 +3,7 @@ hunger = {}
 local poisoned = {}
 
 local function snd(pos)
-	music.play("hunger_eat", {pos = pos})
+	music.play("hunger_eat", {pos = pos, gain = 0.67})
 end
 
 local function cons(player)
