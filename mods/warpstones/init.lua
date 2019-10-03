@@ -135,12 +135,17 @@ warpstones.save = function(name, pos, valid)
 	if not player then
 		return
 	end
-	if not valid then
-		forms.message(player,
-				"Pay to save stats?", true, "warpstones:save", nil, true)
-		return
-	end
 	pos = pos or selected[name]
+	if not valid then
+		if not minetest.is_protected(pos, name) then
+			forms.message(player,
+					"Pay to save stats?", true, "warpstones:save", nil, true)
+			return
+		else
+			hud.message(player,
+					"Protected.")
+		end
+	end
 	local meta = minetest.get_meta(pos)
 	local codex = meta:get_string("codex")
 	codex = minetest.deserialize(codex)
@@ -328,16 +333,25 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 	if formname == "warpstones:save" then
 		if fields.ok then
-			local inv = player:get_inventory()
+			local pos = selected[name]
+			local meta = minetest.get_meta(pos)
+			local stored_level = minetest.deserialize(meta:get_string("codex"))
+			if stored_level then
+				stored_level = stored_level.level
+			else
+				stored_level = 0
+			end
 			local level = stats.update_stats(player, {level = ""}).level
-			if inv:contains_item("main", "mese:mese " .. level) then
-				inv:remove_item("main", "mese:mese " .. level)
+			local cost = level - stored_level
+			local inv = player:get_inventory()
+			if inv:contains_item("main", "mese:mese " .. cost) then
+				inv:remove_item("main", "mese:mese " .. cost)
 				forms.message(player, "Stats saved to mese warpstone!")
 				warpstones.save(name, selected[name], true)
 			else
 				forms.message(player,
 						"Sorry, you do not have enough mese." ..
-						"  Cost is one mese per level.",
+						"  Cost is " .. cost .. " mese.",
 						true)
 			end
 		end
