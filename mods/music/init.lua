@@ -57,4 +57,75 @@ function music.play(sss, spt)
 	return minetest.sound_play(sss, spt)
 end
 
+minetest.register_chatcommand("m", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Not in game!"
+		end
+		local spt = {object = player}
+		param = param:split(" ")
+		if not param[1] then
+			param[1] = ""
+		end
+		if param[2] then
+			spt.pitch = tonumber(param[2])
+		end
+		music.play(param[1], spt)
+	end,
+})
+
+local function show_piano(pos, node, clicker, itemstack, pointed_thing)
+	local fs = "size[12,3]" ..
+	""
+	for i = 1, 10 do
+		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
+	end
+	minetest.show_formspec(clicker:get_player_name(), "music:piano",
+			fs)
+end
+
+minetest.register_chatcommand("p", {
+	func = function(name, param)
+		show_piano(nil, nil, minetest.get_player_by_name(name))
+	end,
+})
+
+minetest.register_node("music:piano", {
+	description = "Piano",
+	on_rightclick = show_piano,
+})
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname == "music:piano" then
+		local spt = {}
+		if fields.pin1 then
+			spt.pitch = 0.5
+		elseif fields.pin2 then
+			spt.pitch = 0.56
+		elseif fields.pin3 then
+			spt.pitch = 0.62
+		elseif fields.pin4 then
+			spt.pitch = 0.68
+		elseif fields.pin5 then
+			spt.pitch = 0.74
+		elseif fields.pin6 then
+			spt.pitch = 0.80
+		elseif fields.pin7 then
+			spt.pitch = 0.86
+		elseif fields.pin8 then
+			spt.pitch = 0.92
+		elseif fields.pin9 then
+			spt.pitch = 0.98
+		elseif fields.pin10 then
+			spt.pitch = 1.04
+		end
+		spt.pitch = spt.pitch and spt.pitch * 0.6
+		spt.object = player
+		spt.gain = 0.2
+		local h = music.play("music_bell", spt)
+		minetest.sound_fade(h, -0.23, 0)
+	end
+end)
+
 print("loaded music")
