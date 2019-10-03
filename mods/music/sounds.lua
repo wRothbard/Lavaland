@@ -174,6 +174,20 @@ music.sounds = {
 				gain = 0.2,
 			},
 		},
+		wool = {
+			footstep = {
+				name = "",
+				gain = 1.0,
+			},
+			dug = {
+				name = "default_dug_node",
+				gain = 0.25,
+			},
+			place = {
+				name = "default_place_node_hard",
+				gain = 1.0,
+			},
+		},
 		obsidian = {
 			footstep = {
 				name = "obsidian_obsidian",

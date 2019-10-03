@@ -795,6 +795,31 @@ shapes.register_shapes(
 	music.sounds.nodes.glass,
 	true
 )
+
+shapes.register_shapes(
+	"packed_ice",
+	"water:packed_ice",
+	{cracky = 3, cools_lava = 1, slippery = 3},
+	{"water_packed_ice.png"},
+	"Packed Ice Stair",
+	"Packed Ice Slab",
+	music.sounds.nodes.glass,
+	true
+)
+
+for _, v in pairs(dye.dyes) do
+	shapes.register_shapes(
+		"wool_" .. v[1],
+		"wool:" .. v[1],
+		{snappy = 2, choppy = 2, oddly_breakable_by_hand = 3,
+				flammable = 3, wool = 1},
+		{"wool_" .. v[1] .. ".png"},
+		v[2] .. " Wool Stair",
+		v[2] .. " Wool Slab",
+		music.sounds.nodes.wool,
+		true
+	)
+end
 --[[
 shapes.register_shapes(
 	"snowblock",
