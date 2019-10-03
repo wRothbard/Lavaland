@@ -50,11 +50,17 @@ warpstones.base = function(pos)
 end
 
 local selected = {}
+
 local function show_rest(name, pos)
+	local pvp = warpstones.ppp(pos)
+	pvp = tostring(pvp)
 	minetest.show_formspec(name, "warpstones:emerald",
-		"size[8,8]" ..
-		"button[0,0;1.5,1;show;Show]" ..
-		"button[1.5,0;1.5,1;set;Set]" ..
+		"size[8,4]" ..
+		forms.exit_button() ..
+		"button[-0.1,-0.15;1.5,1;set;Set]" ..
+		"textarea[0.2,0.82;8.23,3.9;;;PvP Protected: " .. pvp ..
+		"\n\nWarpstone is used to set/show PvP protection only." ..
+		"\n\nIt may be dug without disabling PvP protection.]" ..
 	"")
 end
 
@@ -91,7 +97,7 @@ local on_punch = function(pos, node, puncher, pointed_thing)
 			meta:set_string("state", "timeout")
 			local warp = minetest.deserialize(meta:get_string("warp"))
 			local p = puncher:get_pos()
-			forms.message(puncher, "Hold still.")
+			hud.message(puncher, "Hold still.")
 			timer = function(p, player, time, meta, sid, warp)
 				if vector.equals(p, player:get_pos()) then
 					if time >= 4.4 then
@@ -103,12 +109,12 @@ local on_punch = function(pos, node, puncher, pointed_thing)
 								.. meta:get_string("destination")
 								.. ".")
 						return minetest.sound_play("items_plop",
-								{pos = warp, max_hear_distance = 64})
+								{pos = warp})
 					end
 					minetest.after(0.334, timer, p,
 							player, time + 0.334, meta, sid, warp)
 				else
-					forms.message(puncher,
+					hud.message(puncher,
 							"Stand still for 5 seconds after punching to warp.")
 					minetest.sound_fade(sid, -0.89, 0)
 					meta:set_string("state", "")
@@ -117,10 +123,45 @@ local on_punch = function(pos, node, puncher, pointed_thing)
 			end
 			return timer(p, puncher, 0, meta, sid, warp)
 		elseif meta:get_string("state") == "timeout" then
-			forms.message(puncher, "Waiting.")
+			hud.message(puncher, "Waiting.")
 		else
-			forms.message(puncher, "No destination set.")
+			hud.message(puncher, "No destination set.")
 		end
+	end
+end
+
+warpstones.save = function(name, pos, valid)
+	local player = minetest.get_player_by_name(name)
+	if not player then
+		return
+	end
+	if not valid then
+		forms.message(player,
+				"Pay to save stats?", true, "warpstones:save", nil, true)
+		return
+	end
+	pos = pos or selected[name]
+	local meta = minetest.get_meta(pos)
+	local codex = meta:get_string("codex")
+	codex = minetest.deserialize(codex)
+	local x = stats.update_stats(player, {
+		level = "",
+		xp = "",
+		hp = "",
+		hp_max = "",
+		breath_max = "",
+		stam_max = "",
+		sat_max = "",
+		sat = "",
+		breath = "",
+		stam = "",
+	})
+	if not codex or codex.level <= x.level then
+		meta:set_string("codex", minetest.serialize(x))
+	else
+		forms.message(player,
+				"Your level is equal to or lower than that in the warpstone!",
+				true, nil, nil, true)
 	end
 end
 
@@ -131,20 +172,19 @@ local on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 	local owner = meta:get_string("owner")
 	if node.name == "warpstones:diamond" then
 		if name ~= owner then
-			forms.message(name, "Only the owner of this warpstone can set its destination.", true)
+			forms.message(name,
+					"Only the owner of this warpstone can set its destination.",
+					true, nil, nil, true)
 			return
 		end
 		minetest.show_formspec(name, "warpstones:diamond", warp_formspec(name))
 		return
 	elseif node.name == "warpstones:mese" then
-		if name ~= owner then
-			stats.show_more(clicker)
-		else
-			stats.show_more(clicker, true)
-		end
+		stats.show_more(clicker, pos)
 		return
 	elseif node.name == "warpstones:emerald" then
 		show_rest(name, pos)
+		return
 	end
 end
 
@@ -155,7 +195,8 @@ local after_dig_node = function(pos, oldnode, oldmetadata, digger)
 	if oldnode.name == "warpstones:mese" then
 		local name = digger:get_player_name()
 		selected[name] = oldmetadata
-		forms.message(digger, "Would you like to apply the stored class and level?",
+		forms.message(digger,
+				"Would you like to apply the stored class and level?",
 				true, "warpstones:stats_apply")
 	end
 end
@@ -169,10 +210,10 @@ local after_place_node = function(pos, placer, itemstack, pointed_thing)
 	meta:set_string("owner", name)
 	local spos = minetest.pos_to_string(pos)
 	if itemstack:get_name() == "warpstones:mese" then
-		--print(dump(itemstack:get_meta():to_table()))
-		forms.message(placer, "Would you like to save your current stats to this warpstone?  " ..
+		forms.message(placer,
+				"Would you like to save your current stats to this warpstone?  " ..
 				"Doing so will reset your character's stats and place them in the crystal.",
-				true, "warpstones:stats_save_" .. spos)
+				true, "warpstones:stats_save_" .. spos, nil, true)
 	elseif itemstack:get_name() == "warpstones:diamond" then
 		meta:set_string("infotext", "Uninitialized warpstone\n" ..
 				"Right-click to set destination.")
@@ -219,11 +260,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local codex = minetest.deserialize(selected[name].fields.codex)
 		selected[name] = nil
 		stats.update_stats(player, codex)
-	elseif formname == "warpstones:stats_apply" and fields.quit then
-		--print("try save stats in crystal")
-		--local codex = minetest.deserialize(selected[name].fields.codex)
-		--local inv = player:get_inventory()
-		--show formspec with slot for warpstone, save stats to it on place.
 	elseif formname:sub(1, 22) == "warpstones:stats_save_" and fields.ok then
 		local s = stats.update_stats(player, {
 			level = "",
@@ -234,8 +270,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			stam_max = "",
 			sat_max = "",
 			sat = "",
-			--breath,
-			--stam,
+			--breath = "",
+			--stam = "",
 		})
 		local hp = s.hp
 		local mpos = minetest.string_to_pos(formname:sub(24, -2))
@@ -270,7 +306,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		})
 	end
 	if formname == "warpstones:emerald" then
-		local pos = selected[name] --player:get_pos()
+		local pos = selected[name]
+		selected[name] = nil
 		if fields.set then
 			if minetest.is_protected(pos, name) then
 				return
@@ -286,9 +323,25 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				table.insert(ar.pvp, {p1, p2})
 				ms:set_string("wa", minetest.serialize(ar))
 			end
-		elseif fields.show then
-			minetest.chat_send_player(name, tostring(ppp(pos)))
+			show_rest(name, pos)
 		end
+	end
+	if formname == "warpstones:save" then
+		if fields.ok then
+			local inv = player:get_inventory()
+			local level = stats.update_stats(player, {level = ""}).level
+			if inv:contains_item("main", "emerald:block " .. level) then
+				inv:remove_item("main", "emerald:block " .. level)
+				forms.message(player, "Stats saved to mese warpstone!")
+				warpstones.save(name, selected[name], true)
+			else
+				forms.message(player,
+						"Sorry, you do not have enough emerald blocks." ..
+						"  Cost is one emerald block per level.",
+						true)
+			end
+		end
+		selected[name] = nil
 	end
 end)
 

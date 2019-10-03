@@ -215,20 +215,30 @@ function stats.show_status(player)
 	minetest.show_formspec(name, "stats:status", formspec)
 end
 
-function stats.show_more(player)
+function stats.show_more(player, pos)
 	local name = player:get_player_name()
-	local x = stats.update_stats(player, {
-		hp = "",
-		hp_max = "",
-		breath = "",
-		breath_max = "",
-		stam = "",
-		stam_max = "",
-		sat = "",
-		sat_max = "",
-		xp = "",
-		level = "",
-	})
+	local x = {}
+	if not pos then
+		x = stats.update_stats(player, {
+			hp = "",
+			hp_max = "",
+			breath = "",
+			breath_max = "",
+			stam = "",
+			stam_max = "",
+			sat = "",
+			sat_max = "",
+			xp = "",
+			level = "",
+		})
+	else
+		local m = minetest.get_meta(pos)
+		local codex = m:get_string("codex")
+		codex = minetest.deserialize(codex)
+		if codex then
+			x = codex
+		end
+	end
 	local str = ""
 	for k, v in pairs(x) do
 		str = str .. k .. "," .. v .. ","
@@ -243,6 +253,7 @@ function stats.show_more(player)
 		"button_exit[0.5,2;2,1;spawn;Spawn]" ..
 		"button_exit[0.5,3;2,1;sit;Sit]" ..
 		"button_exit[0.5,4;2,1;lay;Lay]" ..
+		"button_exit[0.5,5;2,1;save;Save]" ..
 		"label[3,0.25;Status]" ..
 		"tablecolumns[text;text,padding=3]" ..
 		"table[3,1;4.75,6.2;stats;" .. str .. ";1]" ..
@@ -251,10 +262,14 @@ function stats.show_more(player)
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if (formname == "" and fields.status) or
-			(formname == "help:help" and fields.status) or
-			(formname == "stats:more" and fields.status) then
+	local name = player:get_player_name()
+	if fields.status and (formname == "" or
+			formname == "help:help" or
+			formname == "stats:more") then
 		stats.show_status(player)
+	elseif formname == "stats:more" and fields.save then
+		warpstones.save(name)
+		stats.save(player)
 	elseif formname == "stats:status" and fields.more then
 		stats.show_more(player)
 	elseif (formname == "stats:status" or
@@ -264,7 +279,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			player:set_pos(mapgen.spawn)
 			minetest.sound_play("mapgen_item", {pos = mapgen.spawn, gain = 0.3})
 		elseif fields.home then
-			local name = player:get_player_name()
 			local pos = mapgen.homes[name]
 			if pos then
 				player:set_pos(pos)
