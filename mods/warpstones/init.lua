@@ -162,7 +162,13 @@ warpstones.save = function(name, pos, valid)
 		stam = "",
 	})
 	if not codex or codex.level <= x.level then
+		meta:set_string("infotext", "Mese Warpstone\nOwned by " .. name ..
+				"\nLevel: " .. tostring(x.level) .. ", " ..
+				"XP: " .. tostring(x.xp) ..
+				"\nHP: " .. tostring(x.hp) .. "/" ..
+				tostring(x.hp_max))
 		meta:set_string("codex", minetest.serialize(x))
+
 	else
 		forms.message(player,
 				"Your level is equal to or lower than that in the warpstone!",
