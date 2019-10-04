@@ -6,6 +6,9 @@ local timers = {}
 stamina.add_stamina = function(player, amount)
 	local name = player:get_player_name()
 	local t = timers[name]
+	if not t then
+		return
+	end
 	local z = minetest.get_us_time()
 	if z - t < 10000 and amount < 0 then
 		return
