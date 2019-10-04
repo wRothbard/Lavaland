@@ -26,7 +26,7 @@ minetest.register_node("papyrus:papyrus", {
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 0.5, 6 / 16},
 	},
 	groups = {snappy = 3, flammable = 2},
-	--sounds = default.node_sound_leaves_defaults(),
+	sounds = music.sounds.nodes.leaves,
 
 	after_dig_node = function(pos, node, metadata, digger)
 		map.dig_up(pos, node, digger)
