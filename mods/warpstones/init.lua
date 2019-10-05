@@ -358,9 +358,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			end
 		end
 	end
+	--[[
 	if fields.quit then
 		selected[name] = nil
 	end
+	--]]
 end)
 
 minetest.register_on_leaveplayer(function(player)
