@@ -239,7 +239,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local b = beds.beds[name]
 			if b and b[w] then
 				local n = minetest.get_meta(selected[name])
-				selected[name] = nil
 				if n then
 					n:set_string("warp",
 							minetest.serialize(b[w]))
@@ -253,7 +252,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				for warp, pos in pairs(warps) do
 					if w == warp then
 						local n = minetest.get_meta(selected[name])
-						selected[name] = nil
 						if n then
 							n:set_string("warp",
 									minetest.serialize(pos))
@@ -269,7 +267,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 	if formname == "warpstones:stats_apply" and fields.ok then
 		local codex = minetest.deserialize(selected[name].fields.codex)
-		selected[name] = nil
 		stats.update_stats(player, codex)
 	elseif formname:sub(1, 22) == "warpstones:stats_save_" and fields.ok then
 		local s = stats.update_stats(player, {
@@ -318,7 +315,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 	if formname == "warpstones:emerald" then
 		local pos = selected[name]
-		selected[name] = nil
 		if fields.set then
 			if minetest.is_protected(pos, name) then
 				return
@@ -361,6 +357,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 						true)
 			end
 		end
+	end
+	if fields.quit then
 		selected[name] = nil
 	end
 end)

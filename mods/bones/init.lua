@@ -48,7 +48,7 @@ minetest.register_node("bones:bones", {
 	on_timer = function(pos, elapsed)
 		local timer = minetest.get_node_timer(pos)
 		timer:set(elapsed, elapsed + 0.1)
-		if timer:get_elapsed() > 666 then
+		if timer:get_elapsed() > 1667 then
 			minetest.dig_node(pos)
 		else
 			return 

@@ -233,7 +233,7 @@ minetest.register_on_punchplayer(function(player, hitter,
 	end
 end)
 
-minetest.register_on_player_hpchange(function(player, hp_change)
+minetest.register_on_player_hpchange(function(player, hp_change, reason)
 	if player and hp_change < 0 then
 		local name = player:get_player_name()
 		if name then
@@ -242,6 +242,42 @@ minetest.register_on_player_hpchange(function(player, hp_change)
 			if time == 0 or time + 1 < minetest.get_gametime() then
 				armor:punch(player)
 			end
+		end
+	end
+	if reason.type then
+		if reason.type == "node_damage" then
+			local _, a = armor:get_valid_player(player)
+			local d = 0
+			for _, v in pairs(a:get_list("armor")) do
+				local n = v:get_name()
+				if n:sub(1, 9) == "3d_armor:" and
+						n:sub(-5, -1) == "_mese" then
+					d = d + 1
+				end
+			end
+			if d == 5 then
+				if reason.node and reason.node == "lava:source" then
+					hp_change = -1
+				else
+					hp_change = 0
+				end
+				armor:punch(player)
+			end
+		elseif reason.type == "fall" then
+			local _, a = armor:get_valid_player(player)
+			local d = 0
+			for _, v in pairs(a:get_list("armor")) do
+				local n = v:get_name()
+				if n:sub(1, 9) == "3d_armor:" and
+						n:sub(-9, -1) == "_obsidian" then
+					d = d + 1
+				end
+			end
+			if d == 5 then
+				hp_change = 0
+				armor:punch(player)
+			end
+
 		end
 	end
 	return hp_change
