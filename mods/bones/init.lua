@@ -162,14 +162,16 @@ minetest.register_craft({
 	recipe = {"bones:bone", "bones:skull"},
 })
 
-minetest.register_craft({output="bones:meal 9",
+minetest.register_craft({
+	output = "bones:meal 9",
 	type = "shapeless",
-	recipe = {"bones:bone"}
+	recipe = {"bones:bone"},
 })
 
-minetest.register_craft({output="bone:meal 9",
+minetest.register_craft({
+	output = "bones:meal 9",
 	type = "shapeless",
-	recipe = {"bones:skull"}
+	recipe = {"bones:skull"},
 })
 
 print("loaded bones")

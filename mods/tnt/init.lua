@@ -172,6 +172,9 @@ local function entity_physics(pos, radius, drops)
 			local do_knockback = true
 			local entity_drops = {}
 			local luaobj = obj:get_luaentity()
+			if not luaobj then
+				return
+			end
 			local objdef = minetest.registered_entities[luaobj.name]
 
 			if objdef and objdef.on_blast then
