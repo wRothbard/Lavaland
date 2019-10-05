@@ -184,12 +184,10 @@ minetest.register_craftitem("walkie:talkie", {
 				walkie.players[name].waypoints.pos = death
 				user:hud_change(walkie.meters[name].waypoint,
 						"world_pos", death)
-				hud.message(user, "Showing place-of-death waypoint.")
 			elseif waypoint == death and saved then
 				walkie.players[name].waypoints.pos = saved
 				user:hud_change(walkie.meters[name].waypoint,
 						"world_pos", saved)
-				hud.message(user, "Showing home waypoint.  (Maybe.)")
 			end
 		end
 		return itemstack

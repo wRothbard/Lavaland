@@ -126,7 +126,7 @@ minetest.register_craft({
 minetest.register_on_player_inventory_action(function(player, action, inventory, inventory_info)
 	if action == "put" and inventory_info.stack:get_name() == "lava:source" then
 		minetest.set_node(player:get_pos(), {name = "lava:source"})
-		player:set_hp(0)
+		--player:set_hp(0)
 	end
 end)
 
