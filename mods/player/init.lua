@@ -336,6 +336,7 @@ end)
 minetest.register_on_dieplayer(function(player, reason)
 	local name = player:get_player_name()
 	if dead[name] then
+		minetest.chat_send_player(name, "It would appear you are in limbo!")
 		return
 	end
 	if reason.type == "punch" and reason.object and
@@ -389,23 +390,22 @@ minetest.register_on_dieplayer(function(player, reason)
 	if old_node.name:match("lava") then
 		minetest.set_node(pos, {name = "water:source"})
 	end
-	local an = minetest.find_node_near(pos, 3, "air", true)
-	if an then
-		minetest.set_node(an, {name = "bones:bones"})
-		local meta = minetest.get_meta(an)
-		local inv = meta:get_inventory()
-		inv:set_size("main", 8 * 4)
-		meta:set_string("formspec", "size[8,9]" ..
-				"list[context;main;0,0;8,4]" ..
-				"list[current_player;main;0,5;8,4]" ..
-				"listring[]")
-		inv:set_list("main", items)
-		meta:set_string("infotext", "" .. name .. "'s bones.")
-		meta:set_string("owner", name)
-		minetest.after(1, function()
-			minetest.get_node_timer(pos):start(1.0)
-		end)
-	end
+	pos = minetest.find_node_near(pos, 3, "air", true) or pos
+	minetest.set_node(pos, {name = "bones:bones"})
+	minetest.chat_send_player(name, "Bones placed at: " .. minetest.pos_to_string(vector.round(pos)))
+	local meta = minetest.get_meta(pos)
+	local inv = meta:get_inventory()
+	inv:set_size("main", 8 * 4)
+	meta:set_string("formspec", "size[8,9]" ..
+			"list[context;main;0,0;8,4]" ..
+			"list[current_player;main;0,5;8,4]" ..
+			"listring[]")
+	inv:set_list("main", items)
+	meta:set_string("infotext", "" .. name .. "'s bones.")
+	meta:set_string("owner", name)
+	minetest.after(1, function()
+		minetest.get_node_timer(pos):start(1.0)
+	end)
 
 	dead[name] = true
 end)

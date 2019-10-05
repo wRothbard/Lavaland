@@ -101,7 +101,7 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item,
 		stats.update_stats(user, {sat = sat / 2})
 		itemstack:take_item()
 		snd(user:get_pos())
-		minetest.after(0.09, function()
+		minetest.after(0.18, function()
 			if minetest.get_player_by_name(user:get_player_name()) then
 				user:set_hp(user:get_hp() + hp_change)
 			end
