@@ -192,6 +192,7 @@ function trees.sapling_on_place(itemstack, placer, pointed_thing,
 
 	return itemstack
 end
+
 minetest.register_node("trees:sapling", {
 	description = "Apple Tree Sapling",
 	drawtype = "plantlike",
@@ -351,6 +352,19 @@ minetest.register_abm({
 				return
 			end
 			minetest.place_node(pos, {name = "trees:sapling"})
+		end
+	end,
+})
+
+minetest.register_abm({
+	nodenames = {"dirt:dirt", "dirt:grass"},
+	neighbors = {"air"},
+	interval = 10,
+	chance = 2,
+	catch_up = false,
+	action = function(pos, node)
+		local o = minetest.get_objects_inside_radius(pos, 1)
+		for i = 1, #o do
 		end
 	end,
 })

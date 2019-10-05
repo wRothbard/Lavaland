@@ -57,7 +57,6 @@ minetest.registered_entities["__builtin:item"].set_item = function(self, item)
 			minetest.set_node(pos, {name = "lava:source"})
 		end
 	end
-
 	local max_count = stack:get_stack_max()
 	local count = math.min(stack:get_count(), max_count)
 	local size = 0.2 + 0.1 * (count / max_count) ^ (1 / 3)
