@@ -71,7 +71,11 @@ minetest.register_node("trees:tree", {
 	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
 	sounds = music.sounds.nodes.wood,
 	on_place = minetest.rotate_node,
-	--after_dig_node = map.fell_tree,
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("placed", "true")
+	end,
+	after_dig_node = map.fell_tree
 })
 
 minetest.register_node("trees:wood", {
