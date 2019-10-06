@@ -1,3 +1,5 @@
+local random = math.random
+
 local get_inv = function(pos)
 	local t = {"bones:bone", "bones:bone", "bones:skull"}
 	local inv = minetest.get_meta(pos):get_inventory()
@@ -22,30 +24,30 @@ local function duengen(pointed_thing)
 	end
 
 	local stage = ""
-	if n.name == "trees:sapling" and minetest.get_node_light(pos) > 13 then
-		if math.random(1, 20) < 5 then
+	if n.name == "trees:sapling" and minetest.get_node_light(pos) > 12 then
+		if random(1, 20) < 5 then
 			minetest.set_node(pos, {name = "air"})
 			trees.grow_new_apple_tree(pos)
 		end
 
 	elseif string.find(n.name, "farming:wheat_") ~= nil then
 		stage = tonumber(string.sub(n.name, 15))
-		if math.random(1, 7) < stage / 3 then
+		if random(1, 7) < stage / 3 then
 			minetest.set_node(pos, {name="farming:wheat_8"})
 		elseif stage < 7 then
-			minetest.set_node(pos, {name="farming:wheat_" .. stage + math.random(1, 2)})
+			minetest.set_node(pos, {name="farming:wheat_" .. stage + random(1, 2)})
 		end
 
 	elseif string.find(n.name, "farming:cotton_") ~= nil then
 		stage = tonumber(string.sub(n.name, 16))
-		if math.random(1, 7) < stage / 3 then
+		if random(1, 7) < stage / 3 then
 			minetest.set_node(pos, {name="farming:cotton_8"})
 		elseif stage < 7 then
-			minetest.set_node(pos, {name="farming:cotton_" .. stage + math.random(1, 2)})
+			minetest.set_node(pos, {name="farming:cotton_" .. stage + random(1, 2)})
 		end
 		--[[
 		if stage == 1 then
-			minetest.set_node(pos, {name="farming:cotton_" .. math.random(stage, 2)})
+			minetest.set_node(pos, {name="farming:cotton_" .. random(stage, 2)})
 		else
 			minetest.set_node(pos, {name="farming:cotton"})
 		end
@@ -54,7 +56,7 @@ local function duengen(pointed_thing)
 	elseif string.find(n.name, "farming:pumpkin_") ~= nil then
 		stage = tonumber(string.sub(n.name, 17))
 		if stage == 1 then
-			minetest.set_node(pos, {name = "farming:pumpkin_" .. math.random(stage, 2)})
+			minetest.set_node(pos, {name = "farming:pumpkin_" .. random(stage, 2)})
 		else
 			minetest.set_node(pos, {name = "farming:pumpkin"})
 		end
@@ -65,7 +67,7 @@ local function duengen(pointed_thing)
 			local n2 = minetest.get_node_or_nil(p)
 
 			if n2 and n2.name and n2.name == "default:dry_dirt" and minetest.find_node_near(p, 6, {"group:water"}) then
-				if math.random(1, 6) > 3 then
+				if random(1, 6) > 3 then
 					minetest.set_node(pointed_thing.under, {name = "default:grass"})
 				else
 					minetest.set_node(p, {name = "default:grass"})

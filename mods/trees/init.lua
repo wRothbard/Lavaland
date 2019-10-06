@@ -359,12 +359,35 @@ minetest.register_abm({
 minetest.register_abm({
 	nodenames = {"dirt:dirt", "dirt:grass"},
 	neighbors = {"air"},
-	interval = 10,
-	chance = 2,
+	interval = 30,
+	chance = 10,
 	catch_up = false,
 	action = function(pos, node)
+		pos = {x = pos.x, y = pos.y + 1, z = pos.z}
+		local un = minetest.get_node(pos)
+		if un and un.name then
+			if un.name ~= "air" and un.name ~= "mobs:spawner" and 
+					not minetest.registered_nodes[un.name].buildable_to then
+				return
+			end
+		else
+			return
+		end
 		local o = minetest.get_objects_inside_radius(pos, 1)
 		for i = 1, #o do
+			local object = o[i]
+			local entity = object:get_luaentity()
+			if not (entity and entity.age) or entity.dropped_by or
+					not (entity.itemstring and
+					entity.itemstring == "trees:sapling") then
+				break
+			end
+			if entity.age > 3 then
+				local p = object:get_pos()
+				object:remove()
+				minetest.set_node(p, {name = "trees:sapling"})
+				return
+			end
 		end
 	end,
 })
