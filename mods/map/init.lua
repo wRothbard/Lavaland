@@ -1,5 +1,7 @@
 map = {}
 
+map.selected = {}
+
 function map.dig_up(pos, node, digger)
 	if digger == nil then
 		return
@@ -31,5 +33,12 @@ function map.fell_tree(pos, oldnode, oldmetadata, digger)
 		end
 	end
 end
+
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	if map.selected[name] then
+		map.selected[name] = nil
+	end
+end)
 
 print("loaded map")

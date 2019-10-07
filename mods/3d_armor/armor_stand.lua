@@ -1,25 +1,33 @@
 -- support for i18n
 local S = minetest.get_translator("3d_armor")
 
-local armor_stand_formspec = "size[8,7]" ..
-	--[[
-	default.gui_bg ..
-	default.gui_bg_img ..
-	default.gui_slots ..
-	default.get_hotbar_bg(0,3) ..
-	--]]
-	"list[current_name;armor_head;3,0.5;1,1;]" ..
-	"list[current_name;armor_torso;4,0.5;1,1;]" ..
-	"list[current_name;armor_legs;3,1.5;1,1;]" ..
-	"list[current_name;armor_feet;4,1.5;1,1;]" ..
-	"image[3,0.5;1,1;3d_armor_stand_head.png]" ..
-	"image[4,0.5;1,1;3d_armor_stand_torso.png]" ..
-	"image[3,1.5;1,1;3d_armor_stand_legs.png]" ..
-	"image[4,1.5;1,1;3d_armor_stand_feet.png]" ..
-	"list[current_player;main;0,3;8,1;]" ..
-	"list[current_player;main;0,4.25;8,3;8]"
+local function activate_formspec(pos, node, player, itemstack, pointed_thing)
+	local name = player:get_player_name()
+	map.selected[name] = pos
+	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
+	local fs = "size[8,8]" ..
+		"list[nodemeta:" .. spos .. ";armor_head;3,0.5;1,1;]" ..
+		"list[nodemeta:" .. spos .. ";armor_torso;4,0.5;1,1;]" ..
+		"list[nodemeta:" .. spos .. ";armor_legs;3,1.5;1,1;]" ..
+		"list[nodemeta:" .. spos .. ";armor_feet;4,1.5;1,1;]" ..
+		"list[nodemeta:" .. spos .. ";armor_shield;3.5,2.5;1,1;]" ..
+		"image[3,0.5;1,1;3d_armor_stand_head.png]" ..
+		"image[4,0.5;1,1;3d_armor_stand_torso.png]" ..
+		"image[3,1.5;1,1;3d_armor_stand_legs.png]" ..
+		"image[4,1.5;1,1;3d_armor_stand_feet.png]" ..
+		"image[3.5,2.5;1,1;3d_armor_stand_shield.png]" ..
+		"button[0,0;1.5,1;store;Store]" ..
+		"button[0,1;1.5,1;apply;Apply]" ..
+		"list[current_player;main;0,4;8,1;]" ..
+		"list[current_player;main;0,5.25;8,3;8]" ..
+		forms.help_button() ..
+		forms.exit_button() ..
+		forms.get_hotbar_bg(0, 4) ..
+	""
+	minetest.show_formspec(name, "3d_armor:stand", fs)
+end
 
-local elements = {"head", "torso", "legs", "feet"}
+local elements = {"head", "torso", "legs", "feet", "shield"}
 
 local function drop_armor(pos)
 	local meta = minetest.get_meta(pos)
@@ -118,6 +126,58 @@ local function has_locked_armor_stand_privilege(meta, player)
 	return true
 end
 
+local function apply_armor(player, pos)
+	local meta = minetest.get_meta(pos)
+	local protected = meta:get_string("owner") ~= ""
+	if protected and not has_locked_armor_stand_privilege(meta, player) then
+		return
+	end
+	local name, p_armor = armor:get_valid_player(player)
+	inventory.throw_inventory(pos, p_armor:get_list("armor"))
+	p_armor:set_list("armor", {})
+	p_armor = nil
+
+	local inv = meta:get_inventory()
+	for n, element in pairs(elements) do
+		local stack = inv:get_stack("armor_" .. element, 1)
+		if stack and stack:get_count() > 0 then
+			armor:set_inventory_stack(player, n, stack)
+		end
+		inv:set_stack("armor_" .. element, 1, nil)
+	end
+
+	update_entity(pos)
+	armor:set_player_armor(player)
+end
+
+local function store_armor(player, pos)
+	local meta = minetest.get_meta(pos)
+	local protected = meta:get_string("owner") ~= ""
+	if protected and not has_locked_armor_stand_privilege(meta, player) then
+		return
+	end
+	local name, p_armor = armor:get_valid_player(player)
+	local inv = meta:get_inventory()
+	local it = {}
+	for n, element in pairs(elements) do
+		local stack = inv:get_stack("armor_" .. element, 1)
+		if stack and stack:get_count() > 0 then
+			it[#it + 1] = stack
+			inv:set_stack("armor_" .. element, 1, nil)
+		end
+		local p_stack = p_armor:get_stack("armor", n)
+		if p_stack and p_stack:get_count() > 0 then
+			inv:set_stack("armor_" .. element, 1, p_stack)
+			armor:set_inventory_stack(player, n, nil)
+		end
+	end
+	inventory.throw_inventory(pos, it)
+	it = nil
+
+	update_entity(pos)
+	armor:set_player_armor(player)
+end
+
 local function add_hidden_node(pos, player)
 	local p = {x=pos.x, y=pos.y + 1, z=pos.z}
 	local name = player:get_player_name()
@@ -134,6 +194,17 @@ local function remove_hidden_node(pos)
 		minetest.remove_node(p)
 	end
 end
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname ~= "3d_armor:stand" then
+		return
+	end
+	if fields.store then
+		store_armor(player, map.selected[player:get_player_name()], pos)
+	elseif fields.apply then
+		apply_armor(player, map.selected[player:get_player_name()], pos)
+	end
+end)
 
 minetest.register_node("3d_armor:stand_top", {
 	description = S("Armor stand top"),
@@ -167,9 +238,12 @@ minetest.register_node("3d_armor:stand", {
 	},
 	groups = {choppy=2, oddly_breakable_by_hand=2},
 	sounds = music.sounds.nodes.wood,
+	on_punch = function(pos)
+		update_entity(pos)
+	end,
+	on_rightclick = activate_formspec,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", armor_stand_formspec)
 		meta:set_string("infotext", S("Armor Stand"))
 		local inv = meta:get_inventory()
 		for _, element in pairs(elements) do
@@ -235,9 +309,12 @@ minetest.register_node("3d_armor:stand_locked", {
 	},
 	groups = {choppy=2, oddly_breakable_by_hand=2},
 	sounds = music.sounds.nodes.wood,
+	on_punch = function(pos)
+		update_entity(pos)
+	end,
+	on_rightclick = activate_formspec,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", armor_stand_formspec)
 		meta:set_string("infotext", S("Armor Stand"))
 		meta:set_string("owner", "")
 		local inv = meta:get_inventory()
