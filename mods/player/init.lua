@@ -303,7 +303,7 @@ minetest.register_item(":", {
 local bp = {
 	meta = {
 		infotext = "Leather Backpack",
-		inventory = "return {\"bucket:bucket_water\", \"stone:cobble 50\", \"mese:crystal_fragment 10\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"}",
+		inventory = "return {\"bucket:bucket_water\", \"stone:cobble 50\", \"mese:crystal_fragment 10\", \"farming:bread 13\", \"mobs:meat\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"}",
 		description = "Leather Backpack"
 	},
 	metadata = "",

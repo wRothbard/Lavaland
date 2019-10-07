@@ -10,11 +10,15 @@ local function cons(player)
 	local name = player:get_player_name()
 	local hp = player:get_hp()
 	if hp > 0 then
-		local sat = stats.update_stats(player, {sat = ""})
+		local sat = stats.update_stats(player, {sat = "", sat_max = ""})
 		if not sat then
 			return
 		end
 
+		local sat_max = sat.sat_max
+		if not sat_max then
+			return
+		end
 		sat = sat.sat
 		if not sat then
 			return
@@ -37,7 +41,7 @@ local function cons(player)
 		stats.update_stats(player, {sat = sat})
 		hud.update(player, "hunger", "number", sat, {name = "hunger"})
 
-		if sat > 16 and hp < player:get_properties().hp_max and
+		if sat > sat_max * 0.75 and hp < player:get_properties().hp_max and
 				player:get_breath() > 0 then
 			player:set_hp(hp + 1)
 		end
