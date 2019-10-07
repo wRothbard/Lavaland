@@ -301,4 +301,6 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
+dofile(modpath .. "/armor_stand.lua")
+
 print("loaded 3d_armor")
