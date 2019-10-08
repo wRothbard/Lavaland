@@ -136,6 +136,9 @@ warpstones.save = function(name, pos, valid)
 		return
 	end
 	pos = pos or selected[name]
+	if not pos then
+		return
+	end
 	if not valid then
 		if not minetest.is_protected(pos, name) then
 			forms.message(player,
@@ -265,6 +268,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			end
 		end
 	end
+
 	if formname == "warpstones:stats_apply" and fields.ok then
 		local codex = minetest.deserialize(selected[name].fields.codex)
 		stats.update_stats(player, codex)
@@ -313,6 +317,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			sat = 20,
 		})
 	end
+
 	if formname == "warpstones:emerald" then
 		local pos = selected[name]
 		if fields.set then
@@ -333,6 +338,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			show_rest(name, pos)
 		end
 	end
+
 	if formname == "warpstones:save" then
 		if fields.ok then
 			local pos = selected[name]
