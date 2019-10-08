@@ -164,7 +164,10 @@ local function entity_physics(pos, radius, drops)
 
 			minetest.after(0.1, function()
 				if minetest.get_player_by_name(obj:get_player_name()) then
-					obj:set_hp(obj:get_hp() - damage)
+					local wielded = obj:get_wielded_item()
+					if wielded:get_name():sub(1, 11) ~= "warpstones:" then
+						obj:set_hp(obj:get_hp() - damage)
+					end
 				end
 			end)
 		else
