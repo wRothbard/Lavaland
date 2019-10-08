@@ -179,6 +179,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		spt.pitch = spt.pitch and spt.pitch * 0.6
 		local pos = player:get_pos()
 		pos.y = pos.y + 0.67
+		spt.pos = pos
 		spt.gain = 0.34
 		local h = music.play("music_bell", spt)
 		minetest.after(0, minetest.sound_fade, h, -0.23, 0)
