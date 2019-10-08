@@ -30,7 +30,7 @@ end
 
 function cauldron.boiling_construct(pos)
 	local spos = minetest.hash_node_position(pos)
-	sounds[spos] = minetest.sound_play("xdecor_boiling_water", {
+	sounds[spos] = minetest.sound_play("cauldron_boiling_water", {
 		pos = pos,
 		max_hear_distance = 5,
 		gain = 0.8,
