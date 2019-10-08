@@ -367,6 +367,7 @@ minetest.register_abm({
 		local un = minetest.get_node(pos)
 		if un and un.name then
 			if un.name ~= "air" and un.name ~= "mobs:spawner" and 
+					minetest.registered_nodes[un.name] and
 					not minetest.registered_nodes[un.name].buildable_to then
 				return
 			end
