@@ -270,6 +270,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	elseif formname == "stats:more" and fields.save then
 		warpstones.save(name)
 		stats.save(player)
+		minetest.chat_send_player(name, "Saved.")
 	elseif formname == "stats:status" and fields.more then
 		stats.show_more(player)
 	elseif (formname == "stats:status" or

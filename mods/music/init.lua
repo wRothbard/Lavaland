@@ -22,12 +22,14 @@ function music.play(sss, spt, player)
 end
 
 local function show_box(pos, node, clicker, itemstack, pointed_thing)
-	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 	local fs = "size[12,3]" ..
-		"list[nodemeta:" .. spos .. ";record;5.5,2;1,1]" ..
 	""
 	for i = 1, 10 do
 		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
+	end
+	if pos then
+		local spos = pos.x .. "," .. pos.y .. "," .. pos.z
+		fs = fs .. "list[nodemeta:" .. spos .. ";record;5.5,2;1,1]"
 	end
 	minetest.show_formspec(clicker:get_player_name(), "music:box",
 			fs)
@@ -97,68 +99,6 @@ minetest.register_on_leaveplayer(function(player)
 	--music.players[player:get_player_name()] = nil
 	handles[player:get_player_name()] = nil
 end)
-
-minetest.register_chatcommand("hum", {
-	description = "arg(bool) means this arg is a bool",
-	params = "loop(bool) gain(float) pitch(float) | stop",
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if param == "stop" then
-			music.panic(name)
-		end
-		a = param:split(" ")
-		local spt = {
-			to_player = name,
-			loop = false,
-			gain = 0.06,
-			pitch = 0.0334,
-		}
-		local loop = a[1] and a[1] == "true" or
-				a[1] == "false"
-		if loop then
-			if a[1] == "true" then
-				spt.loop = true
-			else
-				spt.loop = false
-			end
-		end
-		local gain = a[2] and tonumber(a[2])
-		if gain then
-			spt.gain = tonumber(gain)
-		end
-		local pitch = a[3] and tonumber(a[3])
-		if pitch then
-			spt.pitch = tonumber(pitch)
-		end
-		music.play("music_square", spt, player)
-	end,
-})
-
-minetest.register_chatcommand("m", {
-	func = function(name, param)
-		local player = minetest.get_player_by_name(name)
-		if not player then
-			return false, "Not in game!"
-		end
-		local pos = player:get_pos()
-		pos.y = pos.y + 0.5
-		local spt = {pos = pos}
-		param = param:split(" ")
-		if not param[1] then
-			param[1] = ""
-		end
-		if param[2] then
-			spt.pitch = tonumber(param[2])
-		end
-		music.play(param[1], spt)
-	end,
-})
-
-minetest.register_chatcommand("p", {
-	func = function(name, param)
-		show_box(nil, nil, minetest.get_player_by_name(name))
-	end,
-})
 
 minetest.register_node("music:box", {
 	description = "Piano",
@@ -268,5 +208,67 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 end)
+
+minetest.register_chatcommand("hum", {
+	description = "arg(bool) means this arg is a bool",
+	params = "loop(bool) gain(float) pitch(float) | stop",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if param == "stop" then
+			music.panic(name)
+		end
+		a = param:split(" ")
+		local spt = {
+			to_player = name,
+			loop = false,
+			gain = 0.06,
+			pitch = 0.0334,
+		}
+		local loop = a[1] and a[1] == "true" or
+				a[1] == "false"
+		if loop then
+			if a[1] == "true" then
+				spt.loop = true
+			else
+				spt.loop = false
+			end
+		end
+		local gain = a[2] and tonumber(a[2])
+		if gain then
+			spt.gain = tonumber(gain)
+		end
+		local pitch = a[3] and tonumber(a[3])
+		if pitch then
+			spt.pitch = tonumber(pitch)
+		end
+		music.play("music_square", spt, player)
+	end,
+})
+
+minetest.register_chatcommand("m", {
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "Not in game!"
+		end
+		local pos = player:get_pos()
+		pos.y = pos.y + 0.5
+		local spt = {pos = pos}
+		param = param:split(" ")
+		if not param[1] then
+			param[1] = ""
+		end
+		if param[2] then
+			spt.pitch = tonumber(param[2])
+		end
+		music.play(param[1], spt)
+	end,
+})
+
+minetest.register_chatcommand("p", {
+	func = function(name, param)
+		show_box(nil, nil, minetest.get_player_by_name(name))
+	end,
+})
 
 print("loaded music")
