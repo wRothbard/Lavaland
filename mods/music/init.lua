@@ -21,13 +21,15 @@ function music.play(sss, spt, player)
 	return handle
 end
 
-local function show_piano(pos, node, clicker, itemstack, pointed_thing)
+local function show_box(pos, node, clicker, itemstack, pointed_thing)
+	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 	local fs = "size[12,3]" ..
+		"list[nodemeta:" .. spos .. ";record;5.5,2;1,1]" ..
 	""
 	for i = 1, 10 do
 		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
 	end
-	minetest.show_formspec(clicker:get_player_name(), "music:piano",
+	minetest.show_formspec(clicker:get_player_name(), "music:box",
 			fs)
 end
 
@@ -98,7 +100,7 @@ end)
 
 minetest.register_chatcommand("hum", {
 	description = "arg(bool) means this arg is a bool",
-	params = "loop(bool) gain(float) pitch(float)",
+	params = "loop(bool) gain(float) pitch(float) | stop",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if param == "stop" then
@@ -154,17 +156,64 @@ minetest.register_chatcommand("m", {
 
 minetest.register_chatcommand("p", {
 	func = function(name, param)
-		show_piano(nil, nil, minetest.get_player_by_name(name))
+		show_box(nil, nil, minetest.get_player_by_name(name))
 	end,
 })
 
-minetest.register_node("music:piano", {
+minetest.register_node("music:box", {
 	description = "Piano",
-	on_rightclick = show_piano,
+	tiles = {
+		"stone_block.png^[colorize:black:90",
+	},
+	after_place_node = function(pos, placer, itemstack, pointed_thing)
+		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		inv:set_size("record", 1)
+	end,
+	on_rightclick = show_box,
+	on_metadata_inventory_put = function(pos, listname, index, stack, player)
+	end,
+})
+
+minetest.register_craftitem("music:record", {
+	description = "Record",
+	inventory_image = "shop_coin.png^[colorize:black:90",
+	stack_max = 1,
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.type == "node" then
+			if minetest.get_node(pointed_thing.under).name == "music:box" then
+				local m = minetest.get_meta(pointed_thing.under)
+				m:get_inventory():set_stack("record", 1, itemstack)
+				itemstack:take_item()
+				return itemstack
+			end
+		end
+		local name = user:get_player_name()
+		local meta = itemstack:get_meta()
+		local seq = meta:get("seq")
+		if seq then
+			seq = minetest.deserialize(seq)
+		end
+		local s = ""
+		for i = 1, #seq do
+			local it = seq[i]
+			s = s .. it.pitch
+			if i ~= #seq then
+				s = s .. "\n"
+			end
+		end
+		local fs = "size[8,9]" ..
+			"real_coordinates[true]" ..
+			"textarea[0,0;8,8;music;;" .. s .. "]" ..
+			"button[0,8;8,1;save;Save]" ..
+		""
+		minetest.show_formspec(name, "music:record", fs)
+		return itemstack
+	end,
 })
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname == "music:piano" then
+	if formname == "music:box" and not fields.quit then
 		local spt = {}
 		if fields.pin1 then
 			spt.pitch = 0.5
@@ -193,6 +242,30 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		spt.gain = 0.34
 		local h = music.play("music_bell", spt)
 		minetest.after(0, minetest.sound_fade, h, -0.23, 0)
+	elseif formname == "music:record" then
+		local s = fields.music
+		if s then
+			local seq = {}
+			s = s:split("\n")
+			for i = 1, #s do
+				local ss = s[i]
+				ss = ss:split(" ")
+				for ii = 1, #ss do
+					local a = ss[ii]
+					if ii == 1 then
+						a = tonumber(a)
+					end
+					if a then
+						seq[i] = {pitch = a, sound = "music_bell"}
+					end
+				end
+			end
+			local w = player:get_wielded_item()
+			if w:get_name() == "music:record" then
+				w:get_meta():set_string("seq", minetest.serialize(seq))
+				player:set_wielded_item(w)
+			end
+		end
 	end
 end)
 

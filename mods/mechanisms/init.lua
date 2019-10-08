@@ -54,6 +54,21 @@ local function door_toggle(pos_actuator, pos_door, player)
 	end
 	local f = minetest.get_node_or_nil(pos_door)
 	if f and f.name == "walkie:intercomm" then
+		local actuator = minetest.get_node(pos_actuator)
+		if actuator.name:sub(-4) == "_off" then
+			minetest.set_node(pos_actuator, {
+				name = actuator.name:gsub("_off", "_on"),
+				param2 = actuator.param2
+			})
+		end
+		minetest.after(2, function()
+			if minetest.get_node(pos_actuator).name:sub(-3) == "_on" then
+				minetest.set_node(pos_actuator,	{
+					name = actuator.name,
+					param2 = actuator.param2
+				})
+			end
+		end)
 		f = minetest.registered_nodes[f.name]._on_function
 		f = f(pos_door)
 		if f then
@@ -261,6 +276,10 @@ minetest.register_craft({
 		{"group:stick"},
 		{"stone:stone"}
 	}
+})
+
+minetest.register_node("mechanisms:detector_off", {
+	description = "Detector",
 })
 
 print("loaded mechanisms")
