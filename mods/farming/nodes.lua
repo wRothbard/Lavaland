@@ -95,10 +95,11 @@ minetest.register_abm({
 
 
 for i = 1, 5 do
-	minetest.override_item("grass:grass_"..i, {drop = {
+	minetest.override_item("grass:grass_" .. i, {drop = {
 		max_items = 1,
 		items = {
-			{items = {"farming:seed_wheat"},rarity = 5},
+			{items = {"farming:seed_carrot"}, rarity = 10},
+			{items = {"farming:seed_wheat"}, rarity = 5},
 			{items = {"grass:grass_1"}},
 		}
 	}})
@@ -107,7 +108,8 @@ end
 minetest.override_item("grass:jungle", {drop = {
 	max_items = 1,
 	items = {
-		{items = {"farming:seed_cotton"},rarity = 8},
+		{items = {"farming:seed_carrot"}, rarity = 16},
+		{items = {"farming:seed_cotton"}, rarity = 8},
 		{items = {"grass:jungle"}},
 	}
 }})
