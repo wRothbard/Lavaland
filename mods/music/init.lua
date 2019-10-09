@@ -1,12 +1,13 @@
 music = {}
 --music.players = {}
 local handles = {}
+local boxes = {}
 
 dofile(minetest.get_modpath("music") .. "/sounds.lua")
 
 local rand = math.random
 
-function music.play(sss, spt, player)
+function music.play(sss, spt, player, fade)
 	if type(sss) == "string" then
 		sss = {name = sss}
 	end
@@ -18,7 +19,11 @@ function music.play(sss, spt, player)
 		ph[#ph + 1] = handle
 		handles[name] = ph
 	end
-	return handle
+	if fade then
+		minetest.sound_fade(handle, fade, 0)
+	else
+		return handle
+	end
 end
 
 local function show_box(pos, node, clicker, itemstack, pointed_thing)
@@ -26,8 +31,8 @@ local function show_box(pos, node, clicker, itemstack, pointed_thing)
 	map.selected[name] = pos
 	local fs = "size[12,6]" ..
 	""
-	for i = 0, 11 do
-		fs = fs .. "button[" .. i .. ",0;1,1;pin" .. i .. ";]"
+	for i = 1, 12 do
+		fs = fs .. "button[" .. i - 1 .. ",0;1,1;pin" .. i .. ";]"
 	end
 	if pos then
 		local spos = pos.x .. "," .. pos.y .. "," .. pos.z
@@ -58,30 +63,21 @@ music.panic = function(name)
 	end
 end
 
-local function play_disk(pos)
+local function stop_disk(pos)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
-	local disk = inv:get_stack("disk", 1)
-	if disk:get_name() ~= "music:disk" then
-		return
-	end
-	local seq = disk:get_meta():get("seq")
-	if seq then
-		seq = minetest.deserialize(seq)
-		for i = 1, #seq do
-			local sss = {name = seq[i].sound}
-			local spt = {pitch = seq[i].pitch, pos = pos}
-			minetest.after(i, music.play, sss, spt)
-		end
-	end
+	local hash = minetest.hash_node_position(pos)
+	boxes[minetest.pos_to_string(pos)] = nil
 end
 
 local function eject(pos)
 	local meta = minetest.get_meta(pos)
+	meta:set_string("t", tostring(minetest.get_us_time()))
 	local inv = meta:get_inventory()
 	local stack = inv:get_stack("disk", 1)
 	inventory.throw_inventory(pos, {stack})
 	inv:set_stack("disk", 1, nil)
+	stop_disk(pos)
 end
 
 local function show_seq(player)
@@ -94,7 +90,12 @@ local function show_seq(player)
 		seq = minetest.deserialize(seq)
 		for i = 1, #seq do
 			local it = seq[i]
-			s = s .. it.pitch
+			if type(it) == "string" and
+					it:sub(1, 2) == "i " then
+				s = s .. it
+			else
+				s = s .. it.pitch
+			end
 			if i ~= #seq then
 				s = s .. "\n"
 			end
@@ -106,6 +107,67 @@ local function show_seq(player)
 		"button[0,8;8,1;save;Save]" ..
 	""
 	minetest.show_formspec(name, "music:disk", fs)
+end
+
+local function play_note(sss, spt, t, pos)
+	local meta = minetest.get_meta(pos)
+	local tt = meta:get_string("t")
+	if tt ~= t then
+		return
+	end
+	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
+	if not boxes[spos] or boxes[spos] ~= t then
+		return
+	end
+	local fade
+	if sss.name == "music_square" then
+		fade = -0.34
+	end
+	music.play(sss, spt, nil, fade)
+end
+
+local function play_disk(pos)
+	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
+	if boxes[spos] then
+		stop_disk(pos)
+	end
+	local t = tostring(minetest.get_us_time())
+	boxes[spos] = t
+	local meta = minetest.get_meta(pos)
+	meta:set_string("t", t)
+	local inv = meta:get_inventory()
+	local disk = inv:get_stack("disk", 1)
+	if disk:get_name() ~= "music:disk" then
+		return
+	end
+	local seq = disk:get_meta():get("seq")
+	if seq then
+		local step = 0
+		local stop_delay = 0
+		seq = minetest.deserialize(seq)
+		if #seq > 40 then
+			local s = {}
+			for i = 1, 40 do
+				s[i] = seq[i]
+			end
+			seq = s
+		end
+		for i = 1, #seq do
+			if type(seq[i]) ~= "string" then
+				stop_delay = stop_delay + 1
+				local pitch = seq[i].pitch
+				local sss = {name = seq[i].sound}
+				local spt = {pitch = seq[i].pitch, pos = pos}
+				if pitch == 0 then
+					sss.name = ""
+					spt = {}
+				end
+				minetest.after(step, play_note, sss, spt, t, pos)
+				step = step + 1
+			end
+		end
+		minetest.after(stop_delay, stop_disk, pos)
+	end
 end
 
 --[[
@@ -209,26 +271,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			return eject(pos)
 		end
 		local spt = {}
-		if fields.pin1 then
-			spt.pitch = 0.5
-		elseif fields.pin2 then
-			spt.pitch = 0.56
-		elseif fields.pin3 then
-			spt.pitch = 0.62
-		elseif fields.pin4 then
-			spt.pitch = 0.68
-		elseif fields.pin5 then
-			spt.pitch = 0.74
-		elseif fields.pin6 then
-			spt.pitch = 0.80
-		elseif fields.pin7 then
-			spt.pitch = 0.86
-		elseif fields.pin8 then
-			spt.pitch = 0.92
-		elseif fields.pin9 then
-			spt.pitch = 0.98
-		elseif fields.pin10 then
-			spt.pitch = 1.04
+		for i = 1, 12 do
+			if fields["pin" .. i] then
+				spt.pitch = i * 0.13 --TODO more tunings
+			end
 		end
 		spt.pitch = spt.pitch and spt.pitch * 0.6
 		local pos = player:get_pos()
@@ -242,17 +288,36 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if s then
 			local seq = {}
 			s = s:split("\n")
+			if #s > 40 then
+				minetest.chat_send_player(name, "Limit of 40 exceeded.")
+			end
+			local ins = false
 			for i = 1, #s do
 				local ss = s[i]
 				ss = ss:split(" ")
+				local pitch = 0
 				for ii = 1, #ss do
 					local a = ss[ii]
 					if ii == 1 then
-						a = tonumber(a)
+						if a == "i" then
+							ins = true
+						else
+							pitch = tonumber(a)
+							if a then
+								pitch = a
+							end
+						end
+					elseif ii == 2 and ins then
+						ins = a
+						seq[i] = "i " .. ins
+						break
 					end
-					if a then
-						seq[i] = {pitch = a, sound = "music_bell"}
-					end
+				end
+				if not ins then
+					ins = "music_bell"
+				end
+				if not seq[i] then
+					seq[i] = {pitch = pitch, sound = ins}
 				end
 			end
 			local w = player:get_wielded_item()
