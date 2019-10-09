@@ -27,6 +27,12 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	type = "shapeless",
+	output = "steel:ingot 9",
+	recipe = {"steel:block"},
+})
+
+minetest.register_craft({
 	type = "cooking",
 	output = "steel:ingot",
 	recipe = "steel:iron_lump",
