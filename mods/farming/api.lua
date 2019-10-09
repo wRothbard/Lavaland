@@ -25,6 +25,25 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 		return
 	end
 
+	if minetest.registered_nodes[under.name].buildable_to then
+		local d = minetest.get_node_drops(under.name,
+				user:get_wielded_item():get_name())
+		minetest.remove_node(pt.under)
+		inventory.throw_inventory(pt.under, d)
+		minetest.sound_play("dirt_dig_crumbly", {
+			pos = pt.under,
+			gain = 0.5,
+		})
+		-- wear tool
+		local wdef = itemstack:get_definition()
+		itemstack:add_wear(65535/(uses-1))
+		-- tool break sound
+		if itemstack:get_count() == 0 and wdef.sound and wdef.sound.breaks then
+			minetest.sound_play(wdef.sound.breaks, {pos = pt.above, gain = 0.5})
+		end
+		return itemstack
+	end
+
 	-- check if the node above the pointed thing is air
 	if above.name ~= "air" then
 		return
@@ -52,7 +71,7 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 
 	-- turn the node into soil and play sound
 	minetest.set_node(pt.under, {name = regN[under.name].soil.dry})
-	minetest.sound_play("default_dig_crumbly", {
+	minetest.sound_play("dirt_dig_crumbly", {
 		pos = pt.under,
 		gain = 0.5,
 	})

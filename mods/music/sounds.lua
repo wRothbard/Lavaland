@@ -98,9 +98,15 @@ music.sounds = {
 				name = "dirt_footstep",
 				gain = 0.4,
 			},
+			dig = {
+				name = "dirt_dig_crumbly",
+				gain = 0.443,
+				pitch = 0.97,
+			},
 			dug = {
-				name = "dirt_footstep",
-				gain = 1.0,
+				name = "nodes_place",
+				gain = 0.9,
+				pitch = 0.9,
 			},
 			place = {
 				name = "nodes_place",
