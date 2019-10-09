@@ -29,7 +29,7 @@ mobs:register_mob("mobs:rat", {
 	},
 	lava_damage = 4,
 	on_rightclick = function(self, clicker)
-		mobs:capture_mob(self, clicker, 50, 90, 100, true, "mobs:rat")
+		mobs:capture_mob(self, clicker, 30, true, "mobs:rat")
 	end,
 })
 

@@ -158,7 +158,7 @@ for _, col in ipairs(all_colours) do
 			-- protect mod with mobs:protector item
 			if mobs:protect(self, clicker) then return end
 			--are we capturing?
-			if mobs:capture_mob(self, clicker, 0, 5, 60, false, nil) then return end
+			if mobs:capture_mob(self, clicker, 20, false, nil) then return end
 		end
 	})
 	mobs:register_egg("mobs:sheep_"..col[1], S("@1 Sheep", col[2]), "wool_"..col[1]..".png", 1)

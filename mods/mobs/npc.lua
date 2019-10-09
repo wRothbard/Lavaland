@@ -308,7 +308,7 @@ mobs:register_mob("mobs:npc", {
 		{name = "gold:block", chance = 3, min = 0, max = 1},
 	},
 	lava_damage = 2,
-	follow = {"farming:flour", "mobs:meat_raw", "gold:lump"},
+	follow = {"farming:bread", "mobs:meat", "cauldron:bowl_soup"},
 	owner = "",
 	order = "follow",
 	animation = {
@@ -327,7 +327,7 @@ mobs:register_mob("mobs:npc", {
 		if mobs:feed_tame(self, clicker, 7, true, true) then
 			return
 		end
-		if mobs:capture_mob(self, clicker, 0, 5, 80, false, nil) then
+		if mobs:capture_mob(self, clicker, 33, false, nil) then
 			return
 		end
 		if mobs:protect(self, clicker) then

@@ -53,7 +53,7 @@ mobs:register_mob("mobs:kitten", {
 	on_rightclick = function(self, clicker)
 		if mobs:feed_tame(self, clicker, 4, true, true) then return end
 		if mobs:protect(self, clicker) then return end
-		if mobs:capture_mob(self, clicker, 50, 50, 90, false, nil) then return end
+		if mobs:capture_mob(self, clicker, 20, false, nil) then return end
 
 		-- by right-clicking owner can switch between staying and walking
 		if self.owner and self.owner == clicker:get_player_name() then

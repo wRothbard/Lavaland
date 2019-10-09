@@ -47,6 +47,7 @@ mobs:register_mob("mobs:dungeon_master", {
 		{name = "mese:crystal", chance = 1, min = 1, max = 2},
 		{name = "diamond:diamond", chance = 2, min = 0, max = 1},
 	},
+	follow = {"trees:apple"},
 	lava_damage = 20,
 	animation = {
 		stand_start = 0,
@@ -60,6 +61,14 @@ mobs:register_mob("mobs:dungeon_master", {
 		speed_normal = 15,
 		speed_run = 15,
 	},
+	on_rightclick = function(self, clicker)
+		if mobs:feed_tame(self, clicker, 7, true, true) then
+			return
+		end
+		if mobs:capture_mob(self, clicker, 33, false, nil) then
+			return
+		end
+	end,
 	on_die = function(self, pos)
 		boom(pos)
 	end,

@@ -2850,9 +2850,13 @@ function mobs:register_egg(mob, desc, background, addegg, no_creative)
 end
 
 -- capture critter (thanks to blert2112 for idea)
-function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
-		force_take, replacewith)
-
+function mobs:capture_mob(self, clicker, chance, force_take, replacewith)
+	if not chance or chance > 33 then
+		chance = 33
+	end
+	if chance < 11 then
+		chance = 11
+	end
 	if self.child or not clicker:is_player() or not clicker:get_inventory() then
 		return false
 	end
@@ -2865,12 +2869,18 @@ function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
 	local name = clicker:get_player_name()
 	local tool = clicker:get_wielded_item()
 	-- Only a net can capture mobs.
-	if tool:get_name() ~= "fireflies:bug_net" then
+	local tn = tool:get_name()
+	if tn ~= "tools:bug_net" and tn ~= "tools:bug_net_mese" then
+		hud.message(clicker, "No net!")
 		return false
+	end
+	mob_sound(self, "mobs_swing")
+	if tn == "tools:bug_net_mese" then
+		chance = chance * 3
 	end
 	-- is mob tamed?
 	if self.tamed == false and force_take == false then
-		hud.message(name, "Not tames!")
+		hud.message(name, "Not tamed!")
 		return true
 	end
 	-- cannot pick up if not owner
@@ -2878,25 +2888,9 @@ function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
 		hud.message(name, S("@1 is owner!", self.owner))
 		return true
 	end
+	tool:add_wear(650)
+	clicker:set_wielded_item(tool)
 	if clicker:get_inventory():room_for_item("main", mobname) then
-		--[[
-		-- was mob clicked with hand, net
-		local chance = 0
-		if tool:get_name() == "" then
-			chance = chance_hand
-		elseif tool:get_name() == "mobs:net" then
-			chance = chance_net
-			tool:add_wear(4000) -- 17 uses
-			clicker:set_wielded_item(tool)
-		elseif tool:get_name() == "fireflies:bug_net" then
-		--]]
-			local chance = 0
-			chance = chance_lasso
-			tool:add_wear(650) -- 100 uses
-			clicker:set_wielded_item(tool)
-			--[[
-		end
-		--]]
 		-- calculate chance.. add to inventory if successful?
 		if chance > 0 and random(1, 100) <= chance then
 			-- default mob egg
@@ -2925,9 +2919,8 @@ function mobs:capture_mob(self, clicker, chance_hand, chance_net, chance_lasso,
 			end
 			self.object:remove()
 			mob_sound(self, "default_place_node_hard")
-		elseif chance ~= 0 then
-			--minetest.chat_send_player(name, S("Missed!"))
-			mob_sound(self, "mobs_swing")
+		else
+			hud.message(clicker, "Missed!")
 		end
 	end
 	return true

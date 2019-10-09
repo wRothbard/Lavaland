@@ -226,6 +226,7 @@ minetest.register_node("music:box", {
 		"steel_block.png^[colorize:black:191^(bases_base.png^[opacity:191)^music_disc_slot.png",
 	},
 	paramtype2 = "facedir",
+	stack_max = 1,
 	groups = {cracky = 2},
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
@@ -237,6 +238,15 @@ minetest.register_node("music:box", {
 		minetest.node_dig(pos, node, digger)
 	end,
 	on_rightclick = show_box,
+})
+
+minetest.register_craft({
+	output = "music:box",
+	recipe = {
+		{"copper:ingot", "copper:ingot", "copper:ingot"},
+		{"steel:ingot", "mese:mese", "steel:ingot"},
+		{"steel:ingot", "steel:ingot", "steel:ingot"},
+	},
 })
 
 minetest.register_craftitem("music:disk", {
@@ -261,6 +271,13 @@ minetest.register_craftitem("music:disk", {
 		show_seq(user)
 		return itemstack
 	end,
+})
+
+minetest.register_craft({
+	output = "music:disk",
+	recipe = {
+		{"mese:crystal", "papyrus:paper", "dye:black"}
+	}
 })
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)

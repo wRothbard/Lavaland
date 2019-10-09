@@ -50,7 +50,7 @@ mobs:register_mob("mobs:bunny", {
 		if mobs:protect(self, clicker) then
 			return
 		end
-		if mobs:capture_mob(self, clicker, 50, 50, 90, false, nil) then
+		if mobs:capture_mob(self, clicker, 20, false, nil) then
 			return
 		end
 
