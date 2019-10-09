@@ -459,4 +459,6 @@ minetest.register_craft({
 	}
 })
 
+dofile(minetest.get_modpath("tools") .. "/superpick.lua")
+
 print("loaded tools")
