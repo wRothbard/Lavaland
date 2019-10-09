@@ -11,7 +11,28 @@ dofile(farming.path .. "/nodes.lua")
 dofile(farming.path .. "/hoes.lua")
 
 
--- WHEAT
+-- Carrot
+farming.register_plant("farming:carrot", {
+	description = "Carrot Seed",
+	inventory_image = "farming_carrot_seed.png",
+	steps = 5,
+	minlight = 13,
+	maxlight = minetest.LIGHT_MAX,
+	groups = {food_carrot = 1, flammable = 1},
+	fertility = {"grassland"},
+})
+
+minetest.override_item("farming:carrot", {
+	on_use = minetest.item_eat(3),
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "farming:seed_carrot",
+	recipe = {"farming:carrot"},
+})
+
+-- Wheat
 
 farming.register_plant("farming:wheat", {
 	description = "Wheat Seed",

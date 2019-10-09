@@ -132,6 +132,9 @@ local timer = function(player)
 end
 
 function hud.message(player, message)
+	if not message then
+		return
+	end
 	local name
 	if type(player) ~= "string" then
 		name = player:get_player_name()

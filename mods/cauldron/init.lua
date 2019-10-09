@@ -254,7 +254,6 @@ minetest.register_node("cauldron:cauldron_soup", {
 })
 
 -- Craft items
-
 minetest.register_craftitem("cauldron:bowl", {
 	description = "Bowl",
 	inventory_image = "xdecor_bowl.png",
@@ -263,16 +262,15 @@ minetest.register_craftitem("cauldron:bowl", {
 })
 
 minetest.register_craftitem("cauldron:bowl_soup", {
-	description = "Bowl of soup",
+	description = "Bowl of Soup",
 	inventory_image = "xdecor_bowl_soup.png",
 	wield_image = "xdecor_bowl_soup.png",
-	groups = {not_in_creative_inventory=1},
+	groups = {not_in_creative_inventory = 1},
 	stack_max = 1,
-	on_use = minetest.item_eat(30, "cauldron:bowl")
+	on_use = minetest.item_eat(30, "cauldron:bowl_soup"),
 })
 
 -- Recipes
-
 minetest.register_craft({
 	output = "cauldron:bowl 3",
 	recipe = {

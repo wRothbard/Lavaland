@@ -24,58 +24,63 @@ local function duengen(pointed_thing)
 	end
 
 	local stage = ""
-	if n.name == "trees:sapling" and minetest.get_node_light(pos) > 12 then
-		if random(1, 20) < 5 then
+	local c = 0.67
+	local l = minetest.get_node_light(pos)
+	local wa = minetest.find_node_near(pos, 3, "group:water")
+	if not wa then
+		return
+	end
+	-- Saplings
+	if n.name == "trees:sapling" and l > 6 then
+		if random() < c then
 			minetest.set_node(pos, {name = "air"})
 			trees.grow_new_apple_tree(pos)
 		end
-
-	elseif string.find(n.name, "farming:wheat_") ~= nil then
+	-- Seeds
+	elseif n.name == "farming:seed_wheat" and random() < c and l > 6 then
+		minetest.set_node(pos, {name = "farming:wheat_1"})
+	elseif string.find(n.name, "farming:wheat_") and random() < c and l > 6 then
 		stage = tonumber(string.sub(n.name, 15))
-		if random(1, 7) < stage / 3 then
+		if stage < 7 then
+			minetest.set_node(pos, {name="farming:wheat_" .. stage + 1})
+		else
 			minetest.set_node(pos, {name="farming:wheat_8"})
-		elseif stage < 7 then
-			minetest.set_node(pos, {name="farming:wheat_" .. stage + random(1, 2)})
 		end
-
-	elseif string.find(n.name, "farming:cotton_") ~= nil then
+	elseif n.name == "farming:seed_cotton" and random() < c and l > 6 then
+		minetest.set_node(pos, {name = "farming:cotton_1"})
+	elseif string.find(n.name, "farming:cotton_") and random() < c and l > 6 then
 		stage = tonumber(string.sub(n.name, 16))
-		if random(1, 7) < stage / 3 then
+		if stage < 7 then
+			minetest.set_node(pos, {name="farming:cotton_" .. stage + 1})
+		else
 			minetest.set_node(pos, {name="farming:cotton_8"})
-		elseif stage < 7 then
-			minetest.set_node(pos, {name="farming:cotton_" .. stage + random(1, 2)})
 		end
-		--[[
-		if stage == 1 then
-			minetest.set_node(pos, {name="farming:cotton_" .. random(stage, 2)})
+	elseif n.name == "farming:seed_carrot" and random() < c and l > 6 then
+		minetest.set_node(pos, {name = "farming:carrot_1"})
+	elseif string.find(n.name, "farming:carrot_") and random() < c and l > 6 then
+		stage = tonumber(string.sub(n.name, 16))
+		if stage < 4 then
+			minetest.set_node(pos, {name = "farming:carrot_" .. stage + 1})
 		else
-			minetest.set_node(pos, {name="farming:cotton"})
+			minetest.set_node(pos, {name = "farming:carrot_5"})
 		end
-		--]]
-	--[[
-	elseif string.find(n.name, "farming:pumpkin_") ~= nil then
-		stage = tonumber(string.sub(n.name, 17))
-		if stage == 1 then
-			minetest.set_node(pos, {name = "farming:pumpkin_" .. random(stage, 2)})
-		else
-			minetest.set_node(pos, {name = "farming:pumpkin"})
-		end
-	elseif n.name == "default:dry_dirt" then
+	-- Dirt
+	elseif n.name == "dirt:dirt" then
 		for i = -2, 3, 1 do
 		for j = -3, 2, 1 do
 			local p = {x = pos.x + i, y = pos.y, z = pos.z + j}
 			local n2 = minetest.get_node_or_nil(p)
 
-			if n2 and n2.name and n2.name == "default:dry_dirt" and minetest.find_node_near(p, 6, {"group:water"}) then
-				if random(1, 6) > 3 then
-					minetest.set_node(pointed_thing.under, {name = "default:grass"})
+			if n2 and n2.name and n2.name == "dirt:dirt" and
+					minetest.find_node_near(p, 6, {"group:water"}) then
+				if random() > 0.5 then
+					minetest.set_node(pointed_thing.under, {name = "dirt:grass"})
 				else
-					minetest.set_node(p, {name = "default:grass"})
+					minetest.set_node(p, {name = "dirt:grass"})
 				end
 			end
 		end
 		end
-	--]]
 	end
 end
 
