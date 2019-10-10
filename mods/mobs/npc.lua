@@ -349,23 +349,12 @@ mobs:register_mob("mobs:npc", {
 							random(c[1], c[2]))
 				end
 			end
-			-- Dungeon Loot
-			--[[
-			local d_loot = dungeon_loot.registered_loot
-			for i = random(1, 3), #d_loot, random(1, 2) do
-				if d_loot[i].chance > random() then
-					local c = d_loot[i].count or {1, 1}
-					table.insert(ls,
-							d_loot[i].name .. " " ..
-							random(c[1], c[2]))
-				end
-			end
-			--]]
 			for i = #ls, 1, -1 do
 				local r = random(#ls)
 				ls[i], ls[r] = ls[r], ls[i]
 			end
 			inv_id:set_list("trade", {})
+			inv_id:set_size("trade", 8 * 4)
 			for i = 1, #ls do
 				local m = ls[i]
 				inv_id:add_item("trade", m)
@@ -377,17 +366,16 @@ mobs:register_mob("mobs:npc", {
 			self.inv = minetest.serialize(ls)
 			self.tid = tid
 		else
-			local mi = self.inv
-			mi = minetest.deserialize(mi)
+			local ls = self.inv
+			ls = minetest.deserialize(ls)
 			for i = 1, #col do
-				for ii = 1, #mi do
-					if mi[ii] == "" then
-						mi[ii] = col[i]
+				for ii = 1, #ls do
+					if ls[ii] == "" then
+						ls[ii] = col[i]
 						break
 					end
 				end
 			end
-			self.inv = minetest.serialize(mi)
 			local mob_inv = minetest.get_inventory({type = "detached",
 					name = "npc_" .. self.tid})
 			if not mob_inv then
@@ -395,10 +383,12 @@ mobs:register_mob("mobs:npc", {
 						self.tid, mob_detached_inv(self))
 			end
 			mob_inv:set_list("trade", {})
-			for i = 1, #mi do
-				local m = mi[i]
+			mob_inv:set_size("trade", 8 * 4)
+			for i = 1, #ls do
+				local m = ls[i]
 				mob_inv:add_item("trade", m)
 			end
+			self.inv = minetest.serialize(ls)
 		end
 		self.collected = {}
 		self.order = "stand"
