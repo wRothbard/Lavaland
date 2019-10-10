@@ -233,6 +233,32 @@ local function sprint(player)
 	end)
 end
 
+local function breath_air(player)
+	if not player then
+		return
+	end
+	local bm = player:get_properties().breath_max
+	if player:get_breath() < bm then
+		local _, ba = armor:get_valid_player(player)
+		if ba then
+			ba = ba:get_list("armor")
+			local d = 0
+			for i = 1, 5 do
+				if ba[i]:get_name():sub(-6) == "bronze" then
+					d = d + 1
+				end
+			end
+			if d == 5 then
+				armor:punch(player)
+				player:set_breath(bm)
+			end
+		end
+	end
+	minetest.after(3, function()
+		breath_air(player)
+	end)
+end
+
 local formspec_prepend = "bgcolor[#080808BB;false]" ..
 		"background[1,1;1,1;player_background.png;true]" ..
 		"listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF"
@@ -478,6 +504,7 @@ minetest.register_on_joinplayer(function(player)
 	})
 
 	sprint(player)
+	breath_air(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
