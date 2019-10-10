@@ -2817,10 +2817,10 @@ function mobs:register_egg(mob, desc, background, addegg, no_creative)
 			return itemstack
 		end,
 	})
-	-- register old stackable mob egg
 	minetest.register_craftitem(mob, {
 		description = desc,
 		inventory_image = invimg,
+		stack_max = 1,
 		groups = grp,
 		on_place = function(itemstack, placer, pointed_thing)
 			local pos = pointed_thing.above
