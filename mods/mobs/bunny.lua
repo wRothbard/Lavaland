@@ -79,3 +79,9 @@ minetest.register_craft({
 	recipe = {"mobs:bunny"},
 	output = "mobs:leather 3",
 })
+
+minetest.register_craft({
+	type = "shapeless",
+	recipe = {"mobs:bunny_set"},
+	output = "mobs:leather 3",
+})
