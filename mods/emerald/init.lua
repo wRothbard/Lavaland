@@ -1,6 +1,7 @@
 minetest.register_craftitem("emerald:emerald", {
 	description = "Emerald",
 	inventory_image = "emerald_emerald.png",
+	groups = {trade_value = 30},
 })
 
 minetest.register_node("emerald:block", {

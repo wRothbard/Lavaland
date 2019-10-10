@@ -2875,8 +2875,10 @@ function mobs:capture_mob(self, clicker, chance, force_take, replacewith)
 		return false
 	end
 	mob_sound(self, "mobs_swing")
+	local wear = 650
 	if tn == "tools:bug_net_mese" then
 		chance = chance * 3
+		wear = wear * 3
 	end
 	-- is mob tamed?
 	if self.tamed == false and force_take == false then
@@ -2888,7 +2890,7 @@ function mobs:capture_mob(self, clicker, chance, force_take, replacewith)
 		hud.message(name, S("@1 is owner!", self.owner))
 		return true
 	end
-	tool:add_wear(650)
+	tool:add_wear(wear)
 	clicker:set_wielded_item(tool)
 	if clicker:get_inventory():room_for_item("main", mobname) then
 		-- calculate chance.. add to inventory if successful?

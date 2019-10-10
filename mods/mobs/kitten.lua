@@ -51,7 +51,7 @@ mobs:register_mob("mobs:kitten", {
 	follow = {"mobs:rat"},
 	--view_range = 8,
 	on_rightclick = function(self, clicker)
-		if mobs:feed_tame(self, clicker, 4, true, true) then return end
+		if mobs:feed_tame(self, clicker, 1, true, true) then return end
 		if mobs:protect(self, clicker) then return end
 		if mobs:capture_mob(self, clicker, 20, false, nil) then return end
 

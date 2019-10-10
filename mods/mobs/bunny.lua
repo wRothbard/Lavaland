@@ -27,6 +27,7 @@ mobs:register_mob("mobs:bunny", {
 	--jump_height = 6,
 	drops = {
 		{name = "mobs:meat_raw", chance = 1, min = 1, max = 2},
+		{name = "mobs:leather", chance = 2, min = 1, max = 2},
 	},
 	lava_damage = 4,
 	animation = {

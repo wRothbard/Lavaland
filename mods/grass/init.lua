@@ -96,7 +96,7 @@ minetest.register_node("grass:jungle", {
 
 local sn = {
 	"farming:cotton_8",
-	"farming:wheat_8",
+	"farming:wheat_6",
 	"farming:carrot_5",
 	"grass:jungle",
 	"flowers:rose",

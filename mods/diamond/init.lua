@@ -7,7 +7,7 @@ minetest.register_node("diamond:block", {
 	description = "Diamond Block",
 	tiles = {"default_diamond_block.png"},
 	is_ground_content = false,
-	groups = {cracky = 1, level = 3},
+	groups = {cracky = 1, level = 3, trade_value = 15,},
 	sounds = music.sounds.material.metal,
 })
 

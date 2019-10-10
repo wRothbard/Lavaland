@@ -5,6 +5,7 @@
 -- Namespace for functions
 
 flowers = {}
+local random = math.random
 
 
 -- Map Generation
@@ -155,7 +156,7 @@ function flowers.flower_spread(pos, node)
 	local num_soils = #soils
 	if num_soils >= 1 then
 		for si = 1, math.min(3, num_soils) do
-			local soil = soils[math.random(num_soils)]
+			local soil = soils[random(num_soils)]
 			local soil_name = minetest.get_node(soil).name
 			local soil_above = {x = soil.x, y = soil.y + 1, z = soil.z}
 			light = minetest.get_node_light(soil_above)
@@ -249,10 +250,10 @@ function flowers.mushroom_spread(pos, node)
 		{x = pos.x - 1, y = pos.y - 2, z = pos.z - 1},
 		{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},
 		{"group:soil", "group:tree"})
-	if #positions == 0 then
+	if #positions == 1 then
 		return
 	end
-	local pos2 = positions[math.random(#positions)]
+	local pos2 = positions[random(#positions)]
 	pos2.y = pos2.y + 1
 	if minetest.get_node_light(pos2, 0.5) <= 3 then
 		minetest.set_node(pos2, {name = node.name})
@@ -324,7 +325,7 @@ local waterlily_def = {
 			if not minetest.is_protected(pos, player_name) then
 				minetest.set_node(pos, {name = "flowers:waterlily" ..
 					(def.waving == 3 and "_waving" or ""),
-					param2 = math.random(0, 3)})
+					param2 = random(0, 3)})
 				if not (creative and creative.is_enabled_for
 						and creative.is_enabled_for(player_name)) then
 					itemstack:take_item()

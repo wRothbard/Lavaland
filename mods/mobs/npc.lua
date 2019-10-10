@@ -132,7 +132,7 @@ npc_drops = {
 	{name = "copper:ingot", chance = 0.8, count = {1, 3}},
 	{name = "mobs:leather", chance = 0.8, count = {1, 5}},
 	{name = "music:box", chance = 0.1},
-	{name = "music:record", chance = 0.1},
+	{name = "music:disk", chance = 0.1},
 }
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
