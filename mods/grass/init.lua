@@ -67,6 +67,27 @@ for i = 2, 5 do
 	})
 end
 
+minetest.register_node("grass:dry_shrub", {
+	description = "Dry Shrub",
+	drawtype = "plantlike",
+	waving = 1,
+	tiles = {"default_dry_shrub.png"},
+	inventory_image = "default_dry_shrub.png",
+	wield_image = "default_dry_shrub.png",
+	paramtype = "light",
+	paramtype2 = "meshoptions",
+	place_param2 = 4,
+	sunlight_propagates = true,
+	walkable = false,
+	buildable_to = true,
+	groups = {snappy = 3, flammable = 3, attached_node = 1},
+	sounds = music.sounds.nodes.leaves,
+	selection_box = {
+		type = "fixed",
+		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, 4 / 16, 6 / 16},
+	},
+})
+
 minetest.register_node("grass:jungle", {
 	description = "Jungle Grass",
 	drawtype = "plantlike",
@@ -95,10 +116,11 @@ minetest.register_node("grass:jungle", {
 })
 
 local sn = {
-	"farming:cotton_8",
+	"farming:cotton_6",
 	"farming:wheat_6",
 	"farming:carrot_5",
 	"grass:jungle",
+	"grass:dry_shrub",
 	"flowers:rose",
 	"flowers:tulip",
 	"flowers:dandelion_yellow",
