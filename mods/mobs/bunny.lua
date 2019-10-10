@@ -72,7 +72,7 @@ mobs:register_mob("mobs:bunny", {
 	damage = 5,
 })
 
-mobs:register_egg("mobs:bunny", S("Bunny"), "mobs_bunny_inv.png", 0)
+mobs:register_egg("mobs:bunny", S("Bunny"), "mobs_bunny_inv.png", 1)
 
 minetest.register_craft({
 	type = "shapeless",

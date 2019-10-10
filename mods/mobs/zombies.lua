@@ -205,7 +205,7 @@ mobs:register_mob("mobs:zombie4", {
 })
 
 -- Eggs
-mobs:register_egg("mobs:zombie1", "Original Zombie", "mobs_zombie_head.png", 0)
-mobs:register_egg("mobs:zombie2", "One Armed Zombie", "mobs_zombie_head.png", 0)
-mobs:register_egg("mobs:zombie3", "Crawling Zombie", "mobs_zombie_head.png", 0)
-mobs:register_egg("mobs:zombie4", "New Zombie", "mobs_zombie_head.png", 0)
+mobs:register_egg("mobs:zombie1", "Original Zombie", "mobs_zombie_head.png", 1)
+mobs:register_egg("mobs:zombie2", "One Armed Zombie", "mobs_zombie_head.png", 1)
+mobs:register_egg("mobs:zombie3", "Crawling Zombie", "mobs_zombie_head.png", 1)
+mobs:register_egg("mobs:zombie4", "New Zombie", "mobs_zombie_head.png", 1)
