@@ -250,7 +250,7 @@ function flowers.mushroom_spread(pos, node)
 		{x = pos.x - 1, y = pos.y - 2, z = pos.z - 1},
 		{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},
 		{"group:soil", "group:tree"})
-	if #positions == 1 then
+	if #positions == 0 then
 		return
 	end
 	local pos2 = positions[random(#positions)]
