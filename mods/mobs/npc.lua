@@ -117,7 +117,7 @@ npc_drops = {
 	{name = "trees:wood", chance = 0.8},
 	--{name = "default:blueberries", chance = 0.8},
 	--{name = "default:cactus", chance = 0.8},
-	--{name = "default:dry_shrub", chance = 0.8},
+	{name = "grass:dry_shrub", chance = 0.8},
 	--{name = "default:fern_3", chance = 0.8},
 	--{name = "default:blueberry_bush_sapling", chance = 0.8},
 	{name = "water:ice", chance = 0.8, count = {2, 8}},
@@ -365,7 +365,11 @@ mobs:register_mob("mobs:npc", {
 				local r = random(#ls)
 				ls[i], ls[r] = ls[r], ls[i]
 			end
-			inv_id:set_list("trade", ls)
+			inv_id:set_list("trade", {})
+			for i = 1, #ls do
+				local m = ls[i]
+				inv_id:add_item("trade", m)
+			end
 			ls = inv_id:get_list("trade")
 			for i = 1, #ls do
 				ls[i] = ls[i]:to_string()
@@ -390,7 +394,11 @@ mobs:register_mob("mobs:npc", {
 				mob_inv = minetest.create_detached_inventory("npc_" ..
 						self.tid, mob_detached_inv(self))
 			end
-			mob_inv:set_list("trade", mi)
+			mob_inv:set_list("trade", {})
+			for i = 1, #mi do
+				local m = mi[i]
+				mob_inv:add_item("trade", m)
+			end
 		end
 		self.collected = {}
 		self.order = "stand"
