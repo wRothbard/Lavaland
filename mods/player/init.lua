@@ -234,7 +234,7 @@ local function sprint(player)
 end
 
 local function breath_air(player)
-	if not player then
+	if not minetest.get_player_by_name(player:get_player_name()) then
 		return
 	end
 	local bm = player:get_properties().breath_max
@@ -254,7 +254,7 @@ local function breath_air(player)
 			end
 		end
 	end
-	minetest.after(3, function()
+	minetest.after(6, function()
 		breath_air(player)
 	end)
 end
