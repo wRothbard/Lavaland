@@ -88,6 +88,12 @@ minetest.register_node("grass:dry_shrub", {
 	},
 })
 
+minetest.register_craft({
+	type = "shapeless",
+	output = "trees:stick 2",
+	recipe = {"grass:dry_shrub"},
+})
+
 minetest.register_node("grass:jungle", {
 	description = "Jungle Grass",
 	drawtype = "plantlike",

@@ -1,4 +1,5 @@
 local S = mobs.intllib
+
 -- Bunny by ExeterDad
 mobs:register_mob("mobs:bunny", {
 	--stepheight = 0.6,

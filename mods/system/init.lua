@@ -14,6 +14,19 @@ minetest.register_chatcommand("w", {
 	end,
 })
 
+minetest.register_chatcommand("registered", {
+	privs = "server",
+	func = function(name, param)
+		if param == "entities" then
+			print(dump(minetest.registered_entities))
+		elseif param == "object_refs" then
+			print(dump(minetest.object_refs))
+		elseif param == "luaentities" then
+			print(dump(minetest.luaentities))
+		end
+	end,
+})
+
 minetest.register_chatcommand("is_protected", {
 	func = function(name, param)
 		local p = minetest.get_player_by_name(name)

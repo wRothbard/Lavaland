@@ -1,31 +1,36 @@
 local S = mobs.intllib
 
-minetest.register_craftitem("mobs:rotten_flesh", {
-	description = "Rotten Flesh",
-	inventory_image = "mobs_rotten_flesh.png",
-	groups = {poison = 5},
-	on_use = minetest.item_eat(-10),
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "mobs:meat",
-	recipe = "mobs:rotten_flesh",
-	cooktime = 20,
-})
-
+-- Hairball
 local hairball_items = {
-	"trees:stick", "coal:lump", --[["default:dry_shrub",]] "flowers:rose",
-	"mobs:rat", "grass:grass_1", "farming:seed_wheat", "dye:green",
-	"farming:seed_cotton", "gravel:flint", "trees:sapling", "dye:white",
-	--[["default:clay_lump",]] "papyrus:paper", --[["default:dry_grass_1",]] "dye:red",
-	"farming:string", --[["default:acacia_bush_sapling",]]
-	--[["default:bush_sapling",]] "copper:lump", "iron:lump",
-	"dye:black", "dye:brown", "obsidian:shard", --[["default:tin_lump"]]
+	"trees:stick", "coal:lump",
+	"grass:dry_shrub",
+	"flowers:rose",
+	"mobs:rat",
+	"grass:grass_1",
+	"farming:seed_wheat",
+	"dye:green",
+	"farming:seed_cotton",
+	"gravel:flint",
+	"trees:sapling",
+	"dye:white",
+	--"default:clay_lump",
+	"papyrus:paper",
+	--"default:dry_grass_1",
+	"dye:red",
+	"farming:string",
+	--"default:acacia_bush_sapling",
+	--"default:bush_sapling",
+	"copper:lump",
+	"iron:lump",
+	"dye:black",
+	"dye:brown",
+	"obsidian:shard",
+	--"default:tin_lump",
 }
 
 minetest.register_craftitem("mobs:hairball", {
 	description = S("Lucky Hairball"),
+	groups = {trade_value = 15, flammable = 1},
 	inventory_image = "farming_string.png^(farming_string.png^[transformFYR90)",
 	stack_max = 1,
 	on_use = function(itemstack, user, pointed_thing)
@@ -45,11 +50,11 @@ minetest.register_craftitem("mobs:hairball", {
 	end,
 })
 
--- name tag
+-- Nametag
 minetest.register_craftitem("mobs:nametag", {
 	description = S("Name Tag"),
 	inventory_image = "mobs_nametag.png",
-	groups = {flammable = 2},
+	groups = {flammable = 2, trade_value = 3},
 })
 
 minetest.register_craft({
@@ -58,28 +63,46 @@ minetest.register_craft({
 	recipe = {"paper:paper", "dye:black", "farming:string"},
 })
 
--- leather
+minetest.register_craft({
+	type = "fuel",
+	recipe = "mobs:nametag",
+	burntime = 3,
+})
+
+-- Leather
 minetest.register_craftitem("mobs:leather", {
 	description = S("Leather"),
 	inventory_image = "mobs_leather.png",
-	groups = {flammable = 2},
+	groups = {flammable = 2, trade_value = 2},
 	on_use = minetest.item_eat(1),
 })
 
--- raw meat
+minetest.register_craft({
+	type = "fuel",
+	recipe = "mobs:leather",
+	burntime = 4,
+})
+
+-- Raw meat
+minetest.register_craftitem("mobs:rotten_flesh", {
+	description = "Rotten Flesh",
+	inventory_image = "mobs_rotten_flesh.png",
+	groups = {poison = 5, flammable = 1, trade_value = 2},
+	on_use = minetest.item_eat(-10),
+})
+
 minetest.register_craftitem("mobs:meat_raw", {
 	description = S("Raw Meat"),
 	inventory_image = "mobs_meat_raw.png",
 	on_use = minetest.item_eat(3),
-	groups = {food_meat_raw = 1, flammable = 2},
+	groups = {food_meat_raw = 1, flammable = 2, trade_value = 2},
 })
 
--- cooked meat
 minetest.register_craftitem("mobs:meat", {
 	description = S("Meat"),
 	inventory_image = "mobs_meat.png",
 	on_use = minetest.item_eat(8),
-	groups = {food_meat = 1, flammable = 2},
+	groups = {food_meat = 1, flammable = 2, trade_value = 5},
 })
 
 minetest.register_craft({
@@ -89,15 +112,9 @@ minetest.register_craft({
 	cooktime = 10,
 })
 
--- items that can be used as fuel
 minetest.register_craft({
-	type = "fuel",
-	recipe = "mobs:nametag",
-	burntime = 3,
-})
-
-minetest.register_craft({
-	type = "fuel",
-	recipe = "mobs:leather",
-	burntime = 4,
+	type = "cooking",
+	output = "mobs:meat",
+	recipe = "mobs:rotten_flesh",
+	cooktime = 20,
 })
