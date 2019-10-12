@@ -1,7 +1,3 @@
-local output = function(name, message)
-	minetest.chat_send_player(name, message)
-end
-
 local function get_shop_formspec(pos, p)
 	local meta = minetest.get_meta(pos)
 	local spos = pos.x.. "," ..pos.y .. "," .. pos.z
@@ -51,7 +47,7 @@ minetest.register_node("shop:shop", {
 		"shop_shop_side.png",
 		"shop_shop_front.png",
 	},
-	groups = {choppy = 3, oddly_breakable_by_hand = 1},
+	groups = {choppy = 3, oddly_breakable_by_hand = 1, trade_value = 25},
 	paramtype2 = "facedir",
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
@@ -68,23 +64,23 @@ minetest.register_node("shop:shop", {
 		local inv = meta:get_inventory()
 		inv:set_size("buy1", 1)
 		inv:set_size("sell1", 1)
-		inv:set_size("stock", 8*4)
-		inv:set_size("register", 8*4)
+		inv:set_size("stock", 8 * 4)
+		inv:set_size("register", 8 * 4)
 	end,
 	on_punch = function(pos, node, puncher, pointed_thing)
 		if not minetest.check_player_privs(puncher, "shop_admin") then
 			return
 		end
 		local c = puncher:get_player_control()
-		if not c.aux1 and c.sneak then
+		if not (c.aux1 and c.sneak) then
 			return
 		end
 		local meta = minetest.get_meta(pos)
 		if meta:get_string("admin_shop") == "false" then
-			output(puncher:get_player_name(), "Enabling infinite stocks in shop.")
+			hud.message(puncher, "Enabling infinite stocks in shop.")
 			meta:set_string("admin_shop", "true")
 		elseif meta:get_string("admin_shop") == "true" then
-			output(puncher:get_player_name(), "Disabling infinite stocks in shop.")
+			hud.message(puncher, "Disabling infinite stocks in shop.")
 			meta:set_string("admin_shop", "false")
 		end
 	end,
@@ -160,14 +156,14 @@ minetest.register_node("shop:shop", {
 			end
 		elseif fields.register then
 			if player ~= owner and (not minetest.check_player_privs(player, "shop_admin")) then
-				output(player, "Only the shop owner can open the register.")
+				hud.message(player, "Only the shop owner can open the register.")
 				return
 			else
 				minetest.show_formspec(player, "shop:shop", formspec_register)
 			end
 		elseif fields.stock then
 			if player ~= owner and (not minetest.check_player_privs(player, "shop_admin")) then
-				output(player, "Only the shop owner can open the stock.")
+				hud.message(player, "Only the shop owner can open the stock.")
 				return
 			else
 				minetest.show_formspec(player, "shop:shop", formspec_stock)
@@ -177,7 +173,7 @@ minetest.register_node("shop:shop", {
 			if inv:is_empty("sell" .. pg_current) or
 				    inv:is_empty("buy" .. pg_current) or
 				    (not inv:room_for_item("register", b[1])) then
-					output(player, "Shop closed.")
+					hud.message(player, "Shop closed.")
 					return
 			end
 
@@ -196,13 +192,13 @@ minetest.register_node("shop:shop", {
 						inv:add_item("register", b[1])
 						pinv:add_item("main", s[1])
 					else
-						output(player, "Shop is out of inventory!")
+						hud.message(player, "Shop is out of inventory!")
 					end
 				else
-					output(player, "You're all filled up!")
+					hud.message(player, "You're all filled up!")
 				end
 			else
-				output(player, "Not enough credits!") -- 32X.
+				hud.message(player, "Not enough credits!") -- 32X.
 			end
 		end
 	end,

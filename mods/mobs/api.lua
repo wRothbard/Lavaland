@@ -4,7 +4,6 @@
 -- mobs_redo by TenPlus1 & Co.
 
 local debug = false
-local delay = minetest.settings:get("dedicated_server_step")
 local stepper = 0
 local random = math.random
 
@@ -31,21 +30,23 @@ local atan = function(x)
 end
 
 -- Load settings
-local damage_enabled = minetest.settings:get_bool("enable_damage")
-local mobs_spawn = minetest.settings:get_bool("mobs_spawn") ~= false
-local peaceful_only = false --minetest.settings:get_bool("only_peaceful_mobs")
-local disable_blood = minetest.settings:get_bool("mobs_disable_blood")
-local mobs_drop_items = true --minetest.settings:get_bool("mobs_drop_items") ~= false
-local mobs_griefing = true --minetest.settings:get_bool("mobs_griefing") ~= false
-local spawn_protected = minetest.settings:get_bool("mobs_spawn_protected") ~= false
-local remove_far = false --minetest.settings:get_bool("remove_far_mobs") ~= false
-local difficulty = tonumber(minetest.settings:get("mob_difficulty")) or 1.0
-local show_health = minetest.settings:get_bool("mob_show_health") ~= false
-local max_per_block = tonumber(minetest.settings:get("max_objects_per_block") or 99)
-local mob_chance_multiplier = tonumber(minetest.settings:get("mob_chance_multiplier") or 1)
+local settings = minetest.settings
+local delay = settings:get("dedicated_server_step")
+local damage_enabled = settings:get_bool("enable_damage")
+local mobs_spawn = settings:get_bool("mobs_spawn") ~= false
+local peaceful_only = false --settings:get_bool("only_peaceful_mobs")
+local disable_blood = settings:get_bool("mobs_disable_blood")
+local mobs_drop_items = true --settings:get_bool("mobs_drop_items") ~= false
+local mobs_griefing = true --settings:get_bool("mobs_griefing") ~= false
+local spawn_protected = settings:get_bool("mobs_spawn_protected") ~= false
+local remove_far = false --settings:get_bool("remove_far_mobs") ~= false
+local difficulty = tonumber(settings:get("mob_difficulty")) or 1.0
+local show_health = settings:get_bool("mob_show_health") ~= false
+local max_per_block = tonumber(settings:get("max_objects_per_block") or 99)
+local mob_chance_multiplier = tonumber(settings:get("mob_chance_multiplier") or 1)
 
 -- calculate aoc range for mob count
-local aoc_range = tonumber(minetest.settings:get("active_block_range")) * 16
+local aoc_range = tonumber(settings:get("active_block_range")) * 16
 
 -- pathfinding settings
 local enable_pathfinding = false
@@ -2390,7 +2391,7 @@ local mob_expire = function(self, pos, dtime)
 			end
 
 --			minetest.log("action",
---				S("lifetimer expired, removed @1", self.name))
+--					S("lifetimer expired, removed @1", self.name))
 
 			effect(pos, 15, "tnt_smoke.png", 2, 4, 2, 0)
 
@@ -2509,6 +2510,7 @@ local mob_step = function(self, dtime)
 	else
 		self.stepper = random() 
 	end
+
 	local t = 0
 
 	for k, v in pairs(minetest.get_objects_inside_radius(pos, 24)) do
@@ -2731,7 +2733,7 @@ function mobs:spawn_specific(name, nodes, neighbors, min_light, max_light,
 	end
 
 	-- chance/spawn number override in minetest.conf for registered mob
-	local numbers = minetest.settings:get(name)
+	local numbers = settings:get(name)
 	if numbers then
 		numbers = numbers:split(",")
 		chance = tonumber(numbers[1]) or chance

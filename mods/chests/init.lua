@@ -9,7 +9,7 @@ function chests.get_chest_formspec(pos)
 		"list[current_player;main;0,6.08;8,3;8]" ..
 		"listring[nodemeta:" .. spos .. ";main]" ..
 		"listring[current_player;main]" ..
-		forms.get_hotbar_bg(0,4.85)
+		forms.get_hotbar_bg(0, 4.85)
 	return formspec
 end
 
@@ -212,7 +212,7 @@ function chests.register_chest(name, d)
 		def.on_blast = function(pos)
 			local drops = {}
 			inventory.get_inventory_drops(pos, "main", drops)
-			drops[#drops+1] = "default:" .. name
+			drops[#drops+1] = "chests:" .. name
 			minetest.remove_node(pos)
 			return drops
 		end
