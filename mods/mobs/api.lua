@@ -311,7 +311,7 @@ local function undercrowd(pos, radius)
 		if not s then
 			break
 		end
-		if s.owner and s.owner ~= "" and s.health > 0 then
+		if s.owner and s.owner ~= "" and s.health and s.health > 0 then
 			t = t + 1
 		end
 		if t > 5 then
