@@ -14,7 +14,7 @@ save = function()
 	ms:set_string("colors", minetest.serialize(bases))
 end
 
-local ini = function(pos)
+local ini = function(pos, y_offset)
 	if not warpstones.ppp(pos, true) then
 		minetest.chat_send_player(player:get_player_name(),
 				"Must be a base!")
@@ -23,15 +23,27 @@ local ini = function(pos)
 	local p1, p2 = s_protect.get_area_bounds(pos)
 	p1.y = p1.y + 5
 	p2.y = p2.y - 5
-	local vm = minetest.get_voxel_manip(p1, p2)
+	local vm = minetest.get_voxel_manip()
+	local e1, e2 = vm:read_from_map(p1, p2)
+	local area = VoxelArea:new({MinEdge = e1, MaxEdge = e2})
 	local data = vm:get_data()
+
 	local c_air = minetest.CONTENT_AIR
-	for i = 1, #data do
-		local di = data[i]
-		if di ~= c_air then
-			data[i] = c_air
+	local c_obsidian = minetest.get_content_id("obsidian:obsidian")
+
+	for z = p1.z, p2.z do
+		for y = p1.y, p2.y do
+			for x = p1.x, p2.x do
+				local vi = area:index(x, y, z)
+				if y == pos.y + y_offset - 16 then
+					data[vi] = c_obsidian
+				else
+					data[vi] = c_air
+				end
+			end
 		end
 	end
+
 	vm:set_data(data)
 	vm:update_liquids()
 	vm:write_to_map()
@@ -67,7 +79,7 @@ local place_base = function(name, pos, y, color)
 		colors[color] = center
 		save()
 	end
-	ini(center)
+	ini(center, y)
 	minetest.set_node(center, {name = nn})
 end
 
