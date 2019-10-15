@@ -96,7 +96,7 @@ minetest.register_node("bones:bones", {
 	},
 	paramtype = "light",
 	paramtype2 = "facedir",
-	groups = {bones = 1, dig_immediate = 3, bones = 1, trade_value = 10},
+	groups = {bones = 1, dig_immediate = 3, trade_value = 10},
 	sounds = music.sounds.nodes.bones,
 	after_place_node = function(pos, placer, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
@@ -131,7 +131,7 @@ minetest.register_craftitem("bones:meal", {
 	description = "Bone Meal",
 	inventory_image = "default_bone_meal.png",
 	liquids_pointable = false,
-	groups = {bone = 1, trade_value = 10},
+	groups = {bones = 1, trade_value = 10},
 	on_use = function(itemstack, user, pointed_thing)
 		if pointed_thing.type == "node" then
 			duengen(pointed_thing)
@@ -144,13 +144,13 @@ minetest.register_craftitem("bones:meal", {
 minetest.register_craftitem("bones:bone", {
 	description = "Bone",
 	inventory_image = "bones_bone.png",
-	groups = {bone = 1, trade_value = 10},
+	groups = {bones = 1, trade_value = 10},
 })
 
 minetest.register_craftitem("bones:skull", {
 	description = "Skull",
 	inventory_image = "bones_skull.png",
-	groups = {bone = 1, trade_value = 10},
+	groups = {bones = 1, trade_value = 10},
 })
 
 minetest.register_craft({
