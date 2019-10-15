@@ -131,7 +131,7 @@ minetest.register_craftitem("bones:meal", {
 	description = "Bone Meal",
 	inventory_image = "default_bone_meal.png",
 	liquids_pointable = false,
-	groups = {bones = 1, trade_value = 10},
+	groups = {trade_value = 2},
 	on_use = function(itemstack, user, pointed_thing)
 		if pointed_thing.type == "node" then
 			duengen(pointed_thing)
