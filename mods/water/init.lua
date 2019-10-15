@@ -103,7 +103,7 @@ minetest.register_node("water:flowing", {
 			},
 		},
 	},
-	alpha = 160,
+	alpha = 191,
 	paramtype = "light",
 	paramtype2 = "flowingliquid",
 	walkable = false,
