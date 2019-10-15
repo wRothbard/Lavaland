@@ -1,4 +1,4 @@
-local function auto_pickup(player)
+local function auto_pickup(player, s)
 	if not player then
 		return
 	end
@@ -8,12 +8,16 @@ local function auto_pickup(player)
 		return
 	end
 
+	if not s then
+		pos.y = pos.y + 1
+	end
+
 	local alive = player:get_hp() > 0
 	local name = player:get_player_name()
 	local attached = player_api.player_attached[name]
 
 	if alive and not attached then
-		local o = minetest.get_objects_inside_radius(player:get_pos(), 0.667)
+		local o = minetest.get_objects_inside_radius(pos, 0.667)
 		for i = 1, #o do
 			local obj = o[i]
 			local p = obj:is_player()
@@ -25,7 +29,7 @@ local function auto_pickup(player)
 						obj:remove()
 						local add = inv:add_item("main", ent.itemstring)
 						if add then
-							minetest.add_item(player:get_pos(), add)
+							minetest.add_item(pos, add)
 						end
 						minetest.sound_play("items_plop", {pos = obj:get_pos()})
 					end
@@ -35,7 +39,11 @@ local function auto_pickup(player)
 	end
 
 	minetest.after(0, function()
-		auto_pickup(player)
+		if s then
+			auto_pickup(player)
+		else
+			auto_pickup(player, true)
+		end
 	end)
 end
 
