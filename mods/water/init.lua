@@ -58,7 +58,7 @@ minetest.register_node("water:source", {
 			},
 		},
 	},
-	alpha = 160,
+	alpha = 191,
 	paramtype = "light",
 	walkable = false,
 	pointable = false,
