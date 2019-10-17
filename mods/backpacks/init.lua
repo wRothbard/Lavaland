@@ -92,7 +92,8 @@ local function on_place(itemstack, placer, pointed_thing, param2)
 	local oldnode_under = minetest.get_node_or_nil(under)
 	local above = pointed_thing.above
 	local oldnode_above = minetest.get_node_or_nil(above)
-	if not oldnode_above or oldnode_above.name ~= "air" then
+	if not oldnode_above or (oldnode_above.name ~= "air" and
+			oldnode_above.name ~= "mobs:spawner") then
 		return itemstack, false
 	end
 	local playername = placer and placer:get_player_name() or ""
@@ -186,6 +187,8 @@ local function on_place(itemstack, placer, pointed_thing, param2)
 			" can not be placed at " .. minetest.pos_to_string(place_to))
 		return itemstack, false
 	end
+
+	inventory.throw_inventory(place_to, minetest.get_node_drops(oldnode.name))
 
 	-- Add node and update
 	minetest.add_node(place_to, newnode)

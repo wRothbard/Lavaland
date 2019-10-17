@@ -45,7 +45,7 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 	end
 
 	-- check if the node above the pointed thing is air
-	if above.name ~= "air" then
+	if above.name ~= "air" and above.name ~= "mobs:spawner" then
 		return
 	end
 
