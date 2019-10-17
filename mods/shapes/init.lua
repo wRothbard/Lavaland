@@ -789,7 +789,7 @@ shapes.register_shapes(
 	"ice",
 	"water:ice",
 	{cracky = 3, cools_lava = 1, slippery = 3},
-	{"default_ice.png"},
+	{"water_ice.png"},
 	"Ice Stair",
 	"Ice Slab",
 	music.sounds.nodes.glass,
