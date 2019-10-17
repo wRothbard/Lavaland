@@ -1332,6 +1332,7 @@ local general_attack = function(self)
 			local is = ent.itemstring
 			if self.name == ent.name or (not self.attack_animals and
 					ent.type == "animal") or
+					ent.pos or
 					(not self.attack_monsters and ent.type == "monster") or
 					(not self.attack_npcs and ent.type == "npc") or
 					not specific_attack(self.specific_attack, ent.name) or
@@ -1343,6 +1344,7 @@ local general_attack = function(self)
 		else
 			objs[n] = nil
 		end
+	print(ent)
 	end
 	local p, sp, dist, min_player
 	local min_dist = self.view_range + 1
