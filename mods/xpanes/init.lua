@@ -90,10 +90,6 @@ end)
 
 xpanes = {}
 function xpanes.register_pane(name, def)
-	for i = 1, 15 do
-		minetest.register_alias("xpanes:" .. name .. "_" .. i, "xpanes:" .. name .. "_flat")
-	end
-
 	local flatgroups = table.copy(def.groups)
 	flatgroups.pane = 1
 	minetest.register_node(":xpanes:" .. name .. "_flat", {
@@ -161,16 +157,43 @@ end
 
 xpanes.register_pane("pane", {
 	description = "Glass Pane",
-	textures = {"default_glass.png","xpanes_pane_half.png","xpanes_edge.png"},
+	textures = {"default_glass.png", "xpanes_pane_half.png", "xpanes_edge.png"},
 	inventory_image = "default_glass.png",
 	wield_image = "default_glass.png",
 	sounds = music.sounds.nodes.glass,
-	groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3},
+	groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 	recipe = {
 		{"glass:glass", "glass:glass", "glass:glass"},
 		{"glass:glass", "glass:glass", "glass:glass"}
 	}
 })
+
+for i = 2, #dye.dyes do
+	local color = dye.dyes[i][1]
+	if color == "dark_grey" then
+		color = "darkgrey"
+	elseif color == "dark_green" then
+		color = "darkgreen"
+	end
+	local name = dye.dyes[i][2]
+	local colorize = "^[colorize:" .. color .. ":99"
+	xpanes.register_pane("pane_" .. color, {
+		description = "Glass Pane (" .. name .. ")",
+		textures = {
+			"default_glass.png" .. colorize,
+			"xpanes_pane_half.png" .. colorize,
+			"xpanes_edge.png" .. colorize,
+		},
+		inventory_image = "default_glass.png" .. colorize,
+		wield_image = "default_glass.png" .. colorize,
+		sounds = music.sounds.nodes.glass,
+		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
+		recipe = {
+			{"glass:glass_" .. color, "glass:glass_" .. color, "glass:glass_" .. color},
+			{"glass:glass_" .. color, "glass:glass_" .. color, "glass:glass_" .. color}
+		}
+	})
+end
 
 xpanes.register_pane("obsidian_pane", {
 	description = "Obsidian Glass Pane",
