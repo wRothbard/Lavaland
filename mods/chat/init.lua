@@ -33,8 +33,6 @@ local function show_chat(name, page)
 	end
 	if chatbox == "" then
 		players[name] = 1
-		show_chat(name)
-		return
 	end
 	local chat_fs = "size[8,7.25]" ..
 		"field[0.06,7.12;5.6,1;chatsend;;]" ..

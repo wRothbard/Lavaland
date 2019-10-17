@@ -164,7 +164,8 @@ local function sprint(player)
 
 	local name = player:get_player_name()
 	local attached = player_api.player_attached[name]
-	if not attached and not (rings.players[name] and rings.players[name] == "rings:levitation") then
+	if not attached and not (rings.players[name] and
+			rings.players[name] == "rings:levitation") then
 		local max_stam = stats.update_stats(player, {stam_max = ""}).stam_max
 		local pos = player:get_pos()
 		local c = control(player)
@@ -223,7 +224,8 @@ local function sprint(player)
 			hud.update(player, "stamina", "number", 0)
 		else
 			local sss = stamina.get_stamina(player)
-			local ss = stats.update_stats(player, {stam_max = ""}).stam_max
+			local ss = stats.update_stats(player,
+					{stam_max = ""}).stam_max
 			local s = 20 / (ss / sss)
 			hud.update(player, "stamina", "number", s)
 		end
