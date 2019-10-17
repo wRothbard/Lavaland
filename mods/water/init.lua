@@ -1,11 +1,21 @@
 local rand = math.random
 
+minetest.register_node("water:thin_ice", {
+	description = "Thin Ice",
+	drawtype = "glasslike",
+	tiles = {"water_thin_ice.png"},
+	use_texture_alpha = true,
+	paramtype = "light",
+	propagate_sunlight = true,
+	groups = {cracky = 3, puts_out_fire = 1, cools_lava = 1, slippery = 3, trade_value = 2},
+	sounds = music.sounds.nodes.glass,
+})
+
 minetest.register_node("water:ice", {
 	description = "Ice",
-	tiles = {"default_ice.png"},
-	is_ground_content = false,
+	tiles = {"water_ice.png"},
 	paramtype = "light",
-	groups = {cracky = 3, puts_out_fire = 1, cools_lava = 1, slippery = 3},
+	groups = {cracky = 3, puts_out_fire = 1, cools_lava = 1, slippery = 3, trade_value = 2},
 	sounds = music.sounds.nodes.glass,
 })
 
@@ -13,8 +23,20 @@ minetest.register_node("water:packed_ice", {
 	description = "Packed Ice",
 	tiles = {"water_packed_ice.png"},
 	paramtype = "light",
-	groups = {cracky = 1, puts_out_fire = 1, cools_lava = 1, slippery = 3},
+	groups = {cracky = 1, puts_out_fire = 1, cools_lava = 1, slippery = 3, trade_value = 2},
 	sounds = music.sounds.nodes.glass,
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "water:ice",
+	recipe = {"water:thin_ice", "water:thin_ice"},
+})
+
+minetest.register_craft({
+	type = "shapeless",
+	output = "water:thin_ice 2",
+	recipe = {"water:ice"},
 })
 
 minetest.register_craft({
