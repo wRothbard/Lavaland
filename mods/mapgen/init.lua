@@ -38,6 +38,7 @@ minetest.register_chatcommand("home", {
 		end
 
 		player:set_pos(pos)
+		minetest.sound_play("mapgen_item", {pos = pos, gain = 0.3})
 	end,
 })
 
@@ -50,6 +51,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		local pos = mapgen.homes[name]
 		if pos then
 			player:set_pos(pos)
+			minetest.sound_play("mapgen_item", {pos = pos, gain = 0.3})
 		else
 			minetest.chat_send_player(name, "No home set!")
 		end
