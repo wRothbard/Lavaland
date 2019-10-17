@@ -1344,7 +1344,6 @@ local general_attack = function(self)
 		else
 			objs[n] = nil
 		end
-	print(ent)
 	end
 	local p, sp, dist, min_player
 	local min_dist = self.view_range + 1
