@@ -170,13 +170,8 @@ xpanes.register_pane("pane", {
 
 for i = 2, #dye.dyes do
 	local color = dye.dyes[i][1]
-	if color == "dark_grey" then
-		color = "darkgrey"
-	elseif color == "dark_green" then
-		color = "darkgreen"
-	end
 	local name = dye.dyes[i][2]
-	local colorize = "^[colorize:" .. color .. ":99"
+	local colorize = "^[colorize:" .. dye.dyes[i][3] .. ":191"
 	xpanes.register_pane("pane_" .. color, {
 		description = "Glass Pane (" .. name .. ")",
 		textures = {
