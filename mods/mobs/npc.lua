@@ -105,6 +105,8 @@ npc_drops = {
 	{name = "farming:wheat", chance = 0.8, count = {12, 36}},
 	{name = "farming:seed_carrot", chance = 0.8, count = {1, 13}},
 	{name = "farming:carrot", chance = 0.8, count = {3, 6}},
+	{name = "flowers:waterlily", chance = 0.8, count = {1, 3}},
+	{name = "flowers:mushroom_brown", chance = 0.8, count = {3, 6}},
 	{name = "gravel:gravel", chance = 0.8, count = {15, 25}},
 	{name = "dirt:dirt", chance = 0.67, count = {11, 33}},
 	{name = "craftguide:book", chance = 0.8},

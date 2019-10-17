@@ -152,7 +152,7 @@ function flowers.flower_spread(pos, node)
 	end
 
 	local soils = minetest.find_nodes_in_area_under_air(
-		pos0, pos1, "group:soil")
+			pos0, pos1, "group:soil")
 	local num_soils = #soils
 	if num_soils >= 1 then
 		for si = 1, math.min(3, num_soils) do
@@ -348,3 +348,4 @@ waterlily_waving_def.groups.not_in_creative_inventory = 1
 minetest.register_node("flowers:waterlily", waterlily_def)
 minetest.register_node("flowers:waterlily_waving", waterlily_waving_def)
 
+print("loaded flowers")

@@ -12,14 +12,14 @@ minetest.register_node("grass:grass_1", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy = 3, flora = 1, attached_node = 1, grass = 1, flammable = 1},
+	groups = {snappy = 3, flora = 1, attached_node = 1,
+			grass = 1, flammable = 1, trade_value = 2},
 	floodable = true,
 	sounds = music.sounds.nodes.leaves,
 	selection_box = {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -5 / 16, 6 / 16},
 	},
-
 	on_place = function(itemstack, placer, pointed_thing)
 		-- place a random grass node
 		local stack = ItemStack("grass:grass_" .. rand(1,5))
@@ -50,7 +50,8 @@ for i = 2, 5 do
 		buildable_to = true,
 		drop = "grass:grass_1",
 		groups = {snappy = 3, flora = 1, attached_node = 1,
-			not_in_creative_inventory = 1, grass = 1, flammable = 1},
+				not_in_creative_inventory = 1, grass = 1,
+				flammable = 1, trade_value = 2},
 		floodable = true,
 		sounds = music.sounds.nodes.leaves,
 		selection_box = {
@@ -80,7 +81,7 @@ minetest.register_node("grass:dry_shrub", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy = 3, flammable = 3, attached_node = 1},
+	groups = {flora = 1, snappy = 3, flammable = 3, attached_node = 1, trade_value = 2},
 	sounds = music.sounds.nodes.leaves,
 	selection_box = {
 		type = "fixed",
@@ -106,7 +107,7 @@ minetest.register_node("grass:jungle", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy = 3, flora = 1, attached_node = 1, flammable = 1},
+	groups = {snappy = 3, flora = 1, attached_node = 1, flammable = 1, trade_value = 2},
 	sounds = music.sounds.nodes.grass,
 	selection_box = {
 		type = "fixed",
@@ -121,7 +122,7 @@ minetest.register_node("grass:jungle", {
 	end,
 })
 
-local sn = {
+local fsnn = {
 	"farming:cotton_6",
 	"farming:wheat_6",
 	"farming:carrot_5",
@@ -137,9 +138,33 @@ local sn = {
 	"flowers:tulip_black",
 	"flowers:mushroom_red",
 	"flowers:mushroom_brown",
+	"grass:grass_1",
+	"grass:grass_2",
+	"grass:grass_3",
+	"grass:grass_4",
+	"grass:grass_5",
 }
 
 minetest.register_abm({
+	label = "Flora spread",
+	nodenames = {"dirt:grass"},
+	neighbors = fsnn,
+	chance = 50,
+	interval = 150,
+	catch_up = false,
+	action = function(pos, node)
+		pos.y = pos.y + 1
+		local p1 = {x = pos.x + 1, y = pos.y, z = pos.z + 1}
+		local p2 = {x = pos.x - 1, y = pos.y, z = pos.z - 1}
+		local a, b = minetest.find_nodes_in_area(p1, p2, fsnn)
+		if #a >= 8 then
+			minetest.set_node(pos, {name = fsnn[rand(#fsnn)]})
+		end
+	end,
+})
+
+minetest.register_abm({
+	label = "Grass atop mossycobble",
 	nodenames = {"stone:mossycobble"},
 	neighbors = {"air"},
 	chance = 5,
@@ -154,33 +179,10 @@ minetest.register_abm({
 	end,
 })
 
-local node_names = {"grass:grass_1", "grass:grass_2", "grass:grass_3",
-		"grass:grass_4", "grass:grass_5"}
-
-minetest.register_abm({
-	nodenames = {"dirt:grass"},
-	neighbors = node_names,
-	chance = 50,
-	interval = 150,
-	catch_up = false,
-	action = function(pos, node)
-		pos.y = pos.y + 1
-		local p1 = {x = pos.x + 1, y = pos.y, z = pos.z + 1}
-		local p2 = {x = pos.x - 1, y = pos.y, z = pos.z - 1}
-		local a, b = minetest.find_nodes_in_area(p1, p2, node_names)
-		if #a >= 8 then
-			minetest.set_node(pos, {name = sn[rand(#sn)]})
-		end
-	end,
-})
-
 minetest.register_abm({
 	label = "Grass spread",
 	nodenames = {"dirt:dirt"},
-	neighbors = {
-		"air",
-		"group:grass",
-	},
+	neighbors = {"air", "group:grass"},
 	interval = 6,
 	chance = 50,
 	catch_up = false,
@@ -208,10 +210,6 @@ minetest.register_abm({
 		end
 	end
 })
-
---
--- Grass and dry grass removed in darkness
---
 
 minetest.register_abm({
 	label = "Grass covered",

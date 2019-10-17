@@ -447,7 +447,8 @@ minetest.register_node("tnt:gunpowder", {
 		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 	groups = {dig_immediate = 2, attached_node = 1, flammable = 5,
-		connect_to_raillike = minetest.raillike_group("gunpowder")},
+		connect_to_raillike = minetest.raillike_group("gunpowder"),
+		trade_value = 4},
 	sounds = music.sounds.nodes.leaves,
 
 	on_punch = function(pos, node, puncher)
@@ -555,7 +556,7 @@ minetest.register_craft({
 minetest.register_craftitem("tnt:tnt_stick", {
 	description = "TNT Stick",
 	inventory_image = "tnt_tnt_stick.png",
-	groups = {flammable = 5},
+	groups = {flammable = 5, trade_value = 2},
 })
 
 minetest.register_craft({
