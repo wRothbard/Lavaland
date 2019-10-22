@@ -20,6 +20,45 @@ local function flood_flame(pos, oldnode, newnode)
 	return false
 end
 
+-- Antiflame
+minetest.register_node("fire:antiflame", {
+	drawtype = "firelike",
+	tiles = {
+		{
+			name = "fire_basic_flame_animated.png^[colorize:cyan:127",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 1,
+			},
+		},
+	},
+	inventory_image = "fire_basic_flame.png^[colorize:cyan:127",
+	paramtype = "light",
+	light_source = 14,
+	walkable = false,
+	buildable_to = true,
+	drop = "",
+	sunlight_propagates = true,
+	damage_per_second = 4,
+	groups = {dig_immediate = 3},
+})
+
+minetest.register_abm({
+	nodenames = {"fire:antiflame"},
+	interval = 3,
+	chance = 1,
+	catch_up = false,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		local n = minetest.find_node_near(pos, 5, {"fire:basic_flame"})
+		if n then
+			return minetest.set_node(n, {name = "fire:antiflame"})
+		end
+		minetest.remove_node(pos)
+	end
+})
+
 -- Flame nodes
 
 minetest.register_node("fire:basic_flame", {

@@ -1,6 +1,16 @@
 minetest.register_craftitem("mese:crystal", {
 	description = "Mese Crystal",
 	inventory_image = "mese_crystal.png",
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.type ~= "node" then
+			return
+		end
+		if minetest.get_node(pointed_thing.under).name == "fire:basic_flame" then
+			minetest.set_node(pointed_thing.under, {name = "fire:antiflame"})
+			itemstack:take_item()
+		end
+		return itemstack
+	end,
 })
 
 minetest.register_alias("mese:node", "mese:mese")
