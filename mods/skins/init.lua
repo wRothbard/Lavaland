@@ -79,6 +79,9 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 minetest.register_chatcommand("gender", {
+	description = "Set your gender",
+	params = "<male|female>",
+	privs = "interact",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not player then

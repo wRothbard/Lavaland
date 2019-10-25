@@ -101,6 +101,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 minetest.register_chatcommand("ac", {
+	description = "Autocrafter WIP",
+	params = "",
 	privs = "server",
 	func = function(name, param)
 		if param == "" then

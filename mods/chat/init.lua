@@ -83,6 +83,9 @@ local function edit_motd(name, msg)
 end
 
 minetest.register_chatcommand("motd", {
+	description = "Display the message of the day",
+	params = "",
+	privs = "shout",
 	func = function(name, param)
 		local fs = "size[8,5]" ..
 			"real_coordinates[true]" ..
@@ -95,13 +98,36 @@ minetest.register_chatcommand("motd", {
 })
 
 minetest.register_chatcommand("inbox", {
+	description = "View your inbox",
+	params = "",
+	privs = "shout",
 	func = function(name, param)
 		local msgs = registered[name]
 		if not msgs then
-			return false, "No messages!"
+			return false, "You are not registered!"
 		end
 		local num = #msgs
 		return true, "You have " .. tostring(#msgs) .. " messages"
+	end,
+})
+
+minetest.register_chatcommand("mail", {
+	description = "View your mail",
+	params = "<index>",
+	privs = "shout",
+	func = function(name, param)
+		local idx = tonumber(param)
+		local reg = registered[name]
+		if not reg then
+			return false, "You are not registered!"
+		end
+
+		local sel = registered[name][idx]
+		if sel then
+			return true, sel.message
+		end
+
+		return false, "No mail selected!"
 	end,
 })
 
@@ -111,18 +137,25 @@ old_msg.func = function(name, param)
 	local splits = param:split(" ", false, 1)
 	local d_name = splits[1]
 	local message = name .. ": " .. splits[2]
+
 	if registered[d_name] then
-		table.insert(registered[name], {message})
+		table.insert(registered[name], {status = "unread", message = message})
 	end
+
 	if minetest.get_player_by_name(d_name) then
 		return old_msg_func(name, param)
-	else
-		return true, "Message sent."
+	elseif not registered[d_name] then
+		return false, "Recipient is not registered!"
 	end
+
+	return true, "Message sent."
 end
 minetest.register_chatcommand("msg", old_msg)
 
 minetest.register_chatcommand("register", {
+	description = "Register for offline messages",
+	params = "<player> <message>",
+	privs = "shout",
 	func = function(name, param)
 		if not registered[name] then
 			registered[name] = {}
@@ -134,6 +167,9 @@ minetest.register_chatcommand("register", {
 })
 
 minetest.register_chatcommand("chat", {
+	description = "Show chat",
+	params = "",
+	privs = "shout",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not player then

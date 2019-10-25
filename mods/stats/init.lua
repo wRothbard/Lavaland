@@ -337,6 +337,9 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_chatcommand("stats", {
+	description = "Show your stats",
+	params = "Comma-deliniated list of stats to report",
+	privs = "",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if param and param ~= "" then
@@ -364,6 +367,9 @@ minetest.register_chatcommand("stats", {
 })
 
 minetest.register_chatcommand("save", {
+	description = "Save your stats",
+	params = "",
+	privs = "interact",
 	func = function(name)
 		local player = minetest.get_player_by_name(name)
 		if not player then

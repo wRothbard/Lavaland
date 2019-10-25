@@ -180,6 +180,9 @@ function hud.waypoint(player, det)
 end
 
 minetest.register_chatcommand("hmsg", {
+	description = "Display HUD message",
+	params = "<message>",
+	privs = "debug",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not player then

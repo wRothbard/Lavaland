@@ -11,6 +11,9 @@ end
 spawn.pos = ss
 
 minetest.register_chatcommand("spawn", {
+	description = "Teleport to spawn",
+	params = "",
+	privs = "interact",
 	func = function(name)
 		minetest.get_player_by_name(name):set_pos(ss)
 		minetest.sound_play("mapgen_item", {pos = ss})
@@ -19,7 +22,7 @@ minetest.register_chatcommand("spawn", {
 
 minetest.register_chatcommand("setspawn", {
 	description = "Set your respawn location",
-	params = "none",
+	params = "",
 	privs = "interact",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)

@@ -287,6 +287,9 @@ local function beds_list_fs(player, index, tab)
 end
 
 minetest.register_chatcommand("night_toggle", {
+	description = "Toggle night and day",
+	privs = "interact",
+	params = "<true|false>",
 	func = function(name, param)
 		if not minetest.check_player_privs(name, {server = true}) and
 				param ~= "" then
@@ -306,7 +309,7 @@ minetest.register_chatcommand("night_toggle", {
 
 minetest.register_chatcommand("setspawn", {
 	description = "Set your respawn location",
-	params = "none",
+	params = "",
 	privs = "interact",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
