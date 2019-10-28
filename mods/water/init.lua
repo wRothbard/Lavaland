@@ -15,7 +15,8 @@ minetest.register_node("water:ice", {
 	description = "Ice",
 	tiles = {"water_ice.png"},
 	paramtype = "light",
-	groups = {cracky = 3, puts_out_fire = 1, cools_lava = 1, slippery = 3, trade_value = 2},
+	groups = {cracky = 3, puts_out_fire = 1,
+			cools_lava = 1, slippery = 3, trade_value = 2},
 	sounds = music.sounds.nodes.glass,
 })
 
@@ -23,7 +24,8 @@ minetest.register_node("water:packed_ice", {
 	description = "Packed Ice",
 	tiles = {"water_packed_ice.png"},
 	paramtype = "light",
-	groups = {cracky = 1, puts_out_fire = 1, cools_lava = 1, slippery = 3, trade_value = 2},
+	groups = {cracky = 1, puts_out_fire = 1,
+			cools_lava = 1, slippery = 3, trade_value = 2},
 	sounds = music.sounds.nodes.glass,
 })
 

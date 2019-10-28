@@ -199,9 +199,9 @@ minetest.register_abm({
 
 minetest.register_abm({
 	nodenames = {"obsidian:obsidian"},
-	neighbors = {"water:source"},
-	interval = 80,
-	chance = 20,
+	neighbors = {"group:water"},
+	interval = 40,
+	chance = 10,
 	action = function(pos, node)
 		pos.y = pos.y + 1
 		local nn = minetest.get_node(pos).name
