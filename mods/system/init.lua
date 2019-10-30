@@ -42,7 +42,7 @@ minetest.register_chatcommand("registered", {
 
 minetest.register_chatcommand("is_protected", {
 	description = "Display protection for position",
-	params = "".
+	params = "",
 	privs = "interact",
 	func = function(name, param)
 		local p = minetest.get_player_by_name(name)
