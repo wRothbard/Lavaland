@@ -154,7 +154,7 @@ minetest.register_chatcommand("msg", old_msg)
 
 minetest.register_chatcommand("register", {
 	description = "Register for offline messages",
-	params = "<player> <message>",
+	params = "",
 	privs = "shout",
 	func = function(name, param)
 		if not registered[name] then
@@ -222,6 +222,17 @@ end)
 
 minetest.register_on_chat_message(function(name, message)
 	add_chat(name, minetest.formspec_escape(message))
+end)
+
+minetest.register_on_joinplayer(function(player)
+	if not player then
+		return
+	end
+
+	local name = player:get_player_name()
+	if not registered[name] then
+		registered[name] = {}
+	end
 end)
 
 minetest.register_on_leaveplayer(function(player)
