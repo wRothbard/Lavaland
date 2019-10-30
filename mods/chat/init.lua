@@ -139,7 +139,7 @@ old_msg.func = function(name, param)
 	local message = name .. ": " .. splits[2]
 
 	if registered[d_name] then
-		table.insert(registered[name], {status = "unread", message = message})
+		table.insert(registered[d_name], {status = "unread", message = message})
 	end
 
 	if minetest.get_player_by_name(d_name) then
