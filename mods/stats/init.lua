@@ -339,7 +339,7 @@ end)
 minetest.register_chatcommand("stats", {
 	description = "Show your stats",
 	params = "Comma-deliniated list of stats to report",
-	privs = "",
+	privs = "shout",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if param and param ~= "" then
