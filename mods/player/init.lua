@@ -561,7 +561,7 @@ minetest.register_chatcommand("zoom_fov", {
 		param = tonumber(param)
 		if param and param > 11 and
 				param < 145 then
-			player:set_properties({zoom_fov = zoom_fov})
+			player:set_properties({zoom_fov = param})
 		end
 	end,
 })
