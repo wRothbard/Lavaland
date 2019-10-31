@@ -480,7 +480,6 @@ minetest.register_on_joinplayer(function(player)
 		new_move = true,
 	})
 
-
 	player_api.player_attached[name] = false
 	player_api.set_model(player, "character.b3d")
 	player:set_local_animation(
@@ -494,6 +493,7 @@ minetest.register_on_joinplayer(function(player)
 	player:set_formspec_prepend(formspec_prepend)
 	player:set_inventory_formspec(formspec_default)
 
+	-- HUD
 	player:hud_set_hotbar_image("player_hotbar.png")
 	player:hud_set_hotbar_selected_image("player_hotbar_selected.png")
 	player:hud_set_flags({
@@ -501,6 +501,7 @@ minetest.register_on_joinplayer(function(player)
 		minimap_radar = true,
 	})
 
+	-- Zoom
 	player:set_properties({
 		zoom_fov = 34,
 	})
@@ -522,6 +523,9 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 minetest.register_chatcommand("sit", {
+	description = "Sit down",
+	params = "",
+	privs = "interact",
 	func = function(n)
 		local p = minetest.get_player_by_name(n)
 		if not p then
@@ -532,12 +536,33 @@ minetest.register_chatcommand("sit", {
 })
 
 minetest.register_chatcommand("lay", {
+	description = "Lay down",
+	params = "",
+	privs = "interact",
 	func = function(n)
 		local p = minetest.get_player_by_name(n)
 		if not p then
 			return false, "Must be in-game."
 		end
 		cozy.lay(p)
+	end,
+})
+
+minetest.register_chatcommand("zoom_fov", {
+	description = "Set zoom FOV",
+	params = "<fov>",
+	privs = "interact",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return false, "You must be in-game!"
+		end
+
+		param = tonumber(param)
+		if param and param > 11 and
+				param < 145 then
+			player:set_properties({zoom_fov = zoom_fov})
+		end
 	end,
 })
 
