@@ -1,5 +1,6 @@
 local rand = math.random
 
+-- Ice
 minetest.register_node("water:thin_ice", {
 	description = "Thin Ice",
 	drawtype = "glasslike",
@@ -56,6 +57,7 @@ minetest.register_craft({
 	}
 })
 
+-- Water
 minetest.register_node("water:source", {
 	description = "Water Source",
 	drawtype = "liquid",
@@ -212,15 +214,16 @@ minetest.register_abm({
 minetest.register_abm({
 	label = "Moss growth",
 	nodenames = {"stone:cobble"},
-	neighbors = {"group:water", "group:lava"},
+	neighbors = {"group:water", "group:lava", "air"},
 	interval = 12,
 	chance = 80,
 	catch_up = false,
 	action = function(pos, node)
+		local law = minetest.find_node_near(pos, 2, "group:water")
 		local la = minetest.find_node_near(pos, 1, "group:lava")
 		if la then
 			minetest.set_node(pos, {name = "stone:stone"})
-		else
+		elseif law then
 			minetest.set_node(pos, {name = "stone:mossycobble"})
 		end
 	end
