@@ -82,6 +82,15 @@ local function edit_motd(name, msg)
 	minetest.show_formspec(name, "chat:motd_edit", fs)
 end
 
+--[[
+local old_server_status_func = minetest.get_server_status
+minetest.get_server_status = function(name, joined)
+	local j = joined or false
+	minetest.chat_send_player(name, tostring(j))
+	return old_server_status_func(name, joined)
+end
+--]]
+
 minetest.register_chatcommand("motd", {
 	description = "Display the message of the day",
 	params = "",
