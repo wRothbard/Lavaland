@@ -34,7 +34,7 @@ local function check_in_beds(players)
 		players = minetest.get_connected_players()
 	end
 
-	for n, player in ipairs(players) do
+	for _, player in pairs(players) do
 		local name = player:get_player_name()
 		if not in_bed[name] then
 			return false
@@ -118,8 +118,8 @@ local function update_formspecs(finished)
 		end
 	end
 
-	for name,_ in pairs(beds.player) do
-		minetest.show_formspec(name, "beds_form", form_n)
+	for name, _ in pairs(beds.player) do
+		minetest.after(0.1, minetest.show_formspec, name, "beds_form", form_n)
 	end
 end
 

@@ -1,4 +1,3 @@
-
 local reverse = true
 
 local function destruct_bed(pos, n)

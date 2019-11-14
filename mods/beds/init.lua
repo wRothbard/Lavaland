@@ -59,7 +59,10 @@ minetest.register_on_shutdown(function()
 	store:set_string("beds_public", minetest.serialize(beds.beds_public))
 
 end)
+
 dofile(modpath .. "/functions.lua")
 dofile(modpath .. "/api.lua")
 dofile(modpath .. "/beds.lua")
 dofile(modpath .. "/spawns.lua")
+
+print("loaded beds")
