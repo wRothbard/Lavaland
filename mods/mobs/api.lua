@@ -247,7 +247,7 @@ on_timer = function(pos, elapsed)
 
 	local mobs = {
 		"mobs:rat",
-		"mobs:npc",
+		-- "mobs:npc",
 	}
 
 	local tod = (minetest.get_timeofday() or 0) * 24000

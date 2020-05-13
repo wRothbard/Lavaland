@@ -409,6 +409,9 @@ for label, color in pairs(warps) do
 	if label ~= "mese" then
 		mat = label .. ":block"
 	end
+	if label == "diamond" then
+		mat = "diamond:fragment"
+	end
 	minetest.register_craft({
 		output = "warpstones:" .. label,
 		recipe = {

@@ -559,23 +559,23 @@ minetest.register_craftitem("tnt:tnt_stick", {
 	groups = {flammable = 5, trade_value = 2},
 })
 
-minetest.register_craft({
-	output = "tnt:tnt_stick 2",
-	recipe = {
-		{"tnt:gunpowder", "", "tnt:gunpowder"},
-		{"tnt:gunpowder", "paper:paper", "tnt:gunpowder"},
-		{"tnt:gunpowder", "", "tnt:gunpowder"},
-	}
-})
+-- minetest.register_craft({
+	-- output = "tnt:tnt_stick 2",
+	-- recipe = {
+		-- {"tnt:gunpowder", "", "tnt:gunpowder"},
+		-- {"tnt:gunpowder", "paper:paper", "tnt:gunpowder"},
+		-- {"tnt:gunpowder", "", "tnt:gunpowder"},
+	-- }
+-- })
 
-minetest.register_craft({
-	output = "tnt:tnt",
-	recipe = {
-		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
-		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
-		{"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"}
-	}
-})
+-- minetest.register_craft({
+	-- output = "tnt:tnt",
+	-- recipe = {
+		-- {"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
+		-- {"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"},
+		-- {"tnt:tnt_stick", "tnt:tnt_stick", "tnt:tnt_stick"}
+	-- }
+-- })
 
 minetest.register_abm({
 	label = "TNT ignition",

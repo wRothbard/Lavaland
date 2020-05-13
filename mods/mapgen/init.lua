@@ -6,7 +6,7 @@ local ss = minetest.settings:get("static_spawnpoint")
 if ss then
 	ss = minetest.string_to_pos(ss)
 else
-	ss = {x = 0, y = 5, z = 0}
+	ss = {x = -24.8, y = 1.5, z = 135.3}
 end
 
 mapgen.spawn = ss

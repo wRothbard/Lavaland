@@ -49,22 +49,7 @@ minetest.register_node("stone:stone_with_coal", {
 	description = "Coal Ore",
 	tiles = {"stone_stone.png^default_mineral_coal.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "coal:lump 2"}
-			},
-			{
-				items = {"stone:cobble", "coal:lump"}
-			},
-		}
-	},
+	drop = "coal:lump",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })
@@ -73,22 +58,7 @@ minetest.register_node("stone:stone_with_copper", {
 	description = "Copper Ore",
 	tiles = {"stone_stone.png^stone_mineral_copper.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "copper:lump 2"}
-			},
-			{
-				items = {"stone:cobble", "copper:lump"}
-			},
-		}
-	},
+	drop = "copper:lump",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })
@@ -97,22 +67,7 @@ minetest.register_node("stone:stone_with_gold", {
 	description = "Gold Ore",
 	tiles = {"stone_stone.png^default_mineral_gold.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "gold:lump 2"}
-			},
-			{
-				items = {"stone:cobble", "gold:lump"}
-			},
-		}
-	},
+	drop = "gold:lump",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })
@@ -121,22 +76,7 @@ minetest.register_node("stone:stone_with_diamond", {
 	description = "Diamond Ore",
 	tiles = {"stone_stone.png^default_mineral_diamond.png"},
 	groups = {cracky = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "diamond:diamond 2"}
-			},
-			{
-				items = {"stone:cobble", "diamond:diamond"}
-			},
-		}
-	},
+	drop = "diamond:diamond",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })
@@ -145,22 +85,7 @@ minetest.register_node("stone:stone_with_emerald", {
 	description = "Emerald Ore",
 	tiles = {"stone_stone.png^stone_mineral_emerald.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "emerald:emerald 2"}
-			},
-			{
-				items = {"stone:cobble", "emerald:emerald"}
-			},
-		}
-	},
+	drop = "emerald:emerald",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })
@@ -169,22 +94,7 @@ minetest.register_node("stone:stone_with_iron", {
 	description = "Iron Ore",
 	tiles = {"stone_stone.png^stone_mineral_iron.png"},
 	groups = {cracky = 2, oddly_breakable_by_hand = 1},
-	drop = {
-		max_items = 1,
-		items = {
-			{
-				rarity = 5,
-				items = {"stone:cobble"}
-			},
-			{
-				rarity = 3,
-				items = {"stone:cobble", "steel:iron_lump 2"}
-			},
-			{
-				items = {"stone:cobble", "steel:iron_lump"}
-			},
-		}
-	},
+	drop = "steel:iron_lump",
 	sounds = music.sounds.nodes.stone,
 	after_dig_node = xp_add,
 })

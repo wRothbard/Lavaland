@@ -21,7 +21,7 @@ s_protect.claim_size = 16
 -- Height of claims in nodes
 -- !! Distorts the claim locations along the Y axis !!
 -- Type: Integer, positive
-s_protect.claim_height = 150
+s_protect.claim_height = 100
 
 -- Defines the Y offset where the 0th claim should start in the underground
 -- Example of claim (0,0,0): Ymin = -(50) = -50, Ymax = 150 - (50) - 1 = 99

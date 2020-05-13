@@ -26,7 +26,36 @@ minetest.is_protected = function(pos, player_name)
 	if s_protect.can_access(pos, player_name) then
 		return s_protect.old_is_protected(pos, player_name)
 	end
+	s_protect.flip_player(minetest.get_player_by_name(player_name), pos)
 	return true
+end
+
+s_protect.flip_player = function(player, pos)
+	if player and player:is_player() then
+		-- yaw + 180°
+		local yaw = player:get_look_horizontal() + math.pi
+
+		if yaw > 2 * math.pi then
+			yaw = yaw - 2 * math.pi
+		end
+
+		player:set_look_horizontal(yaw)
+
+		-- invert pitch
+		player:set_look_vertical(-player:get_look_vertical())
+
+		-- if digging below player, move up to avoid falling through hole
+		local pla_pos = player:get_pos()
+
+		if pos.y < pla_pos.y then
+
+			player:set_pos({
+				x = pla_pos.x,
+				y = pla_pos.y + 0.8,
+				z = pla_pos.z
+			})
+		end
+	end
 end
 
 local old_item_place = minetest.item_place

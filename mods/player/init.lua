@@ -455,7 +455,7 @@ minetest.register_on_respawnplayer(function(player)
 	})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 	if not beds.spawn[name] then
-		player:set_pos(spawn.pos)
+		player:set_pos({x = -24.8, y = 1.5, z = 135.3})
 		return true
 	end
 end)

@@ -27,4 +27,46 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craftitem("diamond:fragment", {
+	description = "Diamond Fragment",
+	inventory_image = "diamond_fragment.png",
+})
+
+minetest.register_craft({
+        output = "diamond:fragment 9",
+        recipe = {
+                {"diamond:diamond"},
+        }
+})
+
+minetest.register_craft({
+        output = "diamond:diamond",
+        recipe = {
+                {"diamond:fragment", "diamond:fragment", "diamond:fragment"},
+                {"diamond:fragment", "diamond:fragment", "diamond:fragment"},
+                {"diamond:fragment", "diamond:fragment", "diamond:fragment"}
+        }
+})
+
+minetest.register_craftitem("diamond:coin", {
+	description = "Diamond Coin",
+	inventory_image = "diamond_coin.png",
+})
+
+minetest.register_craft({
+        output = "diamond:coin 9",
+        recipe = {
+                {"diamond:fragment"},
+        }
+})
+
+minetest.register_craft({
+        output = "diamond:fragment",
+        recipe = {
+                {"diamond:coin", "diamond:coin", "diamond:coin"},
+                {"diamond:coin", "diamond:coin", "diamond:coin"},
+                {"diamond:coin", "diamond:coin", "diamond:coin"}
+        }
+})
+
 print("loaded diamond")

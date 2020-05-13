@@ -5,7 +5,7 @@ local ss = minetest.settings:get("static_spawnpoint")
 if ss then
 	ss = minetest.string_to_pos()
 else
-	ss = {x = 0, y = 5, z = 0}
+	ss = {x = -24.8, y = 1.5, z = 135.3}
 end
 
 spawn.pos = ss
@@ -15,7 +15,7 @@ minetest.register_chatcommand("spawn", {
 	params = "",
 	privs = "interact",
 	func = function(name)
-		minetest.get_player_by_name(name):set_pos(ss)
+		minetest.get_player_by_name(name):set_pos({x = -24.8, y = 1.5, z = 135.3})
 		minetest.sound_play("mapgen_item", {pos = ss})
 	end,
 })

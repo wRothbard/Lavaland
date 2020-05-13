@@ -36,6 +36,11 @@ local function duengen(pointed_thing)
 			minetest.set_node(pos, {name = "air"})
 			trees.grow_new_apple_tree(pos)
 		end
+	elseif n.name == "trees:aspen_sapling" and l > 6 then
+		if random() < c then
+			minetest.set_node(pos, {name = "air"})
+			trees.grow_new_aspen_tree(pos)
+		end
 	-- Seeds
 	elseif n.name == "farming:seed_wheat" and random() < c and l > 6 then
 		minetest.set_node(pos, {name = "farming:wheat_1"})

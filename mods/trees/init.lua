@@ -44,12 +44,14 @@ function trees.grow_sapling(pos)
 	local node = minetest.get_node(pos)
 	if node.name == "trees:sapling" then
 		trees.grow_new_apple_tree(pos)
+	elseif node.name == "trees:aspen_sapling" then
+		trees.grow_new_aspen_tree(pos)
 	end
 end
 
 minetest.register_lbm({
 	name = "trees:convert_saplings_to_node_timer",
-	nodenames = {"trees:sapling"},
+	nodenames = {"trees:sapling", "trees:aspen_sapling"},
 	action = function(pos)
 		minetest.get_node_timer(pos):start(random(300, 1500))
 	end
@@ -60,6 +62,13 @@ function trees.grow_new_apple_tree(pos)
 			"/schematics/apple_tree_from_sapling.mts"
 	minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3},
 			path, "random", nil, false)
+end
+
+function trees.grow_new_aspen_tree(pos)
+	local path = minetest.get_modpath("trees") ..
+		"/schematics/aspen_tree_from_sapling.mts"
+	minetest.place_schematic({x = pos.x - 2, y = pos.y - 1, z = pos.z - 2},
+		path, "0", nil, false)
 end
 
 minetest.register_alias("default:tree", "trees:tree")
@@ -78,6 +87,23 @@ minetest.register_node("trees:tree", {
 	after_dig_node = map.fell_tree
 })
 
+minetest.register_alias("default:aspen_tree", "trees:aspen_tree")
+minetest.register_node("trees:aspen_tree", {
+	description = "Aspen Tree",
+	tiles = {"default_aspen_tree_top.png", "default_aspen_tree_top.png",
+		"default_aspen_tree.png"},
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	groups = {tree = 1, choppy = 3, oddly_breakable_by_hand = 1, flammable = 3},
+	sounds = music.sounds.nodes.wood,
+	on_place = minetest.rotate_node,
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("placed", "true")
+	end,
+	after_dig_node = map.fell_tree
+})
+
 minetest.register_node("trees:wood", {
 	description = "Apple Wood Planks",
 	paramtype2 = "facedir",
@@ -85,6 +111,16 @@ minetest.register_node("trees:wood", {
 	tiles = {"default_wood.png"},
 	is_ground_content = false,
 	groups = {choppy = 2, oddly_breakable_by_hand = 2, flammable = 2, wood = 1},
+	sounds = music.sounds.nodes.wood,
+})
+
+minetest.register_node("trees:aspen_wood", {
+	description = "Aspen Wood Planks",
+	paramtype2 = "facedir",
+	place_param2 = 0,
+	tiles = {"default_aspen_wood.png"},
+	is_ground_content = false,
+	groups = {choppy = 3, oddly_breakable_by_hand = 2, flammable = 3, wood = 1},
 	sounds = music.sounds.nodes.wood,
 })
 
@@ -229,6 +265,42 @@ minetest.register_node("trees:sapling", {
 	end,
 })
 
+minetest.register_node("trees:aspen_sapling", {
+	description = "Aspen Tree Sapling",
+	drawtype = "plantlike",
+	tiles = {"default_aspen_sapling.png"},
+	inventory_image = "default_aspen_sapling.png",
+	wield_image = "default_aspen_sapling.png",
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	on_timer = trees.grow_sapling,
+	selection_box = {
+		type = "fixed",
+		fixed = {-3 / 16, -0.5, -3 / 16, 3 / 16, 0.5, 3 / 16}
+	},
+	groups = {snappy = 2, dig_immediate = 3, flammable = 3,
+		attached_node = 1, sapling = 1},
+	sounds = music.sounds.nodes.leaves,
+
+	on_construct = function(pos)
+		minetest.get_node_timer(pos):start(random(300, 1500))
+	end,
+
+	on_place = function(itemstack, placer, pointed_thing)
+		itemstack = trees.sapling_on_place(itemstack, placer, pointed_thing,
+			"trees:aspen_sapling",
+			-- minp, maxp to be checked, relative to sapling pos
+			-- minp_relative.y = 1 because sapling pos has been checked
+			{x = -2, y = 1, z = -2},
+			{x = 2, y = 12, z = 2},
+			-- maximum interval of interior volume check
+			4)
+
+		return itemstack
+	end,
+})
+
 -- Leafdecay
 --
 
@@ -331,6 +403,26 @@ minetest.register_node("trees:leaves", {
 	after_place_node = after_place_leaves,
 })
 
+minetest.register_alias("default:aspen_leaves", "trees:aspen_leaves")
+minetest.register_node("trees:aspen_leaves", {
+	description = "Aspen Tree Leaves",
+	drawtype = "allfaces_optional",
+	tiles = {"default_aspen_leaves.png"},
+	waving = 1,
+	paramtype = "light",
+	is_ground_content = false,
+	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
+	drop = {
+		max_items = 1,
+		items = {
+			{items = {"trees:aspen_sapling"}, rarity = 20},
+			{items = {"trees:aspen_leaves"}}
+		}
+	},
+	sounds = music.sounds.nodes.leaves,
+	after_place_node = after_place_leaves,
+})
+
 local grasses = {"grass:grass_1", "grass:grass_2", "grass:grass_3",
 		"grass:grass_4", "grass:grass_5"}
 
@@ -400,9 +492,22 @@ minetest.register_craft({
 	}
 })
 
+minetest.register_craft({
+	output = "trees:aspen_wood 4",
+	recipe = {
+		{"trees:aspen_tree"},
+	}
+})
+
 register_leafdecay({
 	trunks = {"trees:tree"},
 	leaves = {"trees:apple", "trees:leaves"},
+	radius = 3,
+})
+
+register_leafdecay({
+	trunks = {"trees:aspen_tree"},
+	leaves = {"trees:aspen_leaves"},
 	radius = 3,
 })
 

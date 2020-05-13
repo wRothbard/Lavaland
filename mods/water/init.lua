@@ -155,12 +155,12 @@ minetest.register_abm({
 	catch_up = false,
 	action = function(pos, node)
 		local dist = 1
-		local r = rand()
-		if r > 0.5 and r < 0.9 then
-			dist = 2
-		elseif r >= 0.9 then
-			dist = 3
-		end
+		-- local r = rand()
+		-- if r > 0.5 and r < 0.9 then
+			-- dist = 2
+		-- elseif r >= 0.9 then
+			-- dist = 3
+		-- end
 		local p1 = {x = pos.x + dist, y = pos.y + dist, z = pos.z + dist}
 		local p2 = {x = pos.x - dist, y = pos.y - dist, z = pos.z - dist}
 		local a = minetest.find_nodes_in_area(p1, p2,
@@ -196,8 +196,8 @@ minetest.register_abm({
 	label = "Ice spread",
 	nodenames = "water:ice",
 	neighbors = "water:source",
-	interval = 300,
-	chance = 34,
+	interval = 60,
+	chance = 67,
 	catch_up = false,
 	action = function(pos, node)
 		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
@@ -251,6 +251,19 @@ local minerals = {
 	{name = "stone:stone_with_coal", chance = 25},
 	{name = "stone:stone_with_copper", chance = 20},
 	{name = "stone:stone_with_iron", chance = 15},
+        {name = "birthstones:stone_with_alexandrite", chance = 95},
+        {name = "birthstones:stone_with_amethyst", chance = 95},
+        {name = "birthstones:stone_with_aquamarine", chance = 95},
+        {name = "birthstones:stone_with_diamond", chance = 95},
+        {name = "birthstones:stone_with_emerald", chance = 95},
+        {name = "birthstones:stone_with_garnet", chance = 95},
+        {name = "birthstones:stone_with_opal", chance = 95},
+        {name = "birthstones:stone_with_peridot", chance = 95},
+        {name = "birthstones:stone_with_ruby", chance = 95},
+        {name = "birthstones:stone_with_sapphire", chance = 95},
+        {name = "birthstones:stone_with_topaz", chance = 95},
+        {name = "birthstones:stone_with_zircon", chance = 95},
+        {name = "quartz:quartz_ore", chance = 40},
 }
 
 local cool_lava = function(pos, node)

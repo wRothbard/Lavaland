@@ -1,5 +1,5 @@
 local cooldown = {}
-local boom = {radius = 3, explode_center = true}
+local boom = {radius = 1, explode_center = true}
 
 local warp = function(name, pos)
 	local player = minetest.get_player_by_name(name)
@@ -120,14 +120,14 @@ minetest.register_tool("staves:teleportation", {
 	end,
 })
 
-minetest.register_craft({
-	output = "staves:teleportation",
-	recipe = {
-		{"diamond:diamond"},
-		{"obsidian:shard"},
-		{"trees:stick"},
-	},
-})
+-- minetest.register_craft({
+	-- output = "staves:teleportation",
+	-- recipe = {
+		-- {"diamond:diamond"},
+		-- {"obsidian:shard"},
+		-- {"trees:stick"},
+	-- },
+-- })
 
 minetest.register_entity("staves:fireball", {
 	description = "Fireball",
@@ -205,14 +205,14 @@ minetest.register_tool("staves:destruction", {
 	end,
 })
 
-minetest.register_craft({
-	output = "staves:destruction",
-	recipe = {
-		{"mese:crystal"},
-		{"obsidian:shard"},
-		{"trees:stick"},
-	},
-})
+-- minetest.register_craft({
+	-- output = "staves:destruction",
+	-- recipe = {
+		-- {"mese:crystal"},
+		-- {"obsidian:shard"},
+		-- {"trees:stick"},
+	-- },
+-- })
 
 minetest.register_on_leaveplayer(function(player)
 	cooldown[player:get_player_name()] = nil

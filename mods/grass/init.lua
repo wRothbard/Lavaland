@@ -154,10 +154,11 @@ minetest.register_abm({
 	catch_up = false,
 	action = function(pos, node)
 		pos.y = pos.y + 1
+		local targetname = minetest.get_node(pos).name
 		local p1 = {x = pos.x + 1, y = pos.y, z = pos.z + 1}
 		local p2 = {x = pos.x - 1, y = pos.y, z = pos.z - 1}
 		local a, b = minetest.find_nodes_in_area(p1, p2, fsnn)
-		if #a >= 8 then
+		if #a >= 8 and targetname:sub(1, 6) ~= "flower" then
 			minetest.set_node(pos, {name = fsnn[rand(#fsnn)]})
 		end
 	end,
