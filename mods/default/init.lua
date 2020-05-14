@@ -5,6 +5,7 @@ default.node_sound_glass_defaults = function () return music.sounds.nodes.glass 
 default.node_sound_metal_defaults = function () return music.sounds.nodes.metal end
 default.node_sound_stone_defaults = function () return music.sounds.nodes.stone end
 default.node_sound_leaves_defaults = function () return music.sounds.nodes.leaves end
+default.node_sound_dirt_defaults = function () return music.sounds.nodes.dirt end
 
 minetest.register_alias("default:steel_ingot", "steel:ingot")
 minetest.register_alias("steel:sheet_metal", "steel:ingot")
