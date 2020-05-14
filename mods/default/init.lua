@@ -21,5 +21,8 @@ minetest.register_alias("default:fence_junglewood", "fences:fence_wood")
 minetest.register_alias("default:fence_pine_wood", "fences:fence_wood")
 minetest.register_alias("default:stone_brick", "stone:brick")
 minetest.register_alias("default:stonebrick", "stone:brick")
+minetest.register_alias("default:obsidian_block", "obsidian:block")
+minetest.register_alias("default:obsidian_brick", "obsidian:brick")
+minetest.register_alias("default:obsidianbrick", "obsidian:brick")
 
 print("loaded default")
