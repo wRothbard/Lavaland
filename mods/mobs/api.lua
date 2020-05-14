@@ -253,16 +253,16 @@ on_timer = function(pos, elapsed)
 	local tod = (minetest.get_timeofday() or 0) * 24000
 	local night = tod > 19000 or tod < 06000
 	local protected = minetest.is_protected(pos, ":mobs")
-	if (night or not protected) and light < 10 then
-		local mobs_to_insert = {
-			"mobs:dungeon_master",
-			"mobs:oerkki",
-			"mobs:zombie" .. random(4),
-		}
-		for i = 1, #mobs_to_insert do
-			mobs[#mobs + 1] = mobs_to_insert[i]
-		end
-	end
+	-- if (night or not protected) and light < 10 then
+		-- local mobs_to_insert = {
+			-- "mobs:dungeon_master",
+			-- "mobs:oerkki",
+			-- "mobs:zombie" .. random(4),
+		-- }
+		-- for i = 1, #mobs_to_insert do
+			-- mobs[#mobs + 1] = mobs_to_insert[i]
+		-- end
+	-- end
 	local mobs_to_insert = {
 		"mobs:sheep_white",
 		"mobs:kitten",
