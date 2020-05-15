@@ -354,6 +354,14 @@ minetest.register_on_newplayer(function(player)
 		ItemStack(bp),
 		"walkie:talkie",
 	}
+	if minetest.get_modpath("birthstones") then
+		s_items = {
+			"birthstones:ruby_coin 7",
+			"craftguide:book",
+			"walkie:talkie",
+		}
+	end
+
 	for i = 1, #s_items do
 		local s = s_items[i]
 		inv:add_item("main", s)
