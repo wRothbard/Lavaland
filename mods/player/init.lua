@@ -7,7 +7,11 @@ local cooldown = {}
 local accelerating = {}
 local dead = {}
 
+cozy.log = minetest.log
+
 dofile(minetest.get_modpath("player") .. "/api.lua")
+
+local spawnpoint = {x = -24.8, y = 1.5, z = 135.3}
 
 player_api.register_model("character.b3d", {
 	animation_speed = 30,
@@ -366,6 +370,7 @@ minetest.register_on_newplayer(function(player)
 		local s = s_items[i]
 		inv:add_item("main", s)
 	end
+	player:set_pos(spawnpoint)
 	minetest.after(1, help.show, player, "NewPlayerInfo")
 end)
 
@@ -463,7 +468,7 @@ minetest.register_on_respawnplayer(function(player)
 	})
 	hud.update(player, "hunger", "number", nil, {name = "hunger"})
 	if not beds.spawn[name] then
-		player:set_pos({x = -24.8, y = 1.5, z = 135.3})
+		player:set_pos(spawnpoint)
 		return true
 	end
 end)
