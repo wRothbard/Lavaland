@@ -196,8 +196,8 @@ minetest.register_abm({
 	label = "Ice spread",
 	nodenames = "water:ice",
 	neighbors = "water:source",
-	interval = 60,
-	chance = 67,
+	interval = 300,
+	chance = 34,
 	catch_up = false,
 	action = function(pos, node)
 		local p1 = {x = pos.x + 1, y = pos.y + 1, z = pos.z + 1}
