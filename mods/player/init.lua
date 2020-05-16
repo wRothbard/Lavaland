@@ -11,7 +11,7 @@ cozy.log = minetest.log
 
 dofile(minetest.get_modpath("player") .. "/api.lua")
 
-local spawnpoint = {x = -24.8, y = 1.5, z = 135.3}
+local spawnpoint = lavaland.config.spawnpoint
 
 player_api.register_model("character.b3d", {
 	animation_speed = 30,
