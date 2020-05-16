@@ -176,7 +176,7 @@ local function mob_detached_inv(self)
 		end,
 		allow_take = function(inv, listname, index, stack, player)
 			local name = player:get_player_name()
-			local detached = minetest.create_detached_inventory("trade_" .. self.tid, {
+			local detached = minetest.create_detached_inventory("npc_" .. self.tid, {
 				allow_put = function(r_inv, r_listname, r_index, r_stack, r_player)
 					if r_index ~= 2 then
 						return 0
@@ -243,7 +243,7 @@ local function mob_detached_inv(self)
 				forms.exit_button() ..
 				forms.help_button() ..
 				"label[0,0;I'll need something from you.]" ..
-				"list[detached:trade_" .. self.tid ..
+				"list[detached:npc_" .. self.tid ..
 						";exchange;3,1;2,1]" ..
 				"list[current_player;main;0,2.5;8,1]" ..
 				"list[current_player;main;0,3.6;8,3;8]" ..

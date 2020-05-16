@@ -82,6 +82,15 @@ local function edit_motd(name, msg)
 	minetest.show_formspec(name, "chat:motd_edit", fs)
 end
 
+--[[
+local old_server_status_func = minetest.get_server_status
+minetest.get_server_status = function(name, joined)
+	local j = joined or false
+	minetest.chat_send_player(name, tostring(j))
+	return old_server_status_func(name, joined)
+end
+--]]
+
 minetest.register_chatcommand("motd", {
 	description = "Display the message of the day",
 	params = "",
@@ -139,7 +148,7 @@ old_msg.func = function(name, param)
 	local message = name .. ": " .. splits[2]
 
 	if registered[d_name] then
-		table.insert(registered[name], {status = "unread", message = message})
+		table.insert(registered[d_name], {status = "unread", message = message})
 	end
 
 	if minetest.get_player_by_name(d_name) then
@@ -154,7 +163,7 @@ minetest.register_chatcommand("msg", old_msg)
 
 minetest.register_chatcommand("register", {
 	description = "Register for offline messages",
-	params = "<player> <message>",
+	params = "",
 	privs = "shout",
 	func = function(name, param)
 		if not registered[name] then
@@ -222,6 +231,17 @@ end)
 
 minetest.register_on_chat_message(function(name, message)
 	add_chat(name, minetest.formspec_escape(message))
+end)
+
+minetest.register_on_joinplayer(function(player)
+	if not player then
+		return
+	end
+
+	local name = player:get_player_name()
+	if not registered[name] then
+		registered[name] = {}
+	end
 end)
 
 minetest.register_on_leaveplayer(function(player)

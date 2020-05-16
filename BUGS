@@ -1,3 +1,7 @@
+The server was up for about a week, and I noticed new users were getting
+increased stats, level 6, stam 30, etc..  I couldn't reproduce it locally,
+and when restarting the server it was gone, the stats were correct!  Weird!
+
 Does the cauldron make sounds only when you right click it with water?
 What about server reboot?
 

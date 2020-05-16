@@ -264,7 +264,7 @@ end
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name()
 	if fields.status and (formname == "" or
-			formname == "help:help" or
+			string.match(formname, "help:help") or
 			formname == "stats:more") then
 		stats.show_status(player)
 	elseif formname == "stats:more" and fields.save then
@@ -339,7 +339,7 @@ end)
 minetest.register_chatcommand("stats", {
 	description = "Show your stats",
 	params = "Comma-deliniated list of stats to report",
-	privs = "",
+	privs = "shout",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if param and param ~= "" then

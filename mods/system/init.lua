@@ -1,5 +1,16 @@
+minetest.register_chatcommand("who", {
+	description = "Print your username",
+	params = "",
+	privs = "shout",
+	func = function(name, param)
+		return true, name
+	end,
+})
+
 minetest.register_chatcommand("w", {
 	description = "Show current item",
+	params = "[dump]",
+	privs = "interact",
 	func = function(name, param)
 		local player = minetest.get_player_by_name(name)
 		if not player then
@@ -15,6 +26,8 @@ minetest.register_chatcommand("w", {
 })
 
 minetest.register_chatcommand("registered", {
+	description = "Print registered stuff",
+	params = "[stuff]",
 	privs = "server",
 	func = function(name, param)
 		if param == "entities" then
@@ -28,6 +41,9 @@ minetest.register_chatcommand("registered", {
 })
 
 minetest.register_chatcommand("is_protected", {
+	description = "Display protection for position",
+	params = "",
+	privs = "interact",
 	func = function(name, param)
 		local p = minetest.get_player_by_name(name)
 		if not p then
