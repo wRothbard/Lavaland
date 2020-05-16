@@ -49,6 +49,7 @@ minetest.register_craft({
 minetest.register_craftitem("emerald:coin", {
 	description = "Emerald Coin",
 	inventory_image = "emerald_coin.png",
+	stack_max = 10000,
 })
 
 minetest.register_craft({

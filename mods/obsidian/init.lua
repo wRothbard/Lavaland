@@ -4,6 +4,7 @@ minetest.register_node("obsidian:obsidian", {
 	tiles = {"obsidian_obsidian.png"},
 	sounds = music.sounds.nodes.obsidian,
 	groups = {oddly_breakable_by_hand = 1, cracky = 3, obsidian = 1},
+	stack_max = 10000,
 })
 
 minetest.register_alias("obsidian:node", "obsidian:obsidian")

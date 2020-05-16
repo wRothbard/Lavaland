@@ -105,6 +105,7 @@ minetest.register_node("stone:cobble", {
 	is_ground_content = false,
 	groups = {cracky = 3, stone = 2, oddly_breakable_by_hand = 2},
 	sounds = music.sounds.nodes.stone,
+	stack_max = 10000,
 })
 
 minetest.register_craft({

@@ -51,6 +51,7 @@ minetest.register_craft({
 minetest.register_craftitem("diamond:coin", {
 	description = "Diamond Coin",
 	inventory_image = "diamond_coin.png",
+	stack_max = 10000,
 })
 
 minetest.register_craft({
