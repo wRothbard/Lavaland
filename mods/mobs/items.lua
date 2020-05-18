@@ -40,6 +40,7 @@ local hairball_items = {
 	"skins:calinou_by_calinou",
 	"skins:ladyvioletkitty_by_lordphoenixmh",
 	"skins:stef325_by_stef325",
+	"skins:ruby",
 	"water:ice",
 	"tools:shears",
 	"flowers:waterlily",
