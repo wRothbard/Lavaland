@@ -257,7 +257,6 @@ minetest.register_abm({
 })
 
 local minerals = {
-	{name = "stone:stone_with_emerald", chance = 75},
 	{name = "stone:stone_with_diamond", chance = 60},
 	{name = "stone:stone_with_gold", chance = 40},
 	{name = "stone:stone_with_coal", chance = 25},
