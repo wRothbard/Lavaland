@@ -27,26 +27,15 @@ local hairball_items = {
 	"dye:brown",
 	"obsidian:shard",
 	--"default:tin_lump",
-	"skins:shadowzone_by_crazyginger72",
-	"skins:pirate_girl_by_misty",
-	"skins:thewillyrex_by_edwar_masterchieft",
-	"skins:c55_by_jordach",
-	"skins:summer_by_lizzie",
-	"skins:sam_mese_tee_by_oochainlynxoo",
-	"skins:jayne_by_andromeda",
-	"skins:cheapie_by_lovehart",
-	"skins:alien_by_jmf",
-	"skins:worker_by_krock",
-	"skins:calinou_by_calinou",
-	"skins:ladyvioletkitty_by_lordphoenixmh",
-	"skins:stef325_by_stef325",
-	"skins:ruby",
-	"skins:marie",
 	"water:ice",
 	"tools:shears",
 	"flowers:waterlily",
 	"craftguide:book",
 }
+
+mobs.register_hairball_item = function (item)
+	table.insert(hairball_items, item)
+end
 
 minetest.register_craftitem("mobs:hairball", {
 	description = S("Lucky Hairball"),

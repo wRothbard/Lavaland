@@ -11,14 +11,23 @@ end
 
 local players = {}
 
+local hairball = false
+if minetest.registered_items["mobs:hairball"] then
+	hairball = true
+end
+
 for i = 1, #skins.list do
 	local skin = skins.list[i]
 	local skin_image = "skins_" .. skin .. "_inv.png"
-	minetest.register_craftitem("skins:" .. skin, {
+	local item_name = "skins:" .. skin
+	minetest.register_craftitem(item_name, {
 		description = skin,
 		inventory_image = skin_image,
 		groups = {skin = 1},
 	})
+	if hairball then
+		mobs.register_hairball_item(item_name)
+	end
 end
 
 minetest.register_on_joinplayer(function(player)

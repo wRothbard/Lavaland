@@ -26,6 +26,10 @@ minetest.register_alias("default:obsidian_block", "obsidian:block")
 minetest.register_alias("default:obsidian_brick", "obsidian:brick")
 minetest.register_alias("default:obsidianbrick", "obsidian:brick")
 minetest.register_alias("default:dirt", "dirt:dirt")
+minetest.register_alias("default:chest", "chests:chest")
+minetest.register_alias("default:chest_open", "chests:chest_open")
+minetest.register_alias("default:chest_locked", "chests:chest_locked")
+minetest.register_alias("default:chest_locked_open", "chests:chest_locked_open")
 
 default.get_hotbar_bg = forms.get_hotbar_bg
 default.gui_bg     = ""
