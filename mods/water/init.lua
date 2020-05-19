@@ -185,6 +185,13 @@ minetest.register_abm({
 				end
 				d = d + rand(2) * 5
 			elseif ann == "obsidian:obsidian" then
+				-- if node above is mese, then return - don't turn obsidian into stone when it has mese crystal growing in it
+				an.y = an.y + 1
+				local node_above = minetest.get_node(an)
+				an.y = an.y - 1
+				if node_above.name:sub(1, 4) == "mese" then
+					break
+				end
 				if d > rand(6) * 6 then
 					minetest.swap_node(an, {name = "stone:stone"})
 					break
