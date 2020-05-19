@@ -28,7 +28,7 @@ if minetest.get_modpath("hopper") then
 
 		{"top", "pipeworks:autocrafter", "dst"},
 		{"bottom", "pipeworks:autocrafter", "src"},
-		{"side", "pipeworks:autocrafter", "dst"},
-		{"void", "pipeworks:autocrafter", "dst"},
+		{"side", "pipeworks:autocrafter", "src"},
+		{"void", "pipeworks:autocrafter", "src"},
 	})
 end
