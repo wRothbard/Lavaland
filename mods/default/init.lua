@@ -43,6 +43,7 @@ minetest.register_alias("default:steelblock", "steel:block")
 minetest.register_alias("default:copperblock", "copper:block")
 minetest.register_alias("default:bronzeblock", "bronze:block")
 minetest.register_alias("default:diamondblock", "diamond:block")
+minetest.register_alias("default:aspen_wood", "trees:aspen_wood")
 
 default.get_hotbar_bg = forms.get_hotbar_bg
 default.gui_bg     = ""
