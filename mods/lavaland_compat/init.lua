@@ -47,7 +47,7 @@ if stairs_redo then
 			"opal", "peridot", "ruby", "sapphire", "topaz", "zircon"}
 		for _, stone in ipairs(stones) do
 			local name = firstToUpper(stone)
-			stairs.register_all(stone.."block", "birthstones:"..stone.."block",
+			stairs.register_all("birthstones"..stone.."block", "birthstones:"..stone.."block",
 				{ cracky = 1, level = 3 },
 				{ "birthstones_"..stone.."_block.png" },  -- XXX later on would be nice to export birthstones.get_block_tiles()
 				name,
@@ -62,5 +62,13 @@ if stairs_redo then
 			{ "emerald_block.png" },
 			"Emerald",
 			stairs.metal)
+	end
+
+	-- packed ice
+	if minetest.registered_nodes["water:packed_ice"] then
+		stairs.register_all("packed_ice", "water:packed_ice",
+			{ cracky = 3, cools_lava = 1, slippery = 3 },
+			{ "water_packed_ice.png" },
+			"Packed Ice")
 	end
 end

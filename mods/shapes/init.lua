@@ -412,6 +412,47 @@ function shapes.register_shapes(subname, recipeitem, groups, images,
 		sounds, worldaligntex)
 end
 
+if stairs_redo then
+
+	local basenames = {
+		"wood",
+		"stone",
+		"cobble",
+		"mossycobble",
+		"stonebrick",
+		"stone_block",
+		"sandstone",
+		"sandstonebrick",
+		"sandstone_block",
+		"obsidian",
+		"obsidianbrick",
+		"obsidian_block",
+		"steelblock",
+		"copperblock",
+		"bronzeblock",
+		"goldblock",
+		"ice",
+		"glass",
+		"obsidian_glass",
+		"diamondblock"
+	}
+	local shape_prefixes = { "stair", "stair_inner", "stair_outer", "slab" }
+
+	for _, basename in ipairs(basenames) do
+		for _2, shape in ipairs(shape_prefixes) do
+			local notthere = "shapes:"..shape.."_"..basename
+			local there = "stairs:"..shape.."_"..basename
+			minetest.register_alias(notthere, there);
+		end
+	end
+
+	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emerald_block")
+	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emerald_block")
+	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emerald_block")
+	minetest.register_alias("shapes:slab_emeraldblock", "stairs:slab_emerald_block")
+
+else
+
 
 -- Register default stairs and slabs
 shapes.register_shapes(
@@ -777,26 +818,16 @@ shapes.register_shapes(
 	true
 )
 
-if stairs_redo then
-
-	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emerald_block")
-	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emerald_block")
-	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emerald_block")
-	minetest.register_alias("shapes:slab_emeraldblock", "stairs:slab_emerald_block")
-
-else
-
-	shapes.register_shapes(
-		"emeraldblock",
-		"emerald:block",
-		{cracky = 1},
-		{"emerald_block.png"},
-		"Emerald Block Stair",
-		"Emerald Block Slab",
-		music.sounds.material.metal,
-		true
-	)
-end
+shapes.register_shapes(
+	"emeraldblock",
+	"emerald:block",
+	{cracky = 1},
+	{"emerald_block.png"},
+	"Emerald Block Stair",
+	"Emerald Block Slab",
+	music.sounds.material.metal,
+	true
+)
 
 shapes.register_shapes(
 	"ice",
@@ -938,5 +969,7 @@ shapes.register_stair_outer(
 	music.sounds.nodes.glass,
 	false
 )
+
+end
 
 print("loaded shapes")

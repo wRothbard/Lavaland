@@ -31,6 +31,18 @@ minetest.register_alias("default:chest_open", "chests:chest_open")
 minetest.register_alias("default:chest_locked", "chests:chest_locked")
 minetest.register_alias("default:chest_locked_open", "chests:chest_locked_open")
 minetest.register_alias("default:mese", "mese:mese")
+minetest.register_alias("default:wood", "trees:wood")
+minetest.register_alias("default:mossycobble", "stone:mossycobble")
+minetest.register_alias("default:stone_block", "stone:block")
+minetest.register_alias("default:sandstone_block", "sand:sandstone_block")
+minetest.register_alias("default:sandstone", "sand:sandstone")
+minetest.register_alias("default:sandstone_brick", "sand:sandstone_brick")
+minetest.register_alias("default:ice", "water:ice")
+minetest.register_alias("default:coalblock", "coal:block")
+minetest.register_alias("default:steelblock", "steel:block")
+minetest.register_alias("default:copperblock", "copper:block")
+minetest.register_alias("default:bronzeblock", "bronze:block")
+minetest.register_alias("default:diamondblock", "diamond:block")
 
 default.get_hotbar_bg = forms.get_hotbar_bg
 default.gui_bg     = ""
