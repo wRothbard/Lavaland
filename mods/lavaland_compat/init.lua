@@ -57,7 +57,7 @@ if stairs_redo then
 
 	-- lavaland emeralds
 	if minetest.get_modpath("emerald") then
-		stairs.register_all("emeraldblock", "emerald:block",
+		stairs.register_all("emerald_block", "emerald:block",
 			{ cracky = 2 },
 			{ "emerald_block.png" },
 			"Emerald",

@@ -779,10 +779,10 @@ shapes.register_shapes(
 
 if stairs_redo then
 
-	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emeraldblock")
-	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emeraldblock")
-	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emeraldblock")
-	minetest.register_alias("shapes:slab_emeraldblock", "stairs:slab_emeraldblock")
+	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emerald_block")
+	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emerald_block")
+	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emerald_block")
+	minetest.register_alias("shapes:slab_emeraldblock", "stairs:slab_emerald_block")
 
 else
 
