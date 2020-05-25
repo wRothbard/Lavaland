@@ -6,6 +6,9 @@
 
 shapes = {}
 
+local stairs_mod = minetest.get_modpath("stairs")
+local stairs_redo = stairs_mod and stairs.mod
+
 local function rotate_and_place(itemstack, placer, pointed_thing)
 	local p0 = pointed_thing.under
 	local p1 = pointed_thing.above
@@ -774,16 +777,26 @@ shapes.register_shapes(
 	true
 )
 
-shapes.register_shapes(
-	"emeraldblock",
-	"emerald:block",
-	{cracky = 1},
-	{"emerald_block.png"},
-	"Emerald Block Stair",
-	"Emerald Block Slab",
-	music.sounds.material.metal,
-	true
-)
+if stairs_redo then
+
+	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emerald_block")
+	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emerald_block")
+	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emerald_block")
+	minetest.register_alias("shapes:slab_emeraldblock", "stairs:slab_emerald_block")
+
+else
+
+	shapes.register_shapes(
+		"emeraldblock",
+		"emerald:block",
+		{cracky = 1},
+		{"emerald_block.png"},
+		"Emerald Block Stair",
+		"Emerald Block Slab",
+		music.sounds.material.metal,
+		true
+	)
+end
 
 shapes.register_shapes(
 	"ice",

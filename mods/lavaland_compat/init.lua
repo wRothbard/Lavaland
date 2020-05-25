@@ -32,3 +32,35 @@ if minetest.get_modpath("hopper") then
 		{"void", "pipeworks:autocrafter", "src"},
 	})
 end
+
+local stairs_mod = minetest.get_modpath("stairs")
+local stairs_redo = stairs_mod and stairs.mod
+
+local function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
+if stairs_redo then
+
+	if minetest.get_modpath("birthstones") then
+		local stones = { "alexandrite", "amethyst", "aquamarine", "diamond", "emerald", "garnet",
+			"opal", "peridot", "ruby", "sapphire", "topaz", "zircon"}
+		for _, stone in ipairs(stones) do
+			local name = firstToUpper(stone)
+			stairs.register_all(stone.."block", "birthstones:"..stone.."block",
+				{ cracky = 1, level = 3 },
+				{ "birthstones_"..stone.."_block.png" },  -- XXX later on would be nice to export birthstones.get_block_tiles()
+				name,
+				stairs.stone)
+		end
+	end
+
+	-- lavaland emeralds
+	if minetest.get_modpath("emerald") then
+		stairs.register_all("emerald_block", "emerald:block",
+			{ cracky = 2 },
+			{ "emerald_block.png" },
+			"Emerald",
+			stairs.metal)
+	end
+end

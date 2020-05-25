@@ -2,7 +2,7 @@ default = {}
 
 default.node_sound_wood_defaults = function () return music.sounds.nodes.wood end
 default.node_sound_glass_defaults = function () return music.sounds.material.glass end
-default.node_sound_metal_defaults = function () return music.sounds.nodes.metal end
+default.node_sound_metal_defaults = function () return music.sounds.material.metal end
 default.node_sound_stone_defaults = function () return music.sounds.nodes.stone end
 default.node_sound_leaves_defaults = function () return music.sounds.nodes.leaves end
 default.node_sound_dirt_defaults = function () return music.sounds.nodes.dirt end
