@@ -446,6 +446,15 @@ if stairs_redo then
 		end
 	end
 
+	for _, color in pairs(dye.dyes) do
+		local basename = "wool_" .. color[1]
+		for _2, shape in ipairs(shape_prefixes) do
+			local notthere = "shapes:"..shape.."_"..basename
+			local there = "stairs:"..shape.."_"..basename
+			minetest.register_alias(notthere, there);
+		end
+	end
+
 	minetest.register_alias("shapes:stair_emeraldblock", "stairs:stair_emerald_block")
 	minetest.register_alias("shapes:stair_inner_emeraldblock", "stairs:stair_inner_emerald_block")
 	minetest.register_alias("shapes:stair_outer_emeraldblock", "stairs:stair_outer_emerald_block")
